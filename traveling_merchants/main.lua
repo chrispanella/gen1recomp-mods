@@ -1,39 +1,49 @@
--- traveling_merchants  (STAGE 1 — route edition)
+-- traveling_merchants
 -- ------------------------------------------------------------------
--- A dedicated merchant NPC that appears out ON THE ROUTES (not in towns,
--- which already have marts), travels route-to-route by in-game day, and
--- moves around under real collision.
+-- Dedicated merchant NPCs that appear OUT ON THE ROUTES, travel by
+-- in-game day (world_clock), and move under real collision (mapOverview).
 --
--- How it works, and why it needs no map edits or NPC hijacking:
---   * mod.world:spawnNpc(routeId, {...}) drops a real CLERK NPC onto the
---     route the merchant is visiting today; removeNpc takes it away when
---     it moves on. (The engine's own runtime-object API.)
---   * mod.world:mapOverview() returns the engine's real collision grid
---     ("." walkable, " " wall, "~" water, "+" warp). We place the merchant
---     on a walkable tile and only ever step it onto walkable tiles, so it
---     never clips through scenery — collision is read from the game, not
---     guessed. (scriptMove itself does NOT check collision, so WE check.)
---   * A dedicated sprite + custom text constant, dispatched to our talk
---     script via map_scripts (talkScript resolves it, engine side).
+-- Merchants are data-driven (the MERCHANTS list): each has its own sprite,
+-- route style, patrol range, and set of wares. Ships with two:
+--   * PEDDLER  — roams ROUTE 1-5 (mode: 3/5/random in OPTIONS), sells
+--                supplies, rare wares, and a daily rare Pokemon.
+--   * TRADER   — a fixed shuttle on ROUTE 11 <-> 12, sells supplies + rare.
 --
--- Route mode (OPTIONS): 3-ROUTE / 5-ROUTE / RANDOM (random re-rolls daily).
+-- Wares:
+--   SUPPLIES   — daily-rotating potions / heals / drinks / a vitamin.
+--   RARE WARES — the Mt. Moon fossil you DIDN'T take (auto-detected),
+--                Old Amber, Moon Stone, a Nugget, and a rotating TM.
+--   POKeMON    — one daily rare species (never a common one), for a price.
+--
+-- Everything is registry content + the runtime world API; no map edits.
+-- LuaJIT (Lua 5.1) has no bitops, so daily randomness is arithmetic-only.
 
 local ROUTES5 = { "ROUTE_1", "ROUTE_2", "ROUTE_3", "ROUTE_4", "ROUTE_5" }
 local ROUTES3 = { "ROUTE_1", "ROUTE_2", "ROUTE_3" }
-
-local MERCHANT_SPRITE = "SPRITE_CLERK"
-local MERCHANT_TEXT = "TEXT_TM_MERCHANT" -- our own const; talk wired via map_scripts
+local TRADER_ROUTES = { "ROUTE_11", "ROUTE_12" }
 
 local MODES = { "THREE", "FIVE", "RANDOM" }
 local MODE_LABEL = { THREE = "3-ROUTE LOOP", FIVE = "5-ROUTE LOOP", RANDOM = "RANDOM" }
 
--- ------- supplies pools (verified real Yellow item ids) ------------
+-- ------- item pools (verified real Yellow ids) --------------------
 
 local STAPLES = { "POTION", "SUPER_POTION" }
 local HEALING = { "HYPER_POTION", "ANTIDOTE", "PARLYZ_HEAL", "BURN_HEAL",
                   "ICE_HEAL", "AWAKENING", "FULL_HEAL", "REVIVE" }
 local DRINKS = { "FRESH_WATER", "SODA_POP", "LEMONADE" }
 local VITAMINS = { "HP_UP", "PROTEIN", "IRON", "CARBOS", "CALCIUM", "PP_UP", "RARE_CANDY" }
+local TM_POOL = { "TM_ICE_BEAM", "TM_ROCK_SLIDE", "TM_SOLARBEAM",
+                  "TM_EARTHQUAKE", "TM_SUBMISSION", "TM_FIRE_BLAST" }
+
+-- daily rare Pokemon pool: rares and one-offs only, never common species
+local MON_POOL = {
+  { s = "OMANYTE", lv = 20, p = 6000 }, { s = "KABUTO", lv = 20, p = 6000 },
+  { s = "AERODACTYL", lv = 25, p = 9000 }, { s = "DRATINI", lv = 18, p = 8000 },
+  { s = "LAPRAS", lv = 22, p = 9000 }, { s = "EEVEE", lv = 20, p = 7000 },
+  { s = "SCYTHER", lv = 22, p = 7000 }, { s = "PINSIR", lv = 22, p = 7000 },
+  { s = "TAUROS", lv = 21, p = 6500 }, { s = "CHANSEY", lv = 20, p = 9000 },
+  { s = "PORYGON", lv = 20, p = 8000 }, { s = "SNORLAX", lv = 25, p = 9000 },
+}
 
 -- ------- arithmetic-only determinism (LuaJIT has no bitops) --------
 
@@ -49,6 +59,9 @@ local function rng(seed)
     state = (state * 16807) % 2147483647
     return state / 2147483647
   end
+end
+local function pick1(pool, day, salt)
+  return pool[math.floor(rng(seedFrom(salt, day))() * #pool) + 1]
 end
 local function pickDistinct(nextR, pool, k)
   local copy = {}
@@ -66,8 +79,7 @@ local function routeForDay(day, mode)
   if mode == "FIVE" then
     return ROUTES5[((day - 1) % #ROUTES5) + 1]
   elseif mode == "RANDOM" then
-    local nextR = rng(seedFrom("route", day))
-    return ROUTES5[math.floor(nextR() * #ROUTES5) + 1]
+    return ROUTES5[math.floor(rng(seedFrom("route", day))() * #ROUTES5) + 1]
   end
   return ROUTES3[((day - 1) % #ROUTES3) + 1]
 end
@@ -80,11 +92,23 @@ local function suppliesStockFor(day, routeId)
   for _, id in ipairs(pickDistinct(nextR, VITAMINS, 1)) do stock[#stock + 1] = id end
   return stock
 end
+local function todaysMon(day) return pick1(MON_POOL, day, "mon") end
+local function todaysTM(day) return pick1(TM_POOL, day, "tm") end
+
+local DELTA = { left = { -1, 0 }, right = { 1, 0 }, up = { 0, -1 }, down = { 0, 1 } }
 
 return function(mod)
   local Commands = require("src.script.Commands")
 
-  -- ------- route-mode setting (persisted in this mod's save) --------
+  -- rare wares are sold through the normal shop UI, which reads item.price;
+  -- give the key-item fossils/amber a buy price (they stay unsellable), and
+  -- a price to Moon Stone. Nugget and TMs already have prices.
+  mod.content.items:patch("DOME_FOSSIL", { price = 6000 })
+  mod.content.items:patch("HELIX_FOSSIL", { price = 6000 })
+  mod.content.items:patch("OLD_AMBER", { price = 8000 })
+  mod.content.items:patch("MOON_STONE", { price = 3000 })
+
+  -- ------- route-mode setting (OPTIONS, drives the Peddler) --------
   local function getMode() return mod.save:get("route_mode", "THREE") end
   local function cycleMode()
     local cur, idx = getMode(), 1
@@ -92,7 +116,6 @@ return function(mod)
     mod.save:set("route_mode", MODES[(idx % #MODES) + 1])
   end
 
-  -- ------- clock + today's route -----------------------------------
   local function currentDay()
     local wc = mod.find("world_clock")
     if wc and wc.exports and wc.exports.clock then
@@ -101,7 +124,26 @@ return function(mod)
     end
     return 1
   end
-  local function targetRoute() return routeForDay(currentDay(), getMode()) end
+
+  -- ------- the merchant roster (data-driven) -----------------------
+  local MERCHANTS = {
+    {
+      id = "peddler", sprite = "SPRITE_CLERK", text = "TEXT_TM_PEDDLER",
+      routes = ROUTES5, range = 3,
+      routeToday = function(day) return routeForDay(day, getMode()) end,
+      wares = { supplies = true, rare = true, pokemon = true },
+      greeting = "A traveling\nmerchant, out here\von the road!",
+    },
+    {
+      id = "trader", sprite = "SPRITE_GENTLEMAN", text = "TEXT_TM_TRADER",
+      routes = TRADER_ROUTES, range = 2,
+      routeToday = function(day) return TRADER_ROUTES[((day - 1) % 2) + 1] end,
+      wares = { supplies = true, rare = true, pokemon = false },
+      greeting = "Ah! A customer\nout on the trail.",
+    },
+  }
+  local byText = {}
+  for _, m in ipairs(MERCHANTS) do byText[m.text] = m end
 
   -- ------- collision helpers (engine's own grid) -------------------
   local function overview()
@@ -114,16 +156,16 @@ return function(mod)
     local row = ov.rows[y + 1]
     return row and row:sub(x + 1, x + 1) == "."
   end
-
-  -- ------- find our live merchant NPC on the active map ------------
-  local function liveMerchant(ow)
+  local function liveByText(ow, text)
     for _, n in ipairs(ow.npcs or {}) do
-      if n.def and n.def.runtime and n.def.text == MERCHANT_TEXT then return n end
+      if n.def and n.def.runtime and n.def.text == text then return n end
     end
     return nil
   end
 
-  -- ------- the shop (daily-rotating supplies) ----------------------
+  -- ================= WARES =========================================
+
+  -- SUPPLIES
   mod.content.commands:register("traveling_merchants:open_supplies", {
     foreground = true,
     fn = function(ctx)
@@ -132,96 +174,162 @@ return function(mod)
     end,
   })
 
-  -- ------- gentle strolling patrol --------------------------------
-  -- The merchant paces one tile at a time along an open axis, ping-ponging
-  -- within a few tiles of where it spawned, with real pauses between steps
-  -- and the occasional stand-still. Every step is collision-checked against
-  -- mapOverview, so it can never step into a wall or the water. This command
-  -- does its OWN waiting, so the parallel loop just calls it repeatedly.
-  local DELTA = { left = { -1, 0 }, right = { 1, 0 }, up = { 0, -1 }, down = { 0, 1 } }
+  -- RARE WARES: the fossil(s) you don't have + amber + moonstone + nugget + a TM
+  mod.content.commands:register("traveling_merchants:open_rare", {
+    foreground = true,
+    fn = function(ctx)
+      local inv = ctx.save.inventory or {}
+      local function missing(id) return (inv[id] or 0) <= 0 end
+      local stock = {}
+      if missing("DOME_FOSSIL") then stock[#stock + 1] = "DOME_FOSSIL" end
+      if missing("HELIX_FOSSIL") then stock[#stock + 1] = "HELIX_FOSSIL" end
+      if missing("OLD_AMBER") then stock[#stock + 1] = "OLD_AMBER" end
+      stock[#stock + 1] = "MOON_STONE"
+      stock[#stock + 1] = "NUGGET"
+      stock[#stock + 1] = todaysTM(currentDay())
+      Commands.push_screen(ctx, "ShopMenu", stock)
+    end,
+  })
 
-  -- patrol state for the single live merchant
-  local patrol = { home = nil, pos = "right", neg = "left", travel = 1, offset = 0, range = 2 }
+  -- POKeMON: today's rare mon (name/price shown via tokens below)
+  mod.content.tokens:register("MERCHANT_MON", function(game)
+    local m = todaysMon(currentDay())
+    local d = game and game.data and game.data.pokemon and game.data.pokemon[m.s]
+    return (d and d.name) or m.s
+  end)
+  mod.content.tokens:register("MERCHANT_MON_PRICE", function()
+    return ("¥%d"):format(todaysMon(currentDay()).p)
+  end)
+  mod.content.commands:register("traveling_merchants:can_afford_mon", {
+    foreground = true,
+    fn = function(ctx) ctx.lastCheck = (ctx.save.money or 0) >= todaysMon(currentDay()).p end,
+  })
+  mod.content.commands:register("traveling_merchants:buy_mon", {
+    foreground = true,
+    fn = function(ctx)
+      local deal = todaysMon(currentDay())
+      if (ctx.save.money or 0) < deal.p then ctx.lastCheck = false; return end
+      Commands.give_pokemon(ctx, deal.s, deal.lv, true) -- skip nickname prompt
+      if ctx.lastCheck then Commands.give_money(ctx, -deal.p) end -- pay only on success
+    end,
+  })
+
+  -- selector helper: lastCheck = (the player's menu choice was option n)
+  mod.content.commands:register("traveling_merchants:sel", {
+    foreground = true,
+    fn = function(ctx, n) ctx.lastCheck = (ctx.lastChoice and ctx.lastChoice.index == n) end,
+  })
+
+  -- ------- build a merchant's talk script from its wares -----------
+  local function merchantTalk(m)
+    local opts = {}
+    if m.wares.supplies then opts[#opts + 1] = { "SUPPLIES", "supplies" } end
+    if m.wares.rare then opts[#opts + 1] = { "RARE WARES", "rare" } end
+    if m.wares.pokemon then opts[#opts + 1] = { "POKéMON", "poke" } end
+    local labels = {}
+    for _, o in ipairs(opts) do labels[#labels + 1] = o[1] end
+    labels[#labels + 1] = "NEVER MIND"
+
+    local s = {}
+    local function add(r) s[#s + 1] = r end
+    add({ "show_text", m.greeting .. "\fCare to see my\nwares?" })
+    add({ "choice", labels })
+    for i, o in ipairs(opts) do
+      add({ "traveling_merchants:sel", i })
+      add({ "jump_if_true", o[2] })
+    end
+    add({ "jump", "bye" })
+    if m.wares.supplies then
+      add({ "label", "supplies" }); add({ "traveling_merchants:open_supplies" }); add({ "jump", "bye" })
+    end
+    if m.wares.rare then
+      add({ "label", "rare" }); add({ "traveling_merchants:open_rare" }); add({ "jump", "bye" })
+    end
+    if m.wares.pokemon then
+      add({ "label", "poke" })
+      add({ "show_text", "Today's rare find:\na {MERCHANT_MON}!\fYours for\n{MERCHANT_MON_PRICE}." })
+      add({ "choice", { "BUY", "NO" } })
+      add({ "jump_if_false", "bye" })
+      add({ "traveling_merchants:can_afford_mon" })
+      add({ "jump_if_false", "poor" })
+      add({ "traveling_merchants:buy_mon" })
+      add({ "show_text", "A fine choice!\nTreat it well." })
+      add({ "jump", "bye" })
+      add({ "label", "poor" })
+      add({ "show_text", "Not enough money,\nfriend. Come back!" })
+      add({ "jump", "bye" })
+    end
+    add({ "label", "bye" })
+    add({ "show_text", "Safe travels,\n{PLAYER}!" })
+    return s
+  end
+
+  -- ================= MOVEMENT (collision-aware stroll) =============
+
+  local patrolState = {} -- keyed by merchant text
 
   mod.content.commands:register("traveling_merchants:patrol", {
-    fn = function(ctx)
+    fn = function(ctx, text)
       local ow = ctx.overworld
       if not ow then Commands.wait(ctx, 60); return end
-      local m = liveMerchant(ow)
-      if not m then Commands.wait(ctx, 60); return end
+      local m = liveByText(ow, text)
+      local st = patrolState[text]
+      if not m or not st then Commands.wait(ctx, 60); return end
       local ov = overview()
       if not ov then Commands.wait(ctx, 60); return end
-      if not patrol.home then patrol.home = { x = m.cellX, y = m.cellY } end
 
-      -- sometimes just stand a while and look around
-      if math.random() < 0.35 then
-        Commands.wait(ctx, math.random(70, 170))
-        return
+      if math.random() < 0.35 then -- sometimes stand still a while
+        Commands.wait(ctx, math.random(70, 170)); return
       end
 
-      local dir = patrol.travel > 0 and patrol.pos or patrol.neg
+      local dir = st.travel > 0 and st.pos or st.neg
       local dd = DELTA[dir]
-      local nextOffset = patrol.offset + patrol.travel
+      local nextOffset = st.offset + st.travel
       local nx, ny = m.cellX + dd[1], m.cellY + dd[2]
-      -- turn around at the range bound or a wall/water
-      if math.abs(nextOffset) > patrol.range or not walkableAt(ov, nx, ny) then
-        patrol.travel = -patrol.travel
-        dir = patrol.travel > 0 and patrol.pos or patrol.neg
+      if math.abs(nextOffset) > st.range or not walkableAt(ov, nx, ny) then
+        st.travel = -st.travel
+        dir = st.travel > 0 and st.pos or st.neg
         dd = DELTA[dir]
-        nextOffset = patrol.offset + patrol.travel
+        nextOffset = st.offset + st.travel
         nx, ny = m.cellX + dd[1], m.cellY + dd[2]
       end
-      if math.abs(nextOffset) <= patrol.range and walkableAt(ov, nx, ny) then
+      if math.abs(nextOffset) <= st.range and walkableAt(ov, nx, ny) then
         Commands.walk_npc(ctx, m.def.index, { dir })
-        patrol.offset = nextOffset
+        st.offset = nextOffset
       end
-      -- a beat between steps so it strolls instead of twitching
       Commands.wait(ctx, math.random(35, 80))
     end,
   })
 
-  -- ------- the merchant's dialogue ---------------------------------
-  local function merchantTalk()
-    return {
-      { "show_text", "A traveling\nmerchant, out here\von the road!\fCare to see my\nwares?" },
-      { "choice", { "SUPPLIES", "NEVER MIND" } },
-      { "jump_if_false", "bye" },
-      { "traveling_merchants:open_supplies" },
-      { "label", "bye" },
-      { "show_text", "Safe travels,\n{PLAYER}!" },
-    }
+  -- ================= SPAWN / TRAVEL LIFECYCLE =====================
+
+  local spawn = {} -- keyed by merchant id -> { id, map }
+  for _, m in ipairs(MERCHANTS) do spawn[m.id] = { id = nil, map = nil } end
+
+  local function despawn(m)
+    local slot = spawn[m.id]
+    if slot.id and mod.world then pcall(function() mod.world:removeNpc(slot.id) end) end
+    slot.id, slot.map = nil, nil
+    patrolState[m.text] = nil
   end
 
-  -- ------- spawn / despawn lifecycle -------------------------------
-  local spawn = { id = nil, map = nil }
-
-  local function despawn()
-    if spawn.id and mod.world then
-      pcall(function() mod.world:removeNpc(spawn.id) end)
-    end
-    spawn.id, spawn.map = nil, nil
-    patrol.home, patrol.offset, patrol.travel = nil, 0, 1
-  end
-
-  -- a walkable tile a few steps from the player, so the merchant is seen
   local function pickSpawnCell(ov, ow)
     local px = ow.player and ow.player.cellX or math.floor(ov.width / 2)
     local py = ow.player and ow.player.cellY or math.floor(ov.height / 2)
     for r = 2, 7 do
       for _, o in ipairs({ { r, 0 }, { -r, 0 }, { 0, r }, { 0, -r },
                            { r, r }, { -r, -r }, { r, -r }, { -r, r } }) do
-        local x, y = px + o[1], py + o[2]
-        if walkableAt(ov, x, y) then return x, y end
+        if walkableAt(ov, px + o[1], py + o[2]) then return px + o[1], py + o[2] end
       end
     end
     return nil
   end
 
-  local function ensureMerchant(routeId, ow)
-    local target = targetRoute()
-    -- clear a stale spawn (moved on to another route, or a new day)
-    if spawn.id and (spawn.map ~= routeId or routeId ~= target) then despawn() end
-    if routeId ~= target or spawn.id then return end
+  local function ensureMerchant(m, routeId, ow)
+    local target = m.routeToday(currentDay())
+    local slot = spawn[m.id]
+    if slot.id and (slot.map ~= routeId or routeId ~= target) then despawn(m) end
+    if routeId ~= target or slot.id then return end
 
     local ov = overview()
     if not ov then return end
@@ -229,42 +337,49 @@ return function(mod)
     if not x then return end
 
     local id = mod.world:spawnNpc(routeId, {
-      sprite = MERCHANT_SPRITE, text = MERCHANT_TEXT,
-      movement = "STAY", range = "NONE", x = x, y = y,
+      sprite = m.sprite, text = m.text, movement = "STAY", range = "NONE", x = x, y = y,
     })
     if not id then return end
-    spawn.id, spawn.map = id, routeId
+    slot.id, slot.map = id, routeId
 
-    -- pick the pacing axis by which way has open room at the spawn tile
     local hOpen = (walkableAt(ov, x - 1, y) and 1 or 0) + (walkableAt(ov, x + 1, y) and 1 or 0)
     local vOpen = (walkableAt(ov, x, y - 1) and 1 or 0) + (walkableAt(ov, x, y + 1) and 1 or 0)
-    if hOpen >= vOpen then
-      patrol.pos, patrol.neg = "right", "left"
-    else
-      patrol.pos, patrol.neg = "down", "up"
-    end
-    patrol.home, patrol.offset, patrol.travel = { x = x, y = y }, 0, 1
-
-    -- start the collision-aware strolling loop
-    ow:queueScript({ { "run_parallel", routeId .. "/tm_patrol" } })
+    patrolState[m.text] = {
+      home = { x = x, y = y }, offset = 0, travel = 1, range = m.range or 2,
+      pos = hOpen >= vOpen and "right" or "down",
+      neg = hOpen >= vOpen and "left" or "up",
+    }
+    ow:queueScript({ { "run_parallel", routeId .. "/tm_patrol_" .. m.id } })
   end
 
-  -- ------- attach to each route in the circuit ---------------------
-  for _, routeId in ipairs(ROUTES5) do
+  -- ------- register each route the merchants can appear on ---------
+  local routeMerchants = {}
+  for _, m in ipairs(MERCHANTS) do
+    for _, r in ipairs(m.routes) do
+      routeMerchants[r] = routeMerchants[r] or {}
+      table.insert(routeMerchants[r], m)
+    end
+  end
+  for routeId, mlist in pairs(routeMerchants) do
+    local talk, scripts = {}, {}
+    for _, m in ipairs(mlist) do
+      talk[m.text] = merchantTalk(m)
+      scripts["tm_patrol_" .. m.id] = {
+        { "label", "top" },
+        { "traveling_merchants:patrol", m.text },
+        { "jump", "top" },
+      }
+    end
     mod.content.map_scripts:register(routeId, {
-      talk = { [MERCHANT_TEXT] = merchantTalk() },
-      onEnter = function(game, ow) ensureMerchant(routeId, ow) end,
-      scripts = {
-        tm_patrol = {
-          { "label", "top" },
-          { "traveling_merchants:patrol" }, -- paces one tile and waits internally
-          { "jump", "top" },
-        },
-      },
+      talk = talk,
+      onEnter = function(game, ow)
+        for _, m in ipairs(mlist) do ensureMerchant(m, routeId, ow) end
+      end,
+      scripts = scripts,
     })
   end
 
-  -- ------- OPTIONS row: route mode ---------------------------------
+  -- ------- OPTIONS row: route mode (Peddler) -----------------------
   mod.hooks:wrap("ui.options.rows", function(next, game, rows)
     local out = next(game, rows)
     if type(out) ~= "table" then return out end

@@ -1,7 +1,7 @@
 {
   "id": "traveling_merchants",
   "name": "Traveling Merchants",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",
@@ -12,5 +12,5 @@
   "dependencies": ["world_clock"],
   "optional_dependencies": [],
   "conflicts": [],
-  "description": "A dedicated merchant NPC that appears OUT ON THE ROUTES (not towns), travels route-to-route by in-game day (via world_clock), and patrols under real collision read from the engine (mapOverview). Spawned/removed at runtime via the world API - no map edits, no NPC hijacking. Selectable route mode (3/5/random-daily) in OPTIONS; daily-rotating supplies shop. Rare wares, fossils, and Pokemon come next."
+  "description": "Dedicated merchant NPCs out ON THE ROUTES that travel by in-game day (world_clock) and patrol under real collision (mapOverview) - spawned at runtime, no map edits. Two merchants (a 5-route Peddler + a 2-route Trader). Wares: daily supplies, RARE WARES (the Mt. Moon fossil you didn't take + Old Amber, Moon Stone, Nugget, a rotating TM), and a daily rare POKeMON (never common species). Route mode (3/5/random) in OPTIONS."
 }

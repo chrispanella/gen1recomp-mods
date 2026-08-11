@@ -43,13 +43,29 @@ If the clerk doesn't appear or clips into scenery, tell me what you see in
 the `lovec` console — placement and collision are read live, so this is
 where I'd tune.
 
+## Wares
+
+- **SUPPLIES** — daily-rotating potions, status heals, a drink, a vitamin.
+- **RARE WARES** — the Mt. Moon fossil you **didn't** take (auto-detected
+  from your bag), Old Amber, Moon Stone, a Nugget, and a **rotating TM**.
+  Sold through the normal shop UI; fossils/amber get a buy price (they stay
+  unsellable key items).
+- **POKéMON** (Peddler only) — one **daily rare species** for a price, drawn
+  from a curated pool (Omanyte, Kabuto, Aerodactyl, Dratini, Lapras, Eevee,
+  Scyther, Pinsir, Tauros, Chansey, Porygon, Snorlax) — **never** a common
+  species. Bought mons go to your party (or a PC box if it's full).
+
+## The two merchants
+
+| Merchant | Sprite | Route style | Sells |
+|---|---|---|---|
+| **Peddler** | Clerk | ROUTE 1–5, per the OPTIONS route mode | supplies, rare wares, Pokémon |
+| **Trader** | Gentleman | shuttle: ROUTE 11 ⇄ 12 by day | supplies, rare wares |
+
 ## Roadmap
 
-- **Stage 2** — Rare wares: the Mt. Moon fossil you didn't take, Old Amber,
-  Moon Stone, Nuggets, a rotating TM.
-- **Stage 3** — Pokémon for sale (never common species).
-- **Stage 4** — Multiple merchants with distinct route styles (short
-  shuttles vs long hauls), and longer patrol paths.
+- Longer/varied patrol routes and more merchants with distinct styles.
+- Per-merchant price haggling / reputation, seasonal stock.
 
 ## Notes / limits
 
