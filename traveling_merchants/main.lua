@@ -188,11 +188,12 @@ return function(mod)
     mod.content.map_scripts:register(t.map, {
       talk = { [t.npc] = buildTalk(townKey, t.map, t.npc) },
 
-      -- On entering the town, if the merchant is here today, float a
-      -- recurring "!" bubble over the stall so it's findable on sight.
-      -- onEnter composes with the engine's own; the parallel script dies
-      -- on map exit. (`emote` is blocking but not foreground, so it is
-      -- legal in a background script.)
+      -- On entering the town, if the merchant is here today, set the stall
+      -- NPC "marching in place" so it visibly animates and stands out.
+      -- Unlike the "!" emote (which freezes the overworld by design, like a
+      -- trainer spotting you), march_in_place is NON-blocking, so there is
+      -- no hitch. onEnter composes with the engine's own; the state clears
+      -- on map exit.
       onEnter = function(game, ow)
         if currentTown() == townKey then
           ow:queueScript({ { "run_parallel", t.map .. "/tm_indicator" } })
@@ -200,10 +201,7 @@ return function(mod)
       end,
       scripts = {
         tm_indicator = {
-          { "label", "top" },
-          { "emote", t.index, "shock", 60 }, -- "shock" = the "!" bubble
-          { "wait", 150 },
-          { "jump", "top" },
+          { "march_in_place", t.index, true },
         },
       },
     })
