@@ -1,20 +1,21 @@
 -- rocket_recruits
 -- ------------------------------------------------------------------
--- A gang of Team Rocket "recruits" hangs out in a city each day as a
--- DAILY CHALLENGE. Beat the gang (one scaled trainer battle) for a
--- level-appropriate cash reward plus a rotating item. The gang roams
--- between cities and its reward rotates on REAL-WORLD days.
+-- A gang of Team Rocket "recruits" roams a city each day as a DAILY
+-- CHALLENGE. They move TOGETHER as a formation. Beat the gang (one scaled
+-- trainer battle) for a level-appropriate, CAPPED cash reward plus a
+-- rotating item. The gang moves between cities and its reward rotates on
+-- REAL-WORLD days.
 --
 -- Design notes:
 --   * The recruit trainer's baseMoney is 0, so the engine pays nothing
 --     automatically; the mod hands out its OWN reward, scaled to the
---     player's average party level and CAPPED, so you never earn an
---     absurd amount no matter how strong you are.
---   * The battle party is picked from tiers by the player's level, so the
---     fight stays a real challenge instead of a pushover.
---   * Built on the runtime world API (spawnNpc/removeNpc) + collision
---     (mapOverview); no map edits. Once beaten, the gang won't rebattle
---     until the next real day.
+--     player's average party level and CAPPED, so you never earn an absurd
+--     amount no matter how strong you are.
+--   * The battle party is picked from tiers by the player's level.
+--   * The gang spawns as a contiguous line and paces as a block, every step
+--     collision-checked against mapOverview so it never clips.
+--   * Runtime world API (spawnNpc/removeNpc); no map edits. Beaten once, the
+--     gang won't rebattle until the next real day.
 
 local CITIES = {
   "CERULEAN_CITY", "VERMILION_CITY", "CELADON_CITY",
@@ -23,10 +24,8 @@ local CITIES = {
 local GRUNT_SPRITE = "SPRITE_ROCKET"
 local GRUNT_TEXT = "TEXT_ROCKET_RECRUIT"
 local TRAINER = "OPP_ROCKET_RECRUIT"
+local GANG_SIZE = 3
 
--- battle tiers, chosen by the player's average party level; each is a
--- list of { level, species }. Kept a touch under the player so it's a
--- winnable-but-real fight.
 local TIERS = {
   { { level = 8, species = "RATTATA" }, { level = 9, species = "EKANS" } },
   { { level = 15, species = "ZUBAT" }, { level = 15, species = "RATTATA" }, { level = 16, species = "EKANS" } },
@@ -36,11 +35,12 @@ local TIERS = {
   { { level = 49, species = "ARBOK" }, { level = 50, species = "GOLBAT" }, { level = 51, species = "WEEZING" }, { level = 50, species = "MUK" }, { level = 50, species = "SANDSLASH" }, { level = 52, species = "RATICATE" } },
 }
 
--- rotating reward item pool (daily); give_item works regardless of price
 local REWARD_POOL = {
   "RARE_CANDY", "NUGGET", "MAX_REVIVE", "MAX_ETHER", "PP_UP",
   "MAX_ELIXER", "FULL_RESTORE", "GUARD_SPEC", "TM_ROCK_SLIDE", "TM_TOXIC",
 }
+
+local DELTA = { left = { -1, 0 }, right = { 1, 0 }, up = { 0, -1 }, down = { 0, 1 } }
 
 -- ------- real-world day + arithmetic-only determinism -------------
 
@@ -73,7 +73,6 @@ end
 return function(mod)
   local Commands = require("src.script.Commands")
 
-  -- the recruit trainer: no auto payout, inherits the Rocket battle sprite
   mod.content.trainers:register(TRAINER, {
     id = TRAINER, name = "RECRUIT", baseMoney = 0, basePic = "OPP_ROCKET",
     parties = TIERS,
@@ -90,7 +89,6 @@ return function(mod)
     return math.floor(sum / n)
   end
 
-  -- reward = level-scaled but CAPPED, so it never gets absurd
   local function rewardCash(avg) return math.max(300, math.min(3000, avg * 50)) end
   local lastCash = 0
   mod.content.tokens:register("ROCKET_CASH", function() return ("¥%d"):format(lastCash) end)
@@ -108,6 +106,13 @@ return function(mod)
     local row = ov.rows[y + 1]
     return row and row:sub(x + 1, x + 1) == "."
   end
+  local function liveGrunts(ow)
+    local out = {}
+    for _, n in ipairs(ow.npcs or {}) do
+      if n.def and n.def.runtime and n.def.text == GRUNT_TEXT then out[#out + 1] = n end
+    end
+    return out
+  end
 
   -- ================= CHALLENGE COMMANDS ============================
 
@@ -123,7 +128,6 @@ return function(mod)
     foreground = true,
     fn = function(ctx)
       Commands.start_battle(ctx, "trainer", TRAINER, tierForAvg(avgLevel(ctx)))
-      -- ctx.lastCheck is the win/lose result afterwards
     end,
   })
 
@@ -135,19 +139,6 @@ return function(mod)
       Commands.give_item(ctx, pick1(REWARD_POOL, realDay(), "reward"), 1, true)
       local mapId = ctx.overworld and ctx.overworld.map and ctx.overworld.map.id
       if mapId then mod.save:set(doneKey(mapId), realDay()) end
-    end,
-  })
-
-  -- march the loitering grunts in place (a gang hanging out)
-  mod.content.commands:register("rocket_recruits:loiter", {
-    fn = function(ctx)
-      local ow = ctx.overworld
-      if not ow then return end
-      for _, n in ipairs(ow.npcs or {}) do
-        if n.def and n.def.runtime and n.def.text == GRUNT_TEXT then
-          Commands.march_in_place(ctx, n.def.index, true)
-        end
-      end
     end,
   })
 
@@ -165,30 +156,77 @@ return function(mod)
     { "show_text", "You already routed\nus today, kid.\vWe'll be back..." },
   }
 
-  -- ================= GANG SPAWN LIFECYCLE ==========================
+  -- ================= MOVE AS A FORMATION ==========================
+  -- The whole gang steps in the same direction each beat (block movement),
+  -- ping-ponging within a few tiles of where it spawned. A step happens
+  -- only if EVERY grunt's target tile is walkable, so the formation never
+  -- clips and never splits.
+  local gang = { ids = nil, map = nil, roam = nil }
 
-  local gang = { ids = nil, map = nil }
+  mod.content.commands:register("rocket_recruits:roam", {
+    fn = function(ctx)
+      local ow = ctx.overworld
+      if not ow then Commands.wait(ctx, 60); return end
+      local grunts = liveGrunts(ow)
+      local st = gang.roam
+      if #grunts == 0 or not st then Commands.wait(ctx, 60); return end
+      local ov = overview()
+      if not ov then Commands.wait(ctx, 60); return end
+
+      if math.random() < 0.40 then -- the gang loiters a while
+        Commands.wait(ctx, math.random(60, 160)); return
+      end
+
+      local function allClear(delta)
+        for _, g in ipairs(grunts) do
+          if not walkableAt(ov, g.cellX + delta[1], g.cellY + delta[2]) then return false end
+        end
+        return true
+      end
+
+      local dir = st.travel > 0 and st.pos or st.neg
+      local nextOffset = st.offset + st.travel
+      if math.abs(nextOffset) > st.range or not allClear(DELTA[dir]) then
+        st.travel = -st.travel
+        dir = st.travel > 0 and st.pos or st.neg
+        nextOffset = st.offset + st.travel
+      end
+      if math.abs(nextOffset) <= st.range and allClear(DELTA[dir]) then
+        for _, g in ipairs(grunts) do
+          Commands.walk_npc(ctx, g.def.index, { dir }, { wait = false }) -- all step at once
+        end
+        st.offset = nextOffset
+        Commands.wait(ctx, 18) -- let the simultaneous step land
+      else
+        Commands.wait(ctx, 30)
+      end
+      Commands.wait(ctx, math.random(20, 45))
+    end,
+  })
+
+  -- ================= GANG SPAWN LIFECYCLE ==========================
 
   local function despawnGang()
     if gang.ids and mod.world then
       for _, id in ipairs(gang.ids) do pcall(function() mod.world:removeNpc(id) end) end
     end
-    gang.ids, gang.map = nil, nil
+    gang.ids, gang.map, gang.roam = nil, nil, nil
   end
 
-  -- a small cluster of reachable tiles near the player (flood-fill, so the
-  -- gang is always reachable on foot)
-  local function pickGangCells(ov, ow, n)
+  -- Flood-fill the reachable area from the player, then lay the gang out as
+  -- a contiguous line so they read as a group; pace perpendicular to the
+  -- line so the whole formation slides together.
+  local function planGang(ov, ow, n)
     local px = ow.player and ow.player.cellX
     local py = ow.player and ow.player.cellY
-    if not px or not py then return {} end
+    if not px or not py then return nil end
     local W = ov.width
     local seen, q, head = {}, { { px, py } }, 1
     seen[py * W + px] = true
     local reach = {}
     while head <= #q and head < 4000 do
       local c = q[head]; head = head + 1
-      if math.abs(c[1] - px) + math.abs(c[2] - py) >= 2 then reach[#reach + 1] = c end
+      reach[#reach + 1] = c
       for _, d in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
         local nx, ny = c[1] + d[1], c[2] + d[2]
         if walkableAt(ov, nx, ny) and not seen[ny * W + nx] then
@@ -197,21 +235,31 @@ return function(mod)
         end
       end
     end
-    if #reach == 0 then return {} end
+    local function reachable(x, y) return seen[y * W + x] end
+
     local anchor
     for _, c in ipairs(reach) do
       local d = math.abs(c[1] - px) + math.abs(c[2] - py)
       if d >= 3 and d <= 9 then anchor = c; break end
     end
-    anchor = anchor or reach[1]
-    local out, used = { anchor }, { [anchor[2] * W + anchor[1]] = true }
-    for _, c in ipairs(reach) do
-      if #out >= n then break end
-      local k = c[2] * W + c[1]
-      local dA = math.abs(c[1] - anchor[1]) + math.abs(c[2] - anchor[2])
-      if not used[k] and dA >= 1 and dA <= 4 then out[#out + 1] = c; used[k] = true end
+    anchor = anchor or reach[2] or reach[1]
+    if not anchor then return nil end
+
+    -- try to extend a line of n reachable cells along some direction
+    for _, d in ipairs({ { 1, 0, "right", "left" }, { 0, 1, "down", "up" },
+                         { -1, 0, "left", "right" }, { 0, -1, "up", "down" } }) do
+      local line, cx, cy, ok = { anchor }, anchor[1], anchor[2], true
+      for _ = 2, n do
+        cx, cy = cx + d[1], cy + d[2]
+        if reachable(cx, cy) then line[#line + 1] = { cx, cy } else ok = false; break end
+      end
+      if ok and #line == n then
+        -- pace perpendicular to the line so the block slides sideways
+        local perp = d[1] ~= 0 and { "down", "up" } or { "right", "left" }
+        return { cells = line, pos = perp[1], neg = perp[2] }
+      end
     end
-    return out
+    return { cells = { anchor }, pos = "right", neg = "left" }
   end
 
   local function ensureGang(city, ow)
@@ -221,11 +269,11 @@ return function(mod)
 
     local ov = overview()
     if not ov then return end
-    local cells = pickGangCells(ov, ow, 3)
-    if #cells == 0 then return end
+    local plan = planGang(ov, ow, GANG_SIZE)
+    if not plan then return end
 
     local ids = {}
-    for _, c in ipairs(cells) do
+    for _, c in ipairs(plan.cells) do
       local id = mod.world:spawnNpc(city, {
         sprite = GRUNT_SPRITE, text = GRUNT_TEXT, movement = "STAY", range = "NONE",
         x = c[1], y = c[2],
@@ -234,7 +282,8 @@ return function(mod)
     end
     if #ids == 0 then return end
     gang.ids, gang.map = ids, city
-    ow:queueScript({ { "rocket_recruits:loiter" } })
+    gang.roam = { offset = 0, travel = 1, range = 3, pos = plan.pos, neg = plan.neg }
+    ow:queueScript({ { "run_parallel", city .. "/gang_roam" } })
   end
 
   -- ------- attach to each city -------------------------------------
@@ -242,6 +291,13 @@ return function(mod)
     mod.content.map_scripts:register(city, {
       talk = { [GRUNT_TEXT] = challenge },
       onEnter = function(game, ow) ensureGang(city, ow) end,
+      scripts = {
+        gang_roam = {
+          { "label", "top" },
+          { "rocket_recruits:roam" },
+          { "jump", "top" },
+        },
+      },
     })
   end
 end
