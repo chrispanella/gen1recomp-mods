@@ -24,15 +24,42 @@
 
 -- ------- the merchant's towns (host NPC verified in Yellow data) ----
 
--- `index` is the host NPC's object index on its map, used to float the
--- "!" indicator bubble over it while the merchant is in town.
+-- `index` is the host NPC's object index on its map (targets the
+-- march/patrol). `patrol` (optional) is a list of step directions the
+-- merchant paces while in town; the mod walks it out and back so the NPC
+-- returns to its home tile every loop. Towns WITHOUT a patrol just march
+-- in place. Patrols are set only where the NPC's vanilla sight `range`
+-- hints an open direction, since scripted moves ignore collision.
 local TOWNS = {
   PEWTER    = { map = "PEWTER_CITY",    npc = "TEXT_PEWTERCITY_COOLTRAINER_M",   label = "PEWTER CITY",    index = 2 },
-  CERULEAN  = { map = "CERULEAN_CITY",  npc = "TEXT_CERULEANCITY_COOLTRAINER_M", label = "CERULEAN CITY",  index = 3 },
+  CERULEAN  = { map = "CERULEAN_CITY",  npc = "TEXT_CERULEANCITY_COOLTRAINER_M", label = "CERULEAN CITY",  index = 3, patrol = { "down", "down" } },
   VERMILION = { map = "VERMILION_CITY", npc = "TEXT_VERMILIONCITY_GAMBLER2",     label = "VERMILION CITY", index = 4 },
-  CELADON   = { map = "CELADON_CITY",   npc = "TEXT_CELADONCITY_GRAMPS2",        label = "CELADON CITY",   index = 4 },
-  FUCHSIA   = { map = "FUCHSIA_CITY",   npc = "TEXT_FUCHSIACITY_GAMBLER",        label = "FUCHSIA CITY",   index = 2 },
+  CELADON   = { map = "CELADON_CITY",   npc = "TEXT_CELADONCITY_GRAMPS2",        label = "CELADON CITY",   index = 4, patrol = { "down", "down" } },
+  FUCHSIA   = { map = "FUCHSIA_CITY",   npc = "TEXT_FUCHSIACITY_GAMBLER",        label = "FUCHSIA CITY",   index = 2, patrol = { "right", "right" } },
 }
+
+-- turn a patrol into its return trip (reverse order, opposite each step)
+local OPPOSITE = { up = "down", down = "up", left = "right", right = "left" }
+local function returnTrip(dirs)
+  local r = {}
+  for i = #dirs, 1, -1 do r[#r + 1] = OPPOSITE[dirs[i]] end
+  return r
+end
+
+-- the ambient behavior for a town's stall NPC while the merchant is here
+local function indicatorScript(t)
+  if t.patrol then
+    return {
+      { "label", "top" },
+      { "walk_npc", t.index, t.patrol },              -- pace out
+      { "walk_npc", t.index, returnTrip(t.patrol) },  -- and back home
+      { "wait", 45 },
+      { "jump", "top" },
+    }
+  end
+  -- no verified-open direction: just animate in place (non-blocking)
+  return { { "march_in_place", t.index, true } }
+end
 local ORDER5 = { "PEWTER", "CERULEAN", "VERMILION", "CELADON", "FUCHSIA" }
 local ORDER3 = { "PEWTER", "CERULEAN", "VERMILION" }
 
@@ -188,21 +215,18 @@ return function(mod)
     mod.content.map_scripts:register(t.map, {
       talk = { [t.npc] = buildTalk(townKey, t.map, t.npc) },
 
-      -- On entering the town, if the merchant is here today, set the stall
-      -- NPC "marching in place" so it visibly animates and stands out.
-      -- Unlike the "!" emote (which freezes the overworld by design, like a
-      -- trainer spotting you), march_in_place is NON-blocking, so there is
-      -- no hitch. onEnter composes with the engine's own; the state clears
-      -- on map exit.
+      -- On entering the town, if the merchant is here today, start its
+      -- ambient behavior (a deliberate patrol where we have a verified-open
+      -- direction, otherwise march-in-place). Both are non-freezing, unlike
+      -- the "!" emote. onEnter composes with the engine's own; the parallel
+      -- script dies on map exit.
       onEnter = function(game, ow)
         if currentTown() == townKey then
           ow:queueScript({ { "run_parallel", t.map .. "/tm_indicator" } })
         end
       end,
       scripts = {
-        tm_indicator = {
-          { "march_in_place", t.index, true },
-        },
+        tm_indicator = indicatorScript(t),
       },
     })
   end
