@@ -132,30 +132,51 @@ return function(mod)
     end,
   })
 
-  -- ------- one patrol beat: step onto a walkable tile and back -----
-  -- Background-legal (blocking, not foreground). Reads collision every
-  -- beat, so it can never walk the merchant into a wall or the water.
-  mod.content.commands:register("traveling_merchants:patrol_beat", {
+  -- ------- gentle strolling patrol --------------------------------
+  -- The merchant paces one tile at a time along an open axis, ping-ponging
+  -- within a few tiles of where it spawned, with real pauses between steps
+  -- and the occasional stand-still. Every step is collision-checked against
+  -- mapOverview, so it can never step into a wall or the water. This command
+  -- does its OWN waiting, so the parallel loop just calls it repeatedly.
+  local DELTA = { left = { -1, 0 }, right = { 1, 0 }, up = { 0, -1 }, down = { 0, 1 } }
+
+  -- patrol state for the single live merchant
+  local patrol = { home = nil, pos = "right", neg = "left", travel = 1, offset = 0, range = 2 }
+
+  mod.content.commands:register("traveling_merchants:patrol", {
     fn = function(ctx)
       local ow = ctx.overworld
-      if not ow then return end
+      if not ow then Commands.wait(ctx, 60); return end
       local m = liveMerchant(ow)
-      if not m then return end
+      if not m then Commands.wait(ctx, 60); return end
       local ov = overview()
-      if not ov then return end
-      local cx, cy = m.cellX, m.cellY
-      -- prefer pacing along the route (horizontal), then vertical
-      local tries = {
-        { "left", -1, 0, "right" }, { "right", 1, 0, "left" },
-        { "up", 0, -1, "down" }, { "down", 0, 1, "up" },
-      }
-      for _, d in ipairs(tries) do
-        if walkableAt(ov, cx + d[2], cy + d[3]) then
-          Commands.walk_npc(ctx, m.def.index, { d[1] })       -- out (verified open)
-          Commands.walk_npc(ctx, m.def.index, { d[4] })       -- back home
-          return
-        end
+      if not ov then Commands.wait(ctx, 60); return end
+      if not patrol.home then patrol.home = { x = m.cellX, y = m.cellY } end
+
+      -- sometimes just stand a while and look around
+      if math.random() < 0.35 then
+        Commands.wait(ctx, math.random(70, 170))
+        return
       end
+
+      local dir = patrol.travel > 0 and patrol.pos or patrol.neg
+      local dd = DELTA[dir]
+      local nextOffset = patrol.offset + patrol.travel
+      local nx, ny = m.cellX + dd[1], m.cellY + dd[2]
+      -- turn around at the range bound or a wall/water
+      if math.abs(nextOffset) > patrol.range or not walkableAt(ov, nx, ny) then
+        patrol.travel = -patrol.travel
+        dir = patrol.travel > 0 and patrol.pos or patrol.neg
+        dd = DELTA[dir]
+        nextOffset = patrol.offset + patrol.travel
+        nx, ny = m.cellX + dd[1], m.cellY + dd[2]
+      end
+      if math.abs(nextOffset) <= patrol.range and walkableAt(ov, nx, ny) then
+        Commands.walk_npc(ctx, m.def.index, { dir })
+        patrol.offset = nextOffset
+      end
+      -- a beat between steps so it strolls instead of twitching
+      Commands.wait(ctx, math.random(35, 80))
     end,
   })
 
@@ -179,6 +200,7 @@ return function(mod)
       pcall(function() mod.world:removeNpc(spawn.id) end)
     end
     spawn.id, spawn.map = nil, nil
+    patrol.home, patrol.offset, patrol.travel = nil, 0, 1
   end
 
   -- a walkable tile a few steps from the player, so the merchant is seen
@@ -212,7 +234,18 @@ return function(mod)
     })
     if not id then return end
     spawn.id, spawn.map = id, routeId
-    -- start the collision-aware patrol loop
+
+    -- pick the pacing axis by which way has open room at the spawn tile
+    local hOpen = (walkableAt(ov, x - 1, y) and 1 or 0) + (walkableAt(ov, x + 1, y) and 1 or 0)
+    local vOpen = (walkableAt(ov, x, y - 1) and 1 or 0) + (walkableAt(ov, x, y + 1) and 1 or 0)
+    if hOpen >= vOpen then
+      patrol.pos, patrol.neg = "right", "left"
+    else
+      patrol.pos, patrol.neg = "down", "up"
+    end
+    patrol.home, patrol.offset, patrol.travel = { x = x, y = y }, 0, 1
+
+    -- start the collision-aware strolling loop
     ow:queueScript({ { "run_parallel", routeId .. "/tm_patrol" } })
   end
 
@@ -224,8 +257,7 @@ return function(mod)
       scripts = {
         tm_patrol = {
           { "label", "top" },
-          { "traveling_merchants:patrol_beat" },
-          { "wait", 40 },
+          { "traveling_merchants:patrol" }, -- paces one tile and waits internally
           { "jump", "top" },
         },
       },
