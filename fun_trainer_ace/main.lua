@@ -36,7 +36,8 @@ return function(mod)
 
   mod.content.trainers:register(TRAINER_ID, {
     id = TRAINER_ID,
-    name = "ACE TRAINER LEO",
+    name = "ACE LEO", -- kept short: the engine renders "<name> wants to fight!"
+                      -- and a 15-char name clips the Game Boy text box
     baseMoney = 1200, -- prize money scales off this the vanilla way
     parties = {
       -- party index 1 -- referenced by start_battle below
