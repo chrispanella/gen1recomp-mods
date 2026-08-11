@@ -24,12 +24,14 @@
 
 -- ------- the merchant's towns (host NPC verified in Yellow data) ----
 
+-- `index` is the host NPC's object index on its map, used to float the
+-- "!" indicator bubble over it while the merchant is in town.
 local TOWNS = {
-  PEWTER    = { map = "PEWTER_CITY",    npc = "TEXT_PEWTERCITY_COOLTRAINER_M",   label = "PEWTER CITY" },
-  CERULEAN  = { map = "CERULEAN_CITY",  npc = "TEXT_CERULEANCITY_COOLTRAINER_M", label = "CERULEAN CITY" },
-  VERMILION = { map = "VERMILION_CITY", npc = "TEXT_VERMILIONCITY_GAMBLER2",     label = "VERMILION CITY" },
-  CELADON   = { map = "CELADON_CITY",   npc = "TEXT_CELADONCITY_GRAMPS2",        label = "CELADON CITY" },
-  FUCHSIA   = { map = "FUCHSIA_CITY",   npc = "TEXT_FUCHSIACITY_GAMBLER",        label = "FUCHSIA CITY" },
+  PEWTER    = { map = "PEWTER_CITY",    npc = "TEXT_PEWTERCITY_COOLTRAINER_M",   label = "PEWTER CITY",    index = 2 },
+  CERULEAN  = { map = "CERULEAN_CITY",  npc = "TEXT_CERULEANCITY_COOLTRAINER_M", label = "CERULEAN CITY",  index = 3 },
+  VERMILION = { map = "VERMILION_CITY", npc = "TEXT_VERMILIONCITY_GAMBLER2",     label = "VERMILION CITY", index = 4 },
+  CELADON   = { map = "CELADON_CITY",   npc = "TEXT_CELADONCITY_GRAMPS2",        label = "CELADON CITY",   index = 4 },
+  FUCHSIA   = { map = "FUCHSIA_CITY",   npc = "TEXT_FUCHSIACITY_GAMBLER",        label = "FUCHSIA CITY",   index = 2 },
 }
 local ORDER5 = { "PEWTER", "CERULEAN", "VERMILION", "CELADON", "FUCHSIA" }
 local ORDER3 = { "PEWTER", "CERULEAN", "VERMILION" }
@@ -185,6 +187,25 @@ return function(mod)
   for townKey, t in pairs(TOWNS) do
     mod.content.map_scripts:register(t.map, {
       talk = { [t.npc] = buildTalk(townKey, t.map, t.npc) },
+
+      -- On entering the town, if the merchant is here today, float a
+      -- recurring "!" bubble over the stall so it's findable on sight.
+      -- onEnter composes with the engine's own; the parallel script dies
+      -- on map exit. (`emote` is blocking but not foreground, so it is
+      -- legal in a background script.)
+      onEnter = function(game, ow)
+        if currentTown() == townKey then
+          ow:queueScript({ { "run_parallel", t.map .. "/tm_indicator" } })
+        end
+      end,
+      scripts = {
+        tm_indicator = {
+          { "label", "top" },
+          { "emote", t.index, "shock", 60 }, -- "shock" = the "!" bubble
+          { "wait", 150 },
+          { "jump", "top" },
+        },
+      },
     })
   end
 

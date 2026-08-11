@@ -15,6 +15,8 @@ daily-rotating stock of supplies. Built on [`world_clock`](../world_clock/).
     within a day and across save/load (seeded by the day number).
 - **Supplies shop:** a daily-rotating mix of potions, status heals, drinks,
   and a vitamin — real items at real prices, sold through the normal shop UI.
+- **Findable:** while the merchant is in a town, a recurring **"!" bubble**
+  floats over the stall NPC so you can spot it on sight.
 
 ## Host NPCs (which sprite is the merchant)
 
