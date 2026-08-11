@@ -10,6 +10,7 @@ to make the game more fun. They do not modify the engine.
 | Mod | What it adds |
 |---|---|
 | [`fun_trainer_ace`](fun_trainer_ace/) | ACE TRAINER LEO — an optional battle trainer in Viridian City. Proof-of-concept for adding new trainers. |
+| [`quest_glow_shard`](quest_glow_shard/) | THE GLOW SHARD — a two-town fetch quest (Cerulean → Lavender), with a custom key item, branching dialogue, and a Rare Candy reward. Proof-of-concept for quest NPCs. |
 
 ## Installing / testing a mod
 

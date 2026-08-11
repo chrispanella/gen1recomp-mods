@@ -1,0 +1,15 @@
+{
+  "id": "quest_glow_shard",
+  "name": "The Glow Shard",
+  "version": "0.1.0",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "QUEST",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "A two-town fetch quest: a collector in Cerulean City wants a GLOW SHARD found in Lavender Town. Adds a custom key item, branching dialogue with a YES/NO choice, MOD_ flags, and a RARE CANDY reward. No engine files touched, no map edited."
+}
