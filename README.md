@@ -11,6 +11,7 @@ to make the game more fun. They do not modify the engine.
 |---|---|
 | [`fun_trainer_ace`](fun_trainer_ace/) | ACE TRAINER LEO — an optional battle trainer in Viridian City. Proof-of-concept for adding new trainers. |
 | [`quest_glow_shard`](quest_glow_shard/) | THE GLOW SHARD — a two-town fetch quest (Cerulean → Lavender), with a custom key item, branching dialogue, and a Rare Candy reward. Proof-of-concept for quest NPCs. |
+| [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods to build on. Foundation for time-based content. |
 
 ## Installing / testing a mod
 
