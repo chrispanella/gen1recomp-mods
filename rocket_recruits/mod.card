@@ -1,0 +1,21 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "A roaming Team Rocket gang: a daily challenge in a different city each real-world day, with level-scaled, capped rewards.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "challenge", "battle", "daily", "npc" },
+  differences = {
+    added = {
+      "OPP_ROCKET_RECRUIT trainer with six level-tiered parties (inherits the Rocket battle sprite)",
+      "a three-grunt gang spawned at runtime that moves as a formation and rotates cities daily",
+      "a level-scaled, capped cash reward (avg level x 50, clamped 300-3000) plus a daily-rotating item",
+    },
+    changed = {},
+    known = {
+      "the gang appears once per real day; beating it locks that day's challenge until the next day",
+    },
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}

@@ -2,6 +2,7 @@
   "id": "fun_trainer_ace",
   "name": "Ace Trainer Leo",
   "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",

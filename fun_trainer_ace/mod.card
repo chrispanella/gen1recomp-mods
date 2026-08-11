@@ -1,0 +1,20 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "Adds ACE LEO, an optional battle trainer, to Viridian City.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "trainer", "battle", "content" },
+  differences = {
+    added = {
+      "OPP_FUN_ACE_LEO trainer (Nidorino 15 / Kadabra 16 / Growlithe 17)",
+    },
+    changed = {
+      "the Viridian City gambler challenges you to a one-time battle, "
+        .. "then greets you for a rematch afterward",
+    },
+    known = {},
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}

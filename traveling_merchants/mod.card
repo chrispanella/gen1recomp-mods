@@ -1,0 +1,23 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "Five distinct merchant NPCs out on the routes; their locations and stock rotate on real-world days.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "npc", "shop", "content", "daily" },
+  differences = {
+    added = {
+      "five roaming merchants (Peddler, Digger, Herbalist, Techie, Tamer) spawned at runtime on ROUTE 1-11",
+      "daily-rotating shops: supplies, fossils + evolution stones, vitamins, TMs, and a daily rare Pokemon",
+      "buy prices on DOME_FOSSIL / HELIX_FOSSIL / OLD_AMBER / MOON_STONE (fossils stay unsellable key items)",
+    },
+    changed = {
+      "the four fossil/amber/moonstone items gain a buy price so they can be sold on the route shops",
+    },
+    known = {
+      "merchants appear once per day per route; an NPC cannot walk between maps, so 'travel' is day-by-day presence",
+    },
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}

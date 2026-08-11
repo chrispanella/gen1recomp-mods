@@ -2,13 +2,16 @@
   "id": "rocket_recruits",
   "name": "Rocket Recruits",
   "version": "0.2.0",
+  "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",
   "category": "CHALLENGE",
   "game_version": ">=0.0.0-0 <2.0.0",
   "priority": 100,
-  "permissions": ["engine_internals"],
+  "permissions": [
+    "engine_internals"
+  ],
   "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],

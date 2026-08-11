@@ -1,0 +1,20 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "A two-town fetch quest: bring a Cerulean collector the GLOW SHARD from Lavender Town for a RARE CANDY.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "quest", "story", "scripting" },
+  differences = {
+    added = {
+      "QUEST_GLOW_SHARD_ITEM (GLOW SHARD) key item",
+      "quest branches on the Cerulean super nerd (giver) and Lavender super nerd (holder)",
+    },
+    changed = {
+      "the two super nerds' dialogue is replaced by the quest while it is active",
+    },
+    known = {},
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}

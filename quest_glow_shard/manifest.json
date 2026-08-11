@@ -2,6 +2,7 @@
   "id": "quest_glow_shard",
   "name": "The Glow Shard",
   "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",

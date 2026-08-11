@@ -1,0 +1,19 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "time", "library", "tool" },
+  differences = {
+    added = {
+      "a playtime clock stored in mod.save (resumes at the same time on load)",
+      "an optional on-screen DAY / HH:MM readout",
+      "exports clock() / phase() / isDaytime() and mod.world_clock.day_changed / hour_changed events",
+    },
+    changed = {},
+    known = { "the clock advances during play only; it does not track real-world time" },
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}
