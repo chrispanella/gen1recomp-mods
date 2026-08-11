@@ -1,0 +1,15 @@
+{
+  "id": "fun_trainer_ace",
+  "name": "Ace Trainer Leo",
+  "version": "0.1.0",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "TRAINER",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Adds an optional battle trainer, ACE TRAINER LEO, to Viridian City. Proof-of-concept content mod: registers a new trainer party and places it on a vanilla NPC through a map talk script. No engine files touched, no map edited."
+}

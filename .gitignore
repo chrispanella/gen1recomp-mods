@@ -1,0 +1,13 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Never commit ROMs or extracted game data
+*.gb
+*.gbc
+*.sav
+build/
+cache/
