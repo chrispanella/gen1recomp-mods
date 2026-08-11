@@ -1,9 +1,14 @@
 # Traveling Merchants
 
-A dedicated merchant NPC that appears **out on the routes** (not in towns,
-which already have marts), travels route-to-route by in-game day, and
-**moves under real collision** — it never walks through walls or water.
-Built on [`world_clock`](../world_clock/).
+Five distinct merchant NPCs who appear **out on the routes** (not in towns,
+which already have marts). Each has its own look, personality, specialty,
+route pair, and patrol style, and **moves under real collision** — none of
+them walk through walls or water. Their **locations and stock rotate on
+real-world days** (they change at your local midnight).
+
+No in-game clock required — since merchants don't roam with the time of day,
+the day just comes from the real date. (`world_clock` is now optional and
+can be disabled.)
 
 ## How it works
 
@@ -55,17 +60,25 @@ where I'd tune.
   Scyther, Pinsir, Tauros, Chansey, Porygon, Snorlax) — **never** a common
   species. Bought mons go to your party (or a PC box if it's full).
 
-## The two merchants
+## The merchants
 
-| Merchant | Sprite | Route style | Sells |
-|---|---|---|---|
-| **Peddler** | Clerk | ROUTE 1–5, per the OPTIONS route mode | supplies, rare wares, Pokémon |
-| **Trader** | Gentleman | shuttle: ROUTE 11 ⇄ 12 by day | supplies, rare wares |
+Each rotates between its two/three routes by real-world day, and its stock
+rerolls daily.
+
+| Merchant | Sprite | Routes | Style | Sells |
+|---|---|---|---|---|
+| **Peddler** | Clerk | 1 · 2 · 3 | roams (range 3) | daily supplies |
+| **Digger** | Super Nerd | 4 · 5 | stops a lot (range 2) | the fossil you missed, Old Amber, Moon Stone, daily evolution stones |
+| **Herbalist** | Nurse | 6 · 7 | ambles (range 2) | vitamins, Rare Candy, heals |
+| **Techie** | Scientist | 8 · 9 | paces widely (range 4) | 4 daily-rotating TMs |
+| **Tamer** | Gentleman | 10 · 11 | mostly stands (range 1) | a daily rare Pokémon + curios (Nugget, a stone) |
+
+To find who's where today, warp to a route and look for the strolling NPC;
+each is on `routes[realDay mod N]`.
 
 ## Roadmap
 
-- Longer/varied patrol routes and more merchants with distinct styles.
-- Per-merchant price haggling / reputation, seasonal stock.
+- Longer/varied patrol shapes, more merchants, price haggling / reputation.
 
 ## Notes / limits
 
