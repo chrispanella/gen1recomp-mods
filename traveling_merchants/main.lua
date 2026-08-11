@@ -313,15 +313,39 @@ return function(mod)
     patrolState[m.text] = nil
   end
 
+  -- Flood-fill from the player over walkable tiles, so the merchant is only
+  -- ever placed somewhere the player can actually WALK to (not a walkable
+  -- patch fenced off on the other side of a hedge/pond). Prefer a spot a few
+  -- tiles away with open horizontal room to pace.
   local function pickSpawnCell(ov, ow)
-    local px = ow.player and ow.player.cellX or math.floor(ov.width / 2)
-    local py = ow.player and ow.player.cellY or math.floor(ov.height / 2)
-    for r = 2, 7 do
-      for _, o in ipairs({ { r, 0 }, { -r, 0 }, { 0, r }, { 0, -r },
-                           { r, r }, { -r, -r }, { r, -r }, { -r, r } }) do
-        if walkableAt(ov, px + o[1], py + o[2]) then return px + o[1], py + o[2] end
+    local px = ow.player and ow.player.cellX
+    local py = ow.player and ow.player.cellY
+    if not px or not py then return nil end
+    local W = ov.width
+    local seen, q, head = {}, { { px, py } }, 1
+    seen[py * W + px] = true
+    local best, nearFallback
+    while head <= #q and head < 4000 do
+      local c = q[head]; head = head + 1
+      local cx, cy = c[1], c[2]
+      local dist = math.abs(cx - px) + math.abs(cy - py)
+      if dist >= 1 and not nearFallback then nearFallback = { cx, cy } end
+      if dist >= 3 and dist <= 9 and not best then
+        if walkableAt(ov, cx - 1, cy) or walkableAt(ov, cx + 1, cy)
+           or walkableAt(ov, cx, cy - 1) or walkableAt(ov, cx, cy + 1) then
+          best = { cx, cy } -- reachable, with room to move
+        end
+      end
+      for _, d in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
+        local nx, ny = cx + d[1], cy + d[2]
+        if walkableAt(ov, nx, ny) and not seen[ny * W + nx] then
+          seen[ny * W + nx] = true
+          q[#q + 1] = { nx, ny }
+        end
       end
     end
+    local pick = best or nearFallback
+    if pick then return pick[1], pick[2] end
     return nil
   end
 
