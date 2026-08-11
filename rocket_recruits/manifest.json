@@ -1,0 +1,16 @@
+{
+  "id": "rocket_recruits",
+  "name": "Rocket Recruits",
+  "version": "0.1.0",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "CHALLENGE",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "permissions": ["engine_internals"],
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "A gang of Team Rocket recruits hangs out in a different city each real-world day as a DAILY CHALLENGE. Beat the gang (one battle whose party scales to your level) for a level-scaled, CAPPED cash reward plus a daily-rotating item. Spawned at runtime with real collision - no map edits. Once beaten, the gang won't rebattle until the next day."
+}
