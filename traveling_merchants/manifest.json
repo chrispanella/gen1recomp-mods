@@ -1,0 +1,16 @@
+{
+  "id": "traveling_merchants",
+  "name": "Traveling Merchants",
+  "version": "0.1.0",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "MERCHANT",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "permissions": ["engine_internals"],
+  "dependencies": ["world_clock"],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "STAGE 1: a merchant that travels between towns by in-game day (via world_clock), selectable route mode (3-town / 5-town / random-each-day) in OPTIONS, and a daily-rotating SUPPLIES shop (healing, drinks, vitamins). Reuses one existing NPC per town and restores its vanilla dialogue when the merchant is elsewhere. Rare wares, fossils, and Pokemon come in later stages."
+}
