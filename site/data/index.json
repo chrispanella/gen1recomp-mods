@@ -6,8 +6,10 @@
     "MAP",
     "MERCHANT",
     "QUEST",
+    "SOCIAL",
     "TIME",
-    "TRAINER"
+    "TRAINER",
+    "UI"
   ],
   "mods": [
     {
@@ -33,6 +35,31 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/branching_quests.zip"
+    },
+    {
+      "id": "friendships",
+      "title": "Friendships",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "Build relationships with six townsfolk over real-world days; warmer greetings and gifts as bonds grow.",
+      "categories": [
+        "SOCIAL"
+      ],
+      "tags": [
+        "social",
+        "relationship",
+        "content"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/friendships.zip"
     },
     {
       "id": "fun_trainer_ace",
@@ -102,6 +129,29 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/quest_glow_shard.zip"
+    },
+    {
+      "id": "quest_tracker",
+      "title": "Quest Tracker",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "A QUESTS entry in the START menu that tracks every quest in the pack and its status.",
+      "categories": [
+        "UI"
+      ],
+      "tags": [
+        "ui",
+        "quest",
+        "tool"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/quest_tracker.zip"
     },
     {
       "id": "rocket_recruits",

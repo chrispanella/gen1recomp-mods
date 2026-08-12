@@ -31,6 +31,8 @@ also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
 | [`town_quests`](town_quests/) | Four cross-town fetch quests (keepsake, letter, rare herb, luck charm) between NPCs in different towns, each with a custom key item and a reward. |
 | [`branching_quests`](branching_quests/) | Five questlines with real choices and multiple endings, where NPCs react to the side you pick (including a multi-step Silph investigation that ends in expose-vs-cover-up). |
 | [`new_area_clubhouse`](new_area_clubhouse/) | Experimental example of adding a brand-new map: a Clubhouse room off Pallet Town with its own NPC and gift. A template for new areas; see [docs/make-your-first-area.md](docs/make-your-first-area.md). |
+| [`quest_tracker`](quest_tracker/) | Adds a QUESTS entry to the START menu that tracks every quest in the pack (not started / active / done / which ending). |
+| [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods to build on. Foundation for time-based content. |
 | [`traveling_merchants`](traveling_merchants/) | Five distinct merchant NPCs out on the routes (Peddler, Digger, Herbalist, Techie, Tamer), each with its own sprite, specialty wares, route pair, and patrol style. Locations and stock rotate on real-world days. |
 | [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang that appears in a different city each real-world day as a daily challenge - one level-scaled battle for a capped cash reward + a rotating item. |

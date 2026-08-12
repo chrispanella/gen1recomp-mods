@@ -1,32 +1,36 @@
-# Ace Trainer Leo
+# Wandering Trainers
 
-Adds an optional battle trainer - **ACE TRAINER LEO** - to Viridian City.
+Sprinkles **eight optional battle trainers** across the towns. Each one is an
+existing townsperson who now **asks if you'd like to battle** (YES/NO) before
+any fight, so they are purely optional. Beat one and it greets you with a
+rematch line afterward, just like a real trainer.
 
-Talk to the gambler NPC in Viridian City and he'll challenge you to a
-battle (Nidorino 15 / Kadabra 16 / Growlithe 17). Beat him once and he
-switches to a friendly rematch line, just like a vanilla trainer.
+## The trainers
 
-## What this demonstrates
+| Town | Trainer | Team level |
+|---|---|---|
+| Viridian | Ace Leo | ~15 |
+| Pewter | Hiker Rocky | ~13 |
+| Cerulean | Cooltrainer Dorian | ~19 |
+| Vermilion | Beauty Blaze (fire) | ~23 |
+| Celadon | Fisher Marina (water) | ~29 |
+| Lavender | Medium Spectra (ghost) | ~31 |
+| Fuchsia | Juggler Venom (poison) | ~35 |
+| Cinnabar | Ember (fire) | ~42 |
 
-This is a minimal, self-contained example of the two registries you use
-for almost all "new trainer" content:
+Parties scale by town progression, each trainer has its own flavor, prize
+money is modest, and a beaten trainer switches to a friendly rematch greeting.
 
-| Registry | Role |
-|---|---|
-| `mod.content.trainers` | Defines the trainer: name, prize money, party. |
-| `mod.content.map_scripts` | Places the battle on a map NPC via a `talk` script. |
+## How it works
 
-The battle is triggered by the `start_battle` script verb; `lastCheck`
-is `true` after a win, so the script branches on the outcome with
-`jump_if_false`. No engine files are edited and no map is changed.
+Each entry registers a trainer (`mod.content.trainers`) and places it on a
+real NPC via a `map_scripts` talk script. Talking runs a `check_flag` for the
+beaten state, a `choice` for the YES/NO prompt, then `start_battle`; a win
+sets the beaten flag. All registry content - no engine files edited, no maps
+changed.
 
-## How to extend it
+## Extending it
 
-- **Different party / levels** - edit the `parties` table in `main.lua`.
-- **Multiple parties on one trainer** - add more entries to `parties` and
-  select them with the party-index argument to `start_battle`.
-- **A different location** - change `"VIRIDIAN_CITY"` and `HOST_NPC` to
-  another map id and one of its `TEXT_*` NPC constants.
-- **A truly new NPC** (not an override of an existing one) - author the
-  map in Tiled and export it as a map mod; see the engine's
-  `docs/tiled-map-editing.md`.
+Add a row to the `TRAINERS` table in `main.lua`: a town map, an NPC `TEXT_`
+constant, a party (a list of `{ level, species }`), prize money, and the
+dialogue lines.

@@ -1,0 +1,16 @@
+{
+  "id": "quest_tracker",
+  "name": "Quest Tracker",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "UI",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Adds a QUESTS entry to the START menu that opens a quest log tracking every quest in this mod pack (Glow Shard, the four Town Quests, and the five Branching Quests), showing each as not started, active, done, or which ending you chose. Reads the quests' save flags, so it needs no cooperation from the other mods. No engine files touched, no maps edited."
+}

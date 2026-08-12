@@ -1,0 +1,17 @@
+{
+  "id": "friendships",
+  "name": "Friendships",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "SOCIAL",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "permissions": ["engine_internals"],
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Build relationships with six townsfolk over time. Talk to a befriendable NPC once a real-world day to raise your bond from STRANGER to BEST PAL; their greetings warm up and they gift you an item each time you reach a new level. A FRIENDS entry in the START menu tracks every bond. Persists with the save. Gym-leader friendships are a planned follow-up. No engine files touched, no maps edited."
+}

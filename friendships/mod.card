@@ -1,0 +1,23 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "Build relationships with six townsfolk over real-world days; warmer greetings and gifts as bonds grow.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "social", "relationship", "content" },
+  differences = {
+    added = {
+      "six befriendable townsfolk (Pallet, Viridian, Pewter, Cerulean, Vermilion, Cinnabar) whose bond grows once per real day",
+      "four friendship levels (STRANGER to BEST PAL) with changing greetings and a gift at each new level",
+      "a FRIENDS entry in the start menu that tracks every bond",
+    },
+    changed = {
+      "six townspeople gain friendship dialogue; the start menu gains one entry",
+    },
+    known = {
+      "gym-leader friendships are a planned follow-up (their NPC triggers the gym battle, so they need the baseTalk pattern)",
+    },
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}
