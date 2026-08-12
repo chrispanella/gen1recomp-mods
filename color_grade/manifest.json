@@ -1,0 +1,16 @@
+{
+  "id": "color_grade",
+  "name": "Color Grade",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "GRAPHICS",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Richer color (saturation + contrast) via a small shader, with a safe pass-through fallback. OPTIONS: OFF/SOFT/RICH/MAX."
+}

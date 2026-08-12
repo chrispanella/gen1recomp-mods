@@ -1,0 +1,19 @@
+{
+  "id": "wonder_trader",
+  "name": "Wonder Trader",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "CONTENT",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "permissions": [
+    "engine_internals"
+  ],
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "A girl in Celadon gives you one rare Pokemon per real day (never a common species)."
+}

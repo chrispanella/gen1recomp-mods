@@ -35,6 +35,36 @@ also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
 | [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a timer (1-30 min, configurable) - your choice in OPTIONS. Deferred to safe overworld moments. |
 | [`visual_enhance`](visual_enhance/) | Dynamic day/night lighting: tints the overworld by time of day (from world_clock or your real clock) via a render pipeline. Hotkey 7. |
+
+### Visual enhancements (render pipelines; each adds an OPTIONS row and they stack)
+
+| Mod | What it adds |
+|---|---|
+| [`crt_filter`](crt_filter/) | Scanline / CRT look over the frame. |
+| [`vignette`](vignette/) | Soft edge darkening for a focused look. |
+| [`letterbox`](letterbox/) | Cinematic black bars (thin/wide/epic). |
+| [`weather_fx`](weather_fx/) | Animated rain, snow, or fog over the world. |
+| [`ambient_motes`](ambient_motes/) | Soft glowing motes drifting for atmosphere. |
+| [`chromatic`](chromatic/) | Retro RGB channel split (chromatic aberration). |
+| [`film_grain`](film_grain/) | A light animated filmic grain. |
+| [`night_stars`](night_stars/) | Twinkling stars in the night sky (time-aware). |
+| [`color_grade`](color_grade/) | Richer saturation + contrast (small shader, safe fallback). |
+| [`duotone`](duotone/) | Retro two-tone looks: Game Boy green, sepia, noir. |
+
+### More content and quality-of-life
+
+| Mod | What it adds |
+|---|---|
+| [`daily_gift`](daily_gift/) | A Pewter NPC gives a free item once per real day. |
+| [`wonder_trader`](wonder_trader/) | A daily rare Pokemon from a Celadon NPC. |
+| [`daily_lottery`](daily_lottery/) | Pick a number once a day in Vermilion for a prize. |
+| [`berry_grove`](berry_grove/) | A daily healing item from a Cerulean guard. |
+| [`type_sage`](type_sage/) | A rotating daily type-matchup tip. |
+| [`veteran`](veteran/) | A re-battleable trainer in Viridian for grinding. |
+| [`starter_pack`](starter_pack/) | A one-time item kit for new trainers. |
+| [`daily_coins`](daily_coins/) | Daily Game Corner coins from a Cerulean NPC. |
+| [`roaming_boss`](roaming_boss/) | A tough Champion roams cities; big prize, level-scaled. |
+| [`legendary_shrine`](legendary_shrine/) | A daily rotating legendary wild battle on Route 10. |
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods to build on. Foundation for time-based content. |
 | [`traveling_merchants`](traveling_merchants/) | Five distinct merchant NPCs out on the routes (Peddler, Digger, Herbalist, Techie, Tamer), each with its own sprite, specialty wares, route pair, and patrol style. Locations and stock rotate on real-world days. |
 | [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang that appears in a different city each real-world day as a daily challenge - one level-scaled battle for a capped cash reward + a rotating item. |

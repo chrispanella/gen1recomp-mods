@@ -1,0 +1,18 @@
+{
+  "id": "night_stars",
+  "name": "Night Stars",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "GRAPHICS",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [
+    "world_clock"
+  ],
+  "conflicts": [],
+  "description": "Twinkling stars appear in the night sky (follows world_clock's in-game hour or your real local time). OPTIONS: OFF/DIM/BRIGHT."
+}
