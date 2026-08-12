@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "generated_at": "static",
+  "categories": [
+    "CHALLENGE",
+    "MERCHANT",
+    "QUEST",
+    "TIME",
+    "TRAINER"
+  ],
+  "mods": [
+    {
+      "id": "fun_trainer_ace",
+      "title": "Ace Trainer Leo",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "Adds ACE LEO, an optional battle trainer, to Viridian City.",
+      "categories": [
+        "TRAINER"
+      ],
+      "tags": [
+        "trainer",
+        "battle",
+        "content"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/fun_trainer_ace.zip"
+    },
+    {
+      "id": "quest_glow_shard",
+      "title": "The Glow Shard",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "A two-town fetch quest: bring a Cerulean collector the GLOW SHARD from Lavender Town for a RARE CANDY.",
+      "categories": [
+        "QUEST"
+      ],
+      "tags": [
+        "quest",
+        "story",
+        "scripting"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/quest_glow_shard.zip"
+    },
+    {
+      "id": "rocket_recruits",
+      "title": "Rocket Recruits",
+      "author": "chrispanella",
+      "version": "0.2.0",
+      "summary": "A roaming Team Rocket gang: a daily challenge in a different city each real-world day, with level-scaled, capped rewards.",
+      "categories": [
+        "CHALLENGE"
+      ],
+      "tags": [
+        "challenge",
+        "battle",
+        "daily",
+        "npc"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/rocket_recruits.zip"
+    },
+    {
+      "id": "traveling_merchants",
+      "title": "Traveling Merchants",
+      "author": "chrispanella",
+      "version": "0.6.0",
+      "summary": "Five distinct merchant NPCs out on the routes; their locations and stock rotate on real-world days.",
+      "categories": [
+        "MERCHANT"
+      ],
+      "tags": [
+        "npc",
+        "shop",
+        "content",
+        "daily"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/traveling_merchants.zip"
+    },
+    {
+      "id": "world_clock",
+      "title": "World Clock",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods.",
+      "categories": [
+        "TIME"
+      ],
+      "tags": [
+        "time",
+        "library",
+        "tool"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/world_clock.zip"
+    }
+  ]
+}

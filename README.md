@@ -5,6 +5,23 @@ a hand-written Lua/LÖVE2D recreation of Pokémon Red/Blue/Yellow/Gold with a
 native modding system. These mods add content (trainers, NPCs, quests, …)
 to make the game more fun. They do not modify the engine.
 
+## Install in-game (mod index)
+
+This repo is an installable **mod index**. In gen1recomp, open the mod
+manager (**F10**) → add a mod index → enter:
+
+```
+chrispanella/gen1recomp-mods
+```
+
+All the mods below will appear; install any of them and enable it. (You can
+also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
+**MODS → Import mod .zip**.)
+
+> The index feed lives at `site/data/index.json`; the game reads it from
+> GitHub Pages, falling back to the raw file, so it works as soon as this
+> repo is public.
+
 ## Mods in this repo
 
 | Mod | What it adds |

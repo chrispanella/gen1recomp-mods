@@ -1,0 +1,63 @@
+name: Build mod index
+
+# Rebuilds the installable mod zips + index.json whenever a mod changes,
+# commits the refreshed site/ (so the raw-fallback feed stays current), and
+# deploys the feed to GitHub Pages.
+#
+# One-time setup by the repo owner: Settings > Pages > Source: GitHub Actions.
+# Until that is on, the index still works via the engine's raw fallback:
+#   https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/data/index.json
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'site/**'
+      - '**.md'
+      - '.github/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: mod-index
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Build index + zips
+        env:
+          BUILD_STAMP: ${{ github.sha }}
+        run: python tools/build_index.py
+      - name: Commit refreshed site/
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add site
+          if ! git diff --cached --quiet; then
+            git commit -m "Rebuild mod index [skip ci]"
+            git push
+          fi
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
