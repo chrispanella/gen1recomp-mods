@@ -55,11 +55,25 @@ local ALCHEMY = {
   { out = "MAX_POTION",   name = "MAX POTION",   lvl = 4, xp = 20, mats = { { "ORAN_HERB", 3 }, { "MYSTIC_HERB", 3 } } },
   { out = "FULL_RESTORE", name = "FULL RESTORE", lvl = 5, xp = 28, mats = { { "MYSTIC_HERB", 3 }, { "ORAN_HERB", 2 }, { "CHESTO_LEAF", 1 } } },
 }
-local COOKING = {
-  { out = "FRESH_WATER", name = "FRESH WATER", lvl = 1, xp = 6,  mats = { { "FRESH_BERRY", 2 } } },
-  { out = "SODA_POP",    name = "SODA POP",    lvl = 2, xp = 9,  mats = { { "FRESH_BERRY", 3 } } },
-  { out = "LEMONADE",    name = "LEMONADE",    lvl = 3, xp = 12, mats = { { "FRESH_BERRY", 3 }, { "ORAN_HERB", 1 } } },
+-- COOKING makes BUFF FOOD: custom items that, eaten in battle, raise the active
+-- Pokemon's stat stages for the rest of the fight (a multi-stat X-item). Which
+-- dishes you can cook is gated by BADGES, so each region unlocks a better meal -
+-- the same way your Pokemon obey you further as you earn badges.
+local STAT_LABEL = { attack = "ATK", defense = "DEF", speed = "SPD", special = "SPC" }
+local FOODS = {
+  { id = "BERRY_JUICE", name = "BERRY JUICE", badges = 0, xp = 6,  mats = { { "FRESH_BERRY", 2 } },                        buff = { { "speed", 1 } } },
+  { id = "RICE_BALL",   name = "RICE BALL",   badges = 1, xp = 8,  mats = { { "FRESH_BERRY", 3 } },                        buff = { { "attack", 1 } } },
+  { id = "VEGGIE_WRAP", name = "VEGGIE WRAP", badges = 2, xp = 9,  mats = { { "FRESH_BERRY", 3 }, { "ORAN_HERB", 1 } },    buff = { { "defense", 1 } } },
+  { id = "SPICY_CURRY", name = "SPICY CURRY", badges = 3, xp = 12, mats = { { "FRESH_BERRY", 4 }, { "ORAN_HERB", 1 } },    buff = { { "attack", 1 }, { "speed", 1 } } },
+  { id = "HEARTY_STEW", name = "HEARTY STEW", badges = 4, xp = 14, mats = { { "FRESH_BERRY", 4 }, { "MYSTIC_HERB", 1 } },  buff = { { "defense", 1 }, { "special", 1 } } },
+  { id = "GLORY_BOWL",  name = "GLORY BOWL",  badges = 5, xp = 18, mats = { { "FRESH_BERRY", 5 }, { "MYSTIC_HERB", 1 } },  buff = { { "attack", 1 }, { "defense", 1 }, { "speed", 1 } } },
+  { id = "SAGE_FEAST",  name = "SAGE FEAST",  badges = 6, xp = 22, mats = { { "FRESH_BERRY", 5 }, { "MYSTIC_HERB", 2 } },  buff = { { "special", 2 } } },
+  { id = "GRAND_FEAST", name = "GRAND FEAST", badges = 7, xp = 30, mats = { { "FRESH_BERRY", 6 }, { "MYSTIC_HERB", 3 } },  buff = { { "attack", 1 }, { "defense", 1 }, { "speed", 1 }, { "special", 1 } } },
 }
+local COOKING = {}
+for _, f in ipairs(FOODS) do
+  COOKING[#COOKING + 1] = { out = f.id, name = f.name, badges = f.badges, xp = f.xp, mats = f.mats }
+end
 local ENGINEERING = {
   { out = "POKE_BALL",  name = "POKe BALL",  lvl = 1, xp = 6,  mats = { { "RED_APRICORN", 2 } } },
   { out = "GREAT_BALL", name = "GREAT BALL", lvl = 2, xp = 9,  mats = { { "BLU_APRICORN", 2 } } },
@@ -114,10 +128,47 @@ return function(mod)
     mod.content.items:register(m.id, { id = m.id, name = m.name, price = 100, keyItem = false, tossable = true })
   end
 
+  -- buff-food items + their in-battle stat-boost effects (eaten during a fight,
+  -- they raise the active Pokemon's stat stages for the rest of that battle)
+  local function foodEffect(food)
+    return function(ctx)
+      if not (ctx.battle and ctx.battle.player) then
+        return "failed", { "It is not the time\nto eat that." }
+      end
+      local b = ctx.battle.player
+      local raised = {}
+      for _, s in ipairs(food.buff) do
+        local cur = b.stages[s[1]] or 0
+        if cur < 6 then
+          b.stages[s[1]] = math.min(6, cur + s[2])
+          raised[#raised + 1] = STAT_LABEL[s[1]]
+        end
+      end
+      local who = b.name or "POKeMON"
+      if #raised == 0 then return "consumed", { who .. " is already\npumped up!" } end
+      return "consumed", { who .. " ate the\n" .. food.name .. "!", table.concat(raised, " ") .. " rose!" }
+    end
+  end
+  for _, food in ipairs(FOODS) do
+    mod.content.items:register(food.id, { id = food.id, name = food.name, price = 200, keyItem = false, tossable = true, effect = food.id })
+    mod.content.item_effects:register(food.id, { use = foodEffect(food), battle = true, field = false })
+  end
+
   -- ---- levels ----
   local function xpOf(disc) return mod.save:get("xp_" .. disc, 0) end
   local function levelOf(disc) return levelFor(xpOf(disc)) end
   local function addXP(disc, n) mod.save:set("xp_" .. disc, xpOf(disc) + n) end
+  local function badgeCount(save)
+    local ok, n = pcall(function() return require("src.inventory.Badges").count(nil, save) end)
+    return (ok and type(n) == "number") and n or 0
+  end
+  -- returns (unlocked, lockLabel); cooking recipes gate on BADGES, others on level
+  local function gateInfo(save, disc, r)
+    if r.badges ~= nil then
+      return badgeCount(save) >= r.badges, "Bg " .. r.badges
+    end
+    return levelOf(disc) >= (r.lvl or 1), "Lv " .. (r.lvl or 1)
+  end
 
   -- ---- crafting maths ----
   local function count(save, id) return save.inventory[id] or 0 end
@@ -131,7 +182,7 @@ return function(mod)
     return table.concat(parts, "+")
   end
   local function doCraft(game, disc, r)
-    if levelOf(disc) < r.lvl then return false, "level" end
+    if not gateInfo(game.save, disc, r) then return false, "gate" end
     if not haveMats(game.save, r) then return false, "mats" end
     for _, m in ipairs(r.mats) do Bag.remove(game.save, m[1], m[2]) end
     if not Bag.add(game.save, r.out, 1, game.data) then
@@ -146,10 +197,10 @@ return function(mod)
   -- ---- discipline recipe screens ----
   local function makeDiscScreen(disc, label, recipes)
     local function rows(game)
-      local out, lv = {}, levelOf(disc)
+      local out = {}
       for _, r in ipairs(recipes) do
-        local locked = lv < r.lvl
-        out[#out + 1] = { label = r.name, right = locked and ("Lv " .. r.lvl) or costText(r), recipe = r }
+        local ok, lock = gateInfo(game.save, disc, r)
+        out[#out + 1] = { label = r.name, right = ok and costText(r) or lock, recipe = r }
       end
       out[#out + 1] = { label = "BACK" }
       return out
@@ -166,8 +217,12 @@ return function(mod)
               m.footer = label .. " is now Lv " .. levelOf(disc) .. "!"
             elseif ok then
               m.footer = "Made a " .. item.recipe.name .. "!"
-            elseif why == "level" then
-              m.footer = "Reach " .. label .. " Lv " .. item.recipe.lvl .. " first."
+            elseif why == "gate" then
+              if item.recipe.badges ~= nil then
+                m.footer = "Needs " .. item.recipe.badges .. " badges."
+              else
+                m.footer = "Reach " .. label .. " Lv " .. item.recipe.lvl .. " first."
+              end
             elseif why == "full" then
               m.footer = "Your bag is full."
             else

@@ -62,8 +62,8 @@
       "id": "crafting",
       "title": "Crafting & Alchemy",
       "author": "chrispanella",
-      "version": "0.3.0",
-      "summary": "A crafting hub you open at a bench (Cerulean or Celadon). The main menu branches into ALCHEMY (potions and status heals), COOKING (drinks and food), ENGINEERING (Poke/Great/Ultra Balls, fishing rods, a bicycle), and GATHERING (a view of your materials). Each discipline has its own level that rises as you craft and unlocks better recipes. Materials come from foraging spots on routes (refill weekly, placed off the main path) and a chance drop after winning wild battles; both also raise your Gathering level.",
+      "version": "0.4.0",
+      "summary": "A crafting hub you open at a bench (Cerulean or Celadon). The main menu branches into ALCHEMY (potions and status heals), COOKING (badge-gated buff food that raises a Pokemon's stats when eaten in battle - each region unlocks a better dish), ENGINEERING (Poke/Great/Ultra Balls, fishing rods, a bicycle), and GATHERING (a view of your materials). Each discipline has its own level that rises as you craft and unlocks better recipes. Materials come from foraging spots on routes (refill weekly, placed off the main path) and a chance drop after winning wild battles; both also raise your Gathering level.",
       "categories": [
         "TOOL"
       ],
