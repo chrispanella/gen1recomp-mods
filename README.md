@@ -1,14 +1,14 @@
 # gen1-fun-mods
 
-Content mods for [**gen1recomp**](https://github.com/bryanthaboi/gen1recomp) —
+Content mods for [**gen1recomp**](https://github.com/bryanthaboi/gen1recomp) -
 a hand-written Lua/LÖVE2D recreation of Pokémon Red/Blue/Yellow/Gold with a
-native modding system. These mods add content (trainers, NPCs, quests, …)
+native modding system. These mods add content (trainers, NPCs, quests, ...)
 to make the game more fun. They do not modify the engine.
 
 ## Install in-game (mod index)
 
 This repo is an installable **mod index**. In gen1recomp, open the mod
-manager (**F10**) → add a mod index → enter:
+manager (**F10**) -> add a mod index -> enter:
 
 ```
 chrispanella/gen1recomp-mods
@@ -16,7 +16,7 @@ chrispanella/gen1recomp-mods
 
 All the mods below will appear; install any of them and enable it. (You can
 also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
-**MODS → Import mod .zip**.)
+**MODS -> Import mod .zip**.)
 
 > The index feed lives at `site/data/index.json`; the game reads it from
 > GitHub Pages, falling back to the raw file, so it works as soon as this
@@ -26,12 +26,12 @@ also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
 
 | Mod | What it adds |
 |---|---|
-| [`fun_trainer_ace`](fun_trainer_ace/) | **Wandering Trainers** — eight optional battle trainers sprinkled across the towns, each asking YES/NO before the fight, with a rematch greeting once beaten. |
-| [`quest_glow_shard`](quest_glow_shard/) | THE GLOW SHARD — a two-town fetch quest (Cerulean → Lavender), with a custom key item, branching dialogue, and a Rare Candy reward. |
+| [`fun_trainer_ace`](fun_trainer_ace/) | **Wandering Trainers** - eight optional battle trainers sprinkled across the towns, each asking YES/NO before the fight, with a rematch greeting once beaten. |
+| [`quest_glow_shard`](quest_glow_shard/) | THE GLOW SHARD - a two-town fetch quest (Cerulean -> Lavender), with a custom key item, branching dialogue, and a Rare Candy reward. |
 | [`town_quests`](town_quests/) | Four cross-town fetch quests (keepsake, letter, rare herb, luck charm) between NPCs in different towns, each with a custom key item and a reward. |
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods to build on. Foundation for time-based content. |
 | [`traveling_merchants`](traveling_merchants/) | Five distinct merchant NPCs out on the routes (Peddler, Digger, Herbalist, Techie, Tamer), each with its own sprite, specialty wares, route pair, and patrol style. Locations and stock rotate on real-world days. |
-| [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang that appears in a different city each real-world day as a daily challenge — one level-scaled battle for a capped cash reward + a rotating item. |
+| [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang that appears in a different city each real-world day as a daily challenge - one level-scaled battle for a capped cash reward + a rotating item. |
 
 ## Installing / testing a mod
 

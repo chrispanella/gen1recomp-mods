@@ -18,13 +18,13 @@ Pokémon save. That means:
 
 If you'd instead want the world to advance by *real* calendar time (so it
 "moves on" while the game is closed), that's a one-line swap to `os.time()`
-— ask and I'll add it as an option.
+- ask and I'll add it as an option.
 
 ## Tuning (top of `main.lua`)
 
 | Constant | Default | Meaning |
 |---|---|---|
-| `MINUTES_PER_SECOND` | `1` | 1 real second = 1 game minute (a game-day ≈ 24 real min). |
+| `MINUTES_PER_SECOND` | `1` | 1 real second = 1 game minute (a game-day ~ 24 real min). |
 | `START_MINUTES` | `480` | New games start at Day 1, 08:00. |
 | `SHOW_CLOCK_HUD` | `true` | Draw the on-screen readout. |
 
@@ -55,4 +55,4 @@ Declare it in your manifest so load order is right:
 
 Launch in developer mode, load any save, and watch the top-left readout
 tick. At the default rate an in-game hour passes each real minute. Save,
-quit, relaunch, and load — the clock resumes where you left it.
+quit, relaunch, and load - the clock resumes where you left it.
