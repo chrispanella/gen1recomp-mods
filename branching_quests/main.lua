@@ -144,9 +144,124 @@ local function q2_poacher()
   }
 end
 
+-- ------- Quest 3: The Silph Whistleblower (multi-step) -------------
+-- A three-town investigation: gather two clues, then choose to expose the
+-- wrongdoing or sell your silence. Clues are tracked with flags only.
+local Q3 = { STARTED = "MOD_BQ3_STARTED", C1 = "MOD_BQ3_CLUE1", C2 = "MOD_BQ3_CLUE2",
+             DONE = "MOD_BQ3_DONE", HERO = "MOD_BQ3_END_HERO", GREED = "MOD_BQ3_END_GREED" }
+
+local function q3_gentleman()
+  return {
+    { "check_flag", Q3.DONE }, { "jump_if_true", "after" },
+    { "check_flag", Q3.STARTED }, { "jump_if_true", "pending" },
+    { "show_text", "Psst... I work at\nSILPH. Something's\vwrong in there.\fGather proof for\nme? Two people\vcould help." },
+    { "choice", { "I'LL HELP", "NO" } },
+    { "jump_if_false", "refuse" },
+    { "set_flag", Q3.STARTED },
+    { "show_text", "A retiree in\nCELADON, a dock\vworker in\vVERMILION.\fBe discreet!" },
+    { "jump", "end" },
+    { "label", "pending" },
+    { "check_flag", Q3.C1 }, { "jump_if_false", "remind" },
+    { "check_flag", Q3.C2 }, { "jump_if_false", "remind" },
+    { "show_text", "You have it all?\nThen it's your\vcall...\fExpose SILPH, or\nsell them their\vsilence?" },
+    { "choice", { "EXPOSE THEM", "SELL SILENCE" } },
+    { "jump_if_false", "greed" },
+    { "set_flag", Q3.DONE }, { "set_flag", Q3.HERO },
+    { "give_item", "TM_TOXIC" },
+    { "show_text", "You brave soul!\nTake this -- and\vwatch your back." },
+    { "jump", "end" },
+    { "label", "greed" },
+    { "set_flag", Q3.DONE }, { "set_flag", Q3.GREED },
+    { "give_item", "NUGGET" }, { "give_money", 6000 },
+    { "show_text", "Heh. We both\nretire rich. Not\va word, now." },
+    { "jump", "end" },
+    { "label", "remind" },
+    { "show_text", "The CELADON retiree\nand the VERMILION\vdock worker. Find\nthem both." },
+    { "jump", "end" },
+    { "label", "refuse" }, { "show_text", "I understand. It\nis dangerous." }, { "jump", "end" },
+    { "label", "after" },
+    { "check_flag", Q3.HERO }, { "jump_if_true", "after_hero" },
+    { "show_text", "Our little secret\nkeeps us both\vcomfortable, hm?" }, { "jump", "end" },
+    { "label", "after_hero" },
+    { "show_text", "The truth is out.\nTerrifying, but\vright. Thank you." },
+  }
+end
+
+local function q3_retiree()
+  return {
+    { "check_flag", Q3.STARTED }, { "jump_if_false", "idle" },
+    { "check_flag", Q3.C1 }, { "jump_if_true", "told" },
+    { "show_text", "SILPH? I gave them\n30 years.\fThey hid crates in\nthe basement. That\vis your proof." },
+    { "set_flag", Q3.C1 },
+    { "jump", "end" },
+    { "label", "told" }, { "show_text", "Tell no one I\nspoke, you hear?" }, { "jump", "end" },
+    { "label", "idle" }, { "show_text", "Retirement is dull,\nbut safe." },
+  }
+end
+
+local function q3_dockworker()
+  return {
+    { "check_flag", Q3.STARTED }, { "jump_if_false", "idle" },
+    { "check_flag", Q3.C2 }, { "jump_if_true", "told" },
+    { "show_text", "SILPH crates? I\nload 'em.\fHeavy and unmarked,\nall of 'em. Fishy.\vThere's your proof." },
+    { "set_flag", Q3.C2 },
+    { "jump", "end" },
+    { "label", "told" }, { "show_text", "I said what I saw.\nLeave me out of it." }, { "jump", "end" },
+    { "label", "idle" }, { "show_text", "Long day at the\ndocks, pal." },
+  }
+end
+
+-- ------- Quest 4: Two Brothers (a lighter choice) ------------------
+local NOTE_ITEM = "BQ_CHALLENGE_NOTE"
+local Q4 = { STARTED = "MOD_BQ4_STARTED", DONE = "MOD_BQ4_DONE",
+             SIDE3 = "MOD_BQ4_SIDE3", SIDE2 = "MOD_BQ4_SIDE2" }
+
+local function q4_gramps2()
+  return {
+    { "check_flag", Q4.DONE }, { "jump_if_true", "after" },
+    { "check_flag", Q4.STARTED }, { "jump_if_true", "pending" },
+    { "show_text", "My fool brother\nswears HE caught\vthe bigger MAGIKARP!\fTake him this NOTE\nand settle it!" },
+    { "give_item", NOTE_ITEM, 1, true },
+    { "set_flag", Q4.STARTED },
+    { "jump", "end" },
+    { "label", "pending" },
+    { "show_text", "Has that stubborn\nbrother read my\vNOTE yet?" },
+    { "jump", "end" },
+    { "label", "after" },
+    { "check_flag", Q4.SIDE2 }, { "jump_if_true", "after_win" },
+    { "show_text", "You sided with HIM?!\nSome judge YOU are!" }, { "jump", "end" },
+    { "label", "after_win" },
+    { "show_text", "HA! Told you I was\nright! Good on ya!" },
+  }
+end
+
+local function q4_gramps3()
+  return {
+    { "check_flag", Q4.DONE }, { "jump_if_true", "idle" },
+    { "check_flag", Q4.STARTED }, { "jump_if_false", "idle" },
+    { "check_item", NOTE_ITEM }, { "jump_if_false", "idle" },
+    { "show_text", "My brother's NOTE?\nBah. So, judge --\vwho caught the\vbigger MAGIKARP?" },
+    { "choice", { "YOU DID", "YOUR BROTHER" } },
+    { "jump_if_false", "sidebro" },
+    { "take_item", NOTE_ITEM },
+    { "give_item", "RARE_CANDY" },
+    { "set_flag", Q4.DONE }, { "set_flag", Q4.SIDE3 },
+    { "show_text", "Finally, sense!\nHere, for your\vfine judgment!" },
+    { "jump", "end" },
+    { "label", "sidebro" },
+    { "take_item", NOTE_ITEM },
+    { "give_item", "MAX_ELIXER" },
+    { "set_flag", Q4.DONE }, { "set_flag", Q4.SIDE2 },
+    { "show_text", "Hmph! Fine, HE\nwins. Take this and\vgo, then." },
+    { "jump", "end" },
+    { "label", "idle" }, { "show_text", "Fishin' beats\narguin', most days." },
+  }
+end
+
 return function(mod)
   mod.content.items:register(MAP_ITEM, { id = MAP_ITEM, name = "SECRET MAP", price = 0, keyItem = true, tossable = false })
   mod.content.items:register(SHARD_ITEM, { id = SHARD_ITEM, name = "AMBER SHARD", price = 0, keyItem = true, tossable = false })
+  mod.content.items:register(NOTE_ITEM, { id = NOTE_ITEM, name = "NOTE", price = 0, keyItem = true, tossable = false })
 
   -- collect talk per map so multiple quest NPCs on one town compose
   local byMap = {}
@@ -160,6 +275,13 @@ return function(mod)
   put("FUCHSIA_CITY", "TEXT_FUCHSIACITY_GAMBLER", q1_gambler())
   put("CERULEAN_CITY", "TEXT_CERULEANCITY_SUPER_NERD2", q2_researcher())
   put("FUCHSIA_CITY", "TEXT_FUCHSIACITY_ERIK", q2_poacher())
+
+  put("SAFFRON_CITY", "TEXT_SAFFRONCITY_GENTLEMAN", q3_gentleman())
+  put("CELADON_CITY", "TEXT_CELADONCITY_GRAMPS1", q3_retiree())
+  put("VERMILION_CITY", "TEXT_VERMILIONCITY_GAMBLER1", q3_dockworker())
+
+  put("CELADON_CITY", "TEXT_CELADONCITY_GRAMPS2", q4_gramps2())
+  put("CELADON_CITY", "TEXT_CELADONCITY_GRAMPS3", q4_gramps3())
 
   for map, talk in pairs(byMap) do
     mod.content.map_scripts:register(map, { talk = talk })

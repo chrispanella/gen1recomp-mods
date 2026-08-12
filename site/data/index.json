@@ -13,7 +13,7 @@
       "id": "branching_quests",
       "title": "Branching Quests",
       "author": "chrispanella",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "summary": "Two questlines with real choices and multiple endings, where NPCs react to the side you pick.",
       "categories": [
         "QUEST"

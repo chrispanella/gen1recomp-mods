@@ -24,12 +24,28 @@ who stole an AMBER SHARD. At the poacher you choose:
 - **Take the bribe** and let the poacher go for a **Nugget + cash** (profit
   ending). The researcher is not pleased.
 
+## The Silph Whistleblower (multi-step)
+
+A nervous exec in **Saffron** asks you to gather proof of wrongdoing. Track
+down two witnesses - a **retiree** in Celadon and a **dock worker** in
+Vermilion - then return to choose:
+
+- **Expose them** for a TM (and a warning to watch your back).
+- **Sell your silence** for a Nugget + a big payout.
+
+Both witnesses and the exec react to how it ends.
+
+## Two Brothers
+
+Two old men in **Celadon** are feuding over who caught the bigger Magikarp.
+Carry a NOTE between them and pick a side - whoever you back is delighted,
+the other sulks.
+
 ## How it works
 
-Choices set `MOD_` flags (`END_SCI` / `END_FOR`, `END_CONS` / `END_PROFIT`),
-and every NPC branches on those flags for its after-quest lines. Custom key
-items (SECRET MAP, AMBER SHARD) drive each quest. All script-VM content, no
-engine files edited, no maps changed.
+Choices set `MOD_` flags, and every NPC branches on those flags for its
+after-quest lines. Custom key items (SECRET MAP, AMBER SHARD, NOTE) drive the
+quests. All script-VM content, no engine files edited, no maps changed.
 
 ## Testing
 

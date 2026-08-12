@@ -7,12 +7,14 @@ return {
   tags = { "quest", "story", "branching", "scripting" },
   differences = {
     added = {
-      "THE SECRET MAP: a Vermilion sailor, a Saffron scientist, and a Fuchsia gambler; give the map to one for a rare TM or gold, with two mutually exclusive endings",
-      "THE POACHER'S BARGAIN: a Cerulean researcher and a Fuchsia poacher; recover the amber shard or take a bribe, two endings",
-      "two custom key items (SECRET MAP, AMBER SHARD) and consequence dialogue that changes based on your choice",
+      "THE SECRET MAP: give a Vermilion sailor's map to a Saffron scientist (rare TM) or a Fuchsia gambler (gold); two mutually exclusive endings",
+      "THE POACHER'S BARGAIN: recover an amber shard for a Cerulean researcher, or take a Fuchsia poacher's bribe; two endings",
+      "THE SILPH WHISTLEBLOWER: a multi-step investigation (Saffron gentleman, Celadon retiree, Vermilion dock worker) that ends in expose-vs-cover-up",
+      "TWO BROTHERS: settle a Celadon feud by siding with one gramps or the other",
+      "three custom key items (SECRET MAP, AMBER SHARD, NOTE) and consequence dialogue that changes with your choices",
     },
     changed = {
-      "five townspeople gain branching quest dialogue that reacts to your decisions",
+      "ten townspeople gain branching quest dialogue that reacts to your decisions",
     },
     known = {},
   },
