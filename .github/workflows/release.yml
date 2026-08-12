@@ -41,7 +41,7 @@ jobs:
         id: scan
         run: |
           set -euo pipefail
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          python3 <<'PY'
           import json, os, re, subprocess
 
           SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
@@ -69,10 +69,15 @@ jobs:
                       "name": str(m.get("name", mid)), "tag": tag,
                   })
 
-          print("matrix=" + json.dumps({"include": mods}))
-          print("any=" + ("true" if mods else "false"))
+          # only KEY=VALUE lines belong in GITHUB_OUTPUT
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write("matrix=" + json.dumps({"include": mods}) + "\n")
+              out.write("any=" + ("true" if mods else "false") + "\n")
+
+          # notices / logs go to stdout, never to the output file
           for x in mods:
               print(f"::notice::will release {x['tag']}")
+          print(f"{len(mods)} mod(s) to release")
           PY
 
   release:
