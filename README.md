@@ -38,16 +38,13 @@ use **MODS -> Import mod .zip** in-game.
 
 | Mod | What it adds |
 |---|---|
-| [`fun_trainer_ace`](fun_trainer_ace/) | **Wandering Trainers** - eight optional battle trainers across the towns, each asking YES/NO before the fight, with a rematch greeting once beaten. |
+| [`battles`](battles/) | **Every battle challenge in one mod:** eight wandering trainers who ask before a fight, a re-battleable veteran in Viridian, a daily roaming Team Rocket gang that moves as a formation, a Champion that roams the cities every few days, and a daily rotating legendary on Route 10. |
 | [`new_area_clubhouse`](new_area_clubhouse/) | Example of adding a brand-new map: a Clubhouse off Pallet Town with its own NPC. A template for new areas; see [docs/make-your-first-area.md](docs/make-your-first-area.md). |
 | [`traveling_merchants`](traveling_merchants/) | Five distinct merchant NPCs out on the routes, each with its own sprite, specialty wares, route pair, and patrol style. Locations and stock rotate on real-world days. |
-| [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang: a daily challenge in a different city each real day, with a level-scaled, capped reward. |
-| [`roaming_boss`](roaming_boss/) | A tough Champion roams the cities every few days; beat their level-scaled team for a big prize. |
-| [`legendary_shrine`](legendary_shrine/) | A daily rotating legendary wild battle on Route 10. |
 | [`crafting`](crafting/) | Gather materials (apricorns, herbs) from foraging spots on routes and wild-battle drops, then craft at two benches: a BALL WORKSHOP (apricorns to Poke/Great/Ultra Balls) and an ALCHEMY LAB (herbs to Potions and status heals), each an interactive menu. |
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
 
-> **Battle difficulty:** every battle mod (`rocket_recruits`, `roaming_boss`, `legendary_shrine`, `fun_trainer_ace`, `veteran`) reads the BATTLE DIFF setting from [`tweaks`](tweaks/) when it is installed, so NORMAL / HARD / BRUTAL makes their teams tougher across the board. The roaming/rocket/legendary mods apply it live at each encounter; the fixed-team trainers (`fun_trainer_ace`, `veteran`) apply it at load, so changing the setting for those takes effect after a reload.
+> **Battle difficulty:** [`battles`](battles/) reads the BATTLE DIFF setting from [`tweaks`](tweaks/) when it is installed, so NORMAL / HARD / BRUTAL makes every challenge's team tougher. The roaming/rocket/legendary battles apply it live at each encounter; the fixed-team trainers (wanderers, veteran) apply it at load, so changing the setting for those takes effect after a reload.
 
 **Weekly rewards and quality-of-life:**
 
@@ -57,13 +54,7 @@ use **MODS -> Import mod .zip** in-game.
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods. |
 | [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a timer (1-30 min, configurable) - your choice in OPTIONS. |
 | [`lottery`](lottery/) | A lottery vendor outside every town's mart. Buy a cheap ticket, lock in a number from 1 to 100; draws happen every WEDNESDAY and SATURDAY. Match the drawn number and collect the jackpot from any vendor. |
-| [`daily_gift`](daily_gift/) | A Pewter NPC gives a free item once per real week. |
-| [`wonder_trader`](wonder_trader/) | A rare Pokemon once per real week from a Celadon NPC. |
-| [`berry_grove`](berry_grove/) | A healing item once per real week from a Cerulean guard. |
-| [`daily_coins`](daily_coins/) | Game Corner coins once per real week from a Cerulean NPC. |
-| [`starter_pack`](starter_pack/) | A one-time welcome kit from an NPC in Pewter that disappears for good once you claim it. |
-| [`veteran`](veteran/) | A re-battleable trainer in Viridian for grinding. |
-| [`type_sage`](type_sage/) | A rotating weekly type-matchup tip. |
+| [`town_gifts`](town_gifts/) | **Friendly townsfolk in one mod:** weekly gifts (a free item in Pewter, a rare Pokemon in Celadon, a healing item and Game Corner coins in Cerulean), a rotating weekly type tip, and a one-time welcome kit from a spawned Pewter NPC that leaves for good once claimed. |
 
 ## Installing / testing a mod
 

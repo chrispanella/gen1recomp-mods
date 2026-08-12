@@ -1,0 +1,19 @@
+{
+  "id": "town_gifts",
+  "name": "Town Gifts",
+  "version": "1.0.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "CONTENT",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "permissions": [
+    "engine_internals"
+  ],
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Friendly townsfolk who hand out gifts, all in one mod (formerly daily_gift, wonder_trader, berry_grove, daily_coins, type_sage, and starter_pack): a free item, a rare Pokemon, a healing item, and Game Corner coins each once per real week, a rotating weekly type tip, and a one-time welcome kit from a spawned NPC in Pewter that leaves for good once claimed."
+}
