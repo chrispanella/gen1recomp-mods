@@ -103,27 +103,6 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/daily_gift.zip"
     },
     {
-      "id": "daily_lottery",
-      "title": "Daily Lottery",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Pick a lucky number once a day in Vermilion; match the draw for a prize.",
-      "categories": [
-        "CONTENT"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [
-        "engine_internals"
-      ],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/daily_lottery.zip"
-    },
-    {
       "id": "friendships",
       "title": "Friendships",
       "author": "chrispanella",
@@ -191,6 +170,27 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/legendary_shrine.zip"
+    },
+    {
+      "id": "lottery",
+      "title": "Town Lottery",
+      "author": "chrispanella",
+      "version": "1.0.0",
+      "summary": "A lottery vendor stands outside the mart in every town. Buy a cheap ticket (100) and lock in a number from 1 to 100. Draws happen every Wednesday and Saturday; match the drawn number to win a 50000 jackpot, collectable from any vendor after the draw. The winning number is fixed by the draw's date, so it is the same at every vendor. Spawned at runtime, no map edits.",
+      "categories": [
+        "CONTENT"
+      ],
+      "tags": [],
+      "api": 2,
+      "game_version": null,
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/lottery.zip"
     },
     {
       "id": "new_area_clubhouse",
@@ -285,8 +285,8 @@
       "id": "starter_pack",
       "title": "Starter Pack",
       "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "An NPC in Pewter hands new trainers a one-time kit of useful items.",
+      "version": "0.2.0",
+      "summary": "A welcome NPC in Pewter City hands new trainers a one-time starter kit (potions, status heals, a Rare Candy). Spawned at runtime with real collision; once you claim the kit the NPC disappears for good on that save.",
       "categories": [
         "TOOL"
       ],

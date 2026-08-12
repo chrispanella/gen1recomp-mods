@@ -1,8 +1,6 @@
--- daily_coins: a trainer in Cerulean slips you some Game Corner coins each day.
-local function realDay()
-  local ok, t = pcall(os.date, "*t")
-  if ok and type(t) == "table" and t.year and t.yday then return t.year * 366 + t.yday end
-  return math.floor((os.time and os.time() or 0) / 86400)
+-- daily_coins: a trainer in Cerulean slips you some Game Corner coins each week.
+local function realWeek()
+  return math.floor((os.time and os.time() or 0) / 604800) -- 7-day period
 end
 
 return function(mod)
@@ -10,9 +8,9 @@ return function(mod)
   mod.content.commands:register("daily_coins:give", {
     foreground = true,
     fn = function(ctx)
-      local today = realDay()
+      local today = realWeek()
       if mod.save:get("last", -1) == today then
-        Commands.show_text(ctx, "Spent your luck\nfor today! Back\vtomorrow, pal.")
+        Commands.show_text(ctx, "Spent your luck\nthis week! Back\vnext week, pal.")
         return
       end
       mod.save:set("last", today)

@@ -1,4 +1,4 @@
--- type_sage: a guard in Cerulean shares a rotating type-matchup tip each day.
+-- type_sage: a guard in Cerulean shares a rotating type-matchup tip each week.
 local TIPS = {
   "WATER douses FIRE,\nGROUND and ROCK.",
   "ELECTRIC zaps\nWATER and FLYING.",
@@ -12,10 +12,8 @@ local TIPS = {
   "ROCK crushes FIRE,\nFLYING and BUG.",
 }
 
-local function realDay()
-  local ok, t = pcall(os.date, "*t")
-  if ok and type(t) == "table" and t.year and t.yday then return t.year * 366 + t.yday end
-  return math.floor((os.time and os.time() or 0) / 86400)
+local function realWeek()
+  return math.floor((os.time and os.time() or 0) / 604800) -- 7-day period
 end
 
 return function(mod)
@@ -23,7 +21,7 @@ return function(mod)
   mod.content.commands:register("type_sage:tip", {
     foreground = true,
     fn = function(ctx)
-      Commands.show_text(ctx, "Type tip of the\nday:\f" .. TIPS[(realDay() % #TIPS) + 1])
+      Commands.show_text(ctx, "Type tip of the\nweek:\f" .. TIPS[(realWeek() % #TIPS) + 1])
     end,
   })
   mod.content.map_scripts:register("CERULEAN_CITY", {

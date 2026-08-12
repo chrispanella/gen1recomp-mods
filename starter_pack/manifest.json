@@ -1,7 +1,7 @@
 {
   "id": "starter_pack",
   "name": "Starter Pack",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -15,5 +15,5 @@
   "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],
-  "description": "An NPC in Pewter hands new trainers a one-time kit of useful items."
+  "description": "A welcome NPC in Pewter City hands new trainers a one-time starter kit (potions, status heals, a Rare Candy). Spawned at runtime with real collision; once you claim the kit the NPC disappears for good on that save."
 }

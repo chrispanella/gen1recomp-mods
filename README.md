@@ -14,9 +14,12 @@ manager (**F10**) -> add a mod index -> enter:
 chrispanella/gen1recomp-mods
 ```
 
-All the mods below will appear; install any of them and enable it. (You can
-also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
-**MODS -> Import mod .zip**.)
+All the mods below will appear; install any of them and enable it.
+
+Prefer a manual install? Grab a single mod's installable `.zip` either from
+the [**Releases**](https://github.com/chrispanella/gen1recomp-mods/releases)
+page (one versioned release per mod) or from [`site/mods/`](site/mods/), then
+use **MODS -> Import mod .zip** in-game.
 
 > The index feed lives at `site/data/index.json`; the game reads it from
 > GitHub Pages, falling back to the raw file, so it works as soon as this
@@ -43,20 +46,20 @@ also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
 | [`legendary_shrine`](legendary_shrine/) | A daily rotating legendary wild battle on Route 10. |
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
 
-**Daily rewards and quality-of-life:**
+**Weekly rewards and quality-of-life:**
 
 | Mod | What it adds |
 |---|---|
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods. |
 | [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a timer (1-30 min, configurable) - your choice in OPTIONS. |
-| [`daily_gift`](daily_gift/) | A Pewter NPC gives a free item once per real day. |
-| [`wonder_trader`](wonder_trader/) | A daily rare Pokemon from a Celadon NPC. |
-| [`daily_lottery`](daily_lottery/) | Pick a number once a day in Vermilion for a prize. |
-| [`berry_grove`](berry_grove/) | A daily healing item from a Cerulean guard. |
-| [`daily_coins`](daily_coins/) | Daily Game Corner coins from a Cerulean NPC. |
-| [`starter_pack`](starter_pack/) | A one-time item kit for new trainers. |
+| [`lottery`](lottery/) | A lottery vendor outside every town's mart. Buy a cheap ticket, lock in a number from 1 to 100; draws happen every WEDNESDAY and SATURDAY. Match the drawn number and collect the jackpot from any vendor. |
+| [`daily_gift`](daily_gift/) | A Pewter NPC gives a free item once per real week. |
+| [`wonder_trader`](wonder_trader/) | A rare Pokemon once per real week from a Celadon NPC. |
+| [`berry_grove`](berry_grove/) | A healing item once per real week from a Cerulean guard. |
+| [`daily_coins`](daily_coins/) | Game Corner coins once per real week from a Cerulean NPC. |
+| [`starter_pack`](starter_pack/) | A one-time welcome kit from an NPC in Pewter that disappears for good once you claim it. |
 | [`veteran`](veteran/) | A re-battleable trainer in Viridian for grinding. |
-| [`type_sage`](type_sage/) | A rotating daily type-matchup tip. |
+| [`type_sage`](type_sage/) | A rotating weekly type-matchup tip. |
 
 ## Installing / testing a mod
 
