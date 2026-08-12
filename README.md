@@ -26,8 +26,9 @@ also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
 
 | Mod | What it adds |
 |---|---|
-| [`fun_trainer_ace`](fun_trainer_ace/) | ACE TRAINER LEO — an optional battle trainer in Viridian City. Proof-of-concept for adding new trainers. |
-| [`quest_glow_shard`](quest_glow_shard/) | THE GLOW SHARD — a two-town fetch quest (Cerulean → Lavender), with a custom key item, branching dialogue, and a Rare Candy reward. Proof-of-concept for quest NPCs. |
+| [`fun_trainer_ace`](fun_trainer_ace/) | **Wandering Trainers** — eight optional battle trainers sprinkled across the towns, each asking YES/NO before the fight, with a rematch greeting once beaten. |
+| [`quest_glow_shard`](quest_glow_shard/) | THE GLOW SHARD — a two-town fetch quest (Cerulean → Lavender), with a custom key item, branching dialogue, and a Rare Candy reward. |
+| [`town_quests`](town_quests/) | Four cross-town fetch quests (keepsake, letter, rare herb, luck charm) between NPCs in different towns, each with a custom key item and a reward. |
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods to build on. Foundation for time-based content. |
 | [`traveling_merchants`](traveling_merchants/) | Five distinct merchant NPCs out on the routes (Peddler, Digger, Herbalist, Techie, Tamer), each with its own sprite, specialty wares, route pair, and patrol style. Locations and stock rotate on real-world days. |
 | [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang that appears in a different city each real-world day as a daily challenge — one level-scaled battle for a capped cash reward + a rotating item. |

@@ -1,7 +1,7 @@
 {
   "id": "fun_trainer_ace",
-  "name": "Ace Trainer Leo",
-  "version": "0.1.0",
+  "name": "Wandering Trainers",
+  "version": "0.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -12,5 +12,5 @@
   "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],
-  "description": "Adds an optional battle trainer, ACE TRAINER LEO, to Viridian City. Proof-of-concept content mod: registers a new trainer party and places it on a vanilla NPC through a map talk script. No engine files touched, no map edited."
+  "description": "Sprinkles eight optional battle trainers across the towns (Viridian, Pewter, Cerulean, Vermilion, Celadon, Lavender, Fuchsia, Cinnabar). Each is a townsperson who ASKS if you'd like to battle (YES/NO) before fighting, with level-appropriate parties and a rematch greeting once beaten. No engine files touched, no maps edited."
 }

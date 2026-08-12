@@ -1,87 +1,114 @@
--- fun_trainer_ace
+-- fun_trainer_ace  (a roster of optional trainers)
 -- ------------------------------------------------------------------
--- A proof-of-concept CONTENT mod: it adds one brand-new battle trainer,
--- ACE TRAINER LEO, and places him on a real Viridian City NPC.
+-- Sprinkles battle trainers across the towns. Each one is an existing
+-- townsperson who now ASKS if you'd like to battle (YES/NO) before any
+-- fight, so they're purely optional. Beat one and it greets you for a
+-- rematch line afterward, the way a real trainer would.
 --
--- Two moving parts, both pure registry content -- no engine file is
--- edited and no map is changed:
---
---   1. mod.content.trainers:register(...) defines WHO the trainer is:
---      his name, prize money, and his party (`parties` is a list of
---      parties; each party is a list of { level = N, species = "ID" }).
---
---   2. mod.content.map_scripts:register("VIRIDIAN_CITY", { talk = ... })
---      overrides the talk handler of a vanilla NPC so that talking to
---      him challenges you to that trainer battle exactly once, the way
---      a normal in-game trainer works.
---
--- The battle itself is fired by the `start_battle` script verb:
---   { "start_battle", "trainer", <trainer id>, <party index> }
--- After it runs, ctx.lastCheck is true on a win, so `jump_if_false`
--- lets us branch on the outcome.
+-- All registry content: a trainer per entry (trainers registry) placed on
+-- a real NPC via a map talk script. No engine files edited, no map changed.
+-- The battle fires with the `start_battle` verb; lastCheck is true on a win.
 
-local TRAINER_ID = "OPP_FUN_ACE_LEO"
+local TRAINERS = {
+  { town = "VIRIDIAN_CITY", npc = "TEXT_VIRIDIANCITY_GAMBLER1",
+    id = "OPP_FUN_ACE_LEO", name = "ACE LEO", money = 60,
+    party = { { level = 15, species = "NIDORINO" }, { level = 16, species = "KADABRA" }, { level = 17, species = "GROWLITHE" } },
+    ask = "You there!\nThose are some\vfine POKéMON.\fCare to battle?",
+    win = "Whoa! You're the\nreal deal. Nice\vwork!",
+    refuse = "No? Come find me\nwhen you feel\vbrave.",
+    after = "That was a great\nmatch, {PLAYER}!" },
 
--- Mod-authored save flags are MOD_-prefixed by convention so they can
--- never collide with the engine's own pokered event flags.
-local BEATEN = "MOD_FUN_TRAINER_ACE_BEATEN"
+  { town = "PEWTER_CITY", npc = "TEXT_PEWTERCITY_COOLTRAINER_M",
+    id = "OPP_FUN_ROCKY", name = "HIKER ROCKY", money = 40,
+    party = { { level = 12, species = "GEODUDE" }, { level = 13, species = "SANDSHREW" }, { level = 14, species = "MACHOP" } },
+    ask = "These rocks made\nme tough!\fWanna test your\nteam on me?",
+    win = "Rock solid! You\nbeat me fair.",
+    refuse = "Bah. Come back\nwhen you mean it.",
+    after = "Keep climbing,\nkid!" },
 
--- The vanilla NPC we attach to. TEXT_VIRIDIANCITY_GAMBLER1 is a real
--- Viridian City object (the same map/NPC the shipped lost_parcel example
--- uses), so this works on an unmodified game with no map editing.
-local HOST_NPC = "TEXT_VIRIDIANCITY_GAMBLER1"
+  { town = "CERULEAN_CITY", npc = "TEXT_CERULEANCITY_COOLTRAINER_M",
+    id = "OPP_FUN_DORIAN", name = "COOLTRAINER DORIAN", money = 50,
+    party = { { level = 18, species = "PIDGEOTTO" }, { level = 19, species = "RATICATE" }, { level = 20, species = "KADABRA" } },
+    ask = "You've got a\nconfident look.\fShall we battle?",
+    win = "Impressive! You've\nreally trained.",
+    refuse = "Another time,\nthen.",
+    after = "Sharp as ever,\nI see." },
+
+  { town = "VERMILION_CITY", npc = "TEXT_VERMILIONCITY_BEAUTY",
+    id = "OPP_FUN_BLAZE", name = "BEAUTY BLAZE", money = 55,
+    party = { { level = 22, species = "VULPIX" }, { level = 23, species = "PONYTA" }, { level = 24, species = "GROWLITHE" } },
+    ask = "My fire types\nburn bright!\fDare to face them?",
+    win = "Ooh, you snuffed\nmy flames!",
+    refuse = "Too hot for you?\nHee hee.",
+    after = "Still smoldering\nover that loss!" },
+
+  { town = "CELADON_CITY", npc = "TEXT_CELADONCITY_FISHER",
+    id = "OPP_FUN_MARINA", name = "FISHER MARINA", money = 45,
+    party = { { level = 28, species = "SEADRA" }, { level = 29, species = "KINGLER" }, { level = 30, species = "TENTACRUEL" } },
+    ask = "Reeled in a fine\nteam today.\fCare to battle?",
+    win = "You slipped the\nnet! Well done.",
+    refuse = "The tide will\nturn, hah!",
+    after = "Nice catch of a\nwin you had." },
+
+  { town = "LAVENDER_TOWN", npc = "TEXT_LAVENDERTOWN_COOLTRAINER_M",
+    id = "OPP_FUN_SPECTRA", name = "MEDIUM SPECTRA", money = 55,
+    party = { { level = 30, species = "HAUNTER" }, { level = 32, species = "MAROWAK" }, { level = 33, species = "HAUNTER" } },
+    ask = "The spirits are\nrestless...\fDare you battle?",
+    win = "The spirits are\nquiet now. You\vwin.",
+    refuse = "The dead can\nwait. Can you?",
+    after = "The tower still\nwhispers of you." },
+
+  { town = "FUCHSIA_CITY", npc = "TEXT_FUCHSIACITY_YOUNGSTER1",
+    id = "OPP_FUN_VENOM", name = "JUGGLER VENOM", money = 50,
+    party = { { level = 34, species = "ARBOK" }, { level = 35, species = "WEEZING" }, { level = 36, species = "MUK" } },
+    ask = "My poisons never\nmiss!\fWant a taste of\nbattle?",
+    win = "Ack! You resisted\nit all!",
+    refuse = "Afraid of a\nlittle poison?",
+    after = "Still stinging\nfrom that loss." },
+
+  { town = "CINNABAR_ISLAND", npc = "TEXT_CINNABARISLAND_GAMBLER",
+    id = "OPP_FUN_EMBER", name = "BLAINE FAN EMBER", money = 70,
+    party = { { level = 40, species = "RAPIDASH" }, { level = 42, species = "ARCANINE" }, { level = 44, species = "FLAREON" } },
+    ask = "This island runs\nhot!\fThink you can\nhandle my fire?",
+    win = "Blazing battle!\nYou earned it.",
+    refuse = "Cold feet? Come\nback when you're\vfired up.",
+    after = "That match was\none for the ages!" },
+}
+
+local function flagFor(id) return "MOD_FT_" .. id .. "_BEATEN" end
+
+local function trainerTalk(t)
+  return {
+    { "check_flag", flagFor(t.id) },
+    { "jump_if_true", "after" },
+    { "show_text", t.ask },
+    { "choice", { "YES", "NO" } },
+    { "jump_if_false", "refuse" },
+    { "start_battle", "trainer", t.id, 1 },
+    { "jump_if_false", "end" }, -- a loss blacks you out; bail quietly
+    { "set_flag", flagFor(t.id) },
+    { "show_text", t.win },
+    { "jump", "end" },
+    { "label", "refuse" },
+    { "show_text", t.refuse },
+    { "jump", "end" },
+    { "label", "after" },
+    { "show_text", t.after },
+  }
+end
 
 return function(mod)
-  -- ------- 1. WHO the trainer is ---------------------------------------
-
-  mod.content.trainers:register(TRAINER_ID, {
-    id = TRAINER_ID,
-    name = "ACE LEO", -- kept short: the engine renders "<name> wants to fight!"
-                      -- and a 15-char name clips the Game Boy text box
-    baseMoney = 1200, -- prize money scales off this the vanilla way
-    parties = {
-      -- party index 1 -- referenced by start_battle below
-      {
-        { level = 15, species = "NIDORINO" },
-        { level = 16, species = "KADABRA" },
-        { level = 17, species = "GROWLITHE" },
-      },
-    },
-  })
-
-  -- ------- 2. WHERE you meet him ---------------------------------------
-
-  mod.content.map_scripts:register("VIRIDIAN_CITY", {
-    talk = {
-      [HOST_NPC] = {
-        -- already beaten? go straight to the rematch flavor line
-        { "check_flag", BEATEN },
-        { "jump_if_true", "already" },
-
-        -- the challenge
-        { "show_text", "You there!\nThose are some\vfine POKeMON.\fLet's see how you\nhandle a real\vtrainer!" },
-        { "start_battle", "trainer", TRAINER_ID, 1 },
-
-        -- a trainer loss blacks you out; on the resume, bail quietly
-        { "jump_if_false", "end" },
-
-        -- win path
-        { "set_flag", BEATEN },
-        { "show_text", "Whoa! You're the\nreal deal. Take\vpride in that win!" },
-        { "jump", "end" },
-
-        -- post-battle / rematch line
-        { "label", "already" },
-        { "show_text", "That was a great\nbattle, {PLAYER}.\fKeep training!" },
-      },
-    },
-  })
-
-  -- ------- optional: announce the win to any other mods listening ------
-
-  mod.events:on("flag.changed", function(ev)
-    if ev.name == BEATEN and ev.value then
-      mod.events:emit("mod.fun_trainer_ace.defeated", { trainer = TRAINER_ID })
-    end
-  end)
+  -- register every trainer, and collect talk entries per map so several
+  -- trainers on one map compose instead of overwriting
+  local byMap = {}
+  for _, t in ipairs(TRAINERS) do
+    mod.content.trainers:register(t.id, {
+      id = t.id, name = t.name, baseMoney = t.money, parties = { t.party },
+    })
+    byMap[t.town] = byMap[t.town] or {}
+    byMap[t.town][t.npc] = trainerTalk(t)
+  end
+  for map, talk in pairs(byMap) do
+    mod.content.map_scripts:register(map, { talk = talk })
+  end
 end

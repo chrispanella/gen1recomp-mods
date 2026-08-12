@@ -1,0 +1,25 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "Four cross-town fetch quests: find a keepsake, a letter, a rare herb, or a luck charm for a reward.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "quest", "story", "scripting" },
+  differences = {
+    added = {
+      "four fetch quests spanning Pallet/Viridian, Cerulean/Vermilion, Celadon/Fuchsia, and Lavender/Pewter",
+      "four custom key items (KEEPSAKE, LETTER, RARE HERB, LUCK CHARM)",
+      "rewards: Poke Doll, Rare Candy, Max Ether, Nugget",
+    },
+    changed = {
+      "eight townspeople (a giver + holder per quest) gain quest dialogue",
+    },
+    known = {
+      "the quest items can be tossed is prevented (key items); dialogue is fully owned while a quest is active",
+    },
+  },
+  credits = {
+    { who = "pret/pokered", for_ = "the base game this content composes with" },
+  },
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "d4f45ddbfa62a9643779927818a5bf517e354b13",
+  "generated_at": "static",
   "categories": [
     "CHALLENGE",
     "MERCHANT",
@@ -11,10 +11,10 @@
   "mods": [
     {
       "id": "fun_trainer_ace",
-      "title": "Ace Trainer Leo",
+      "title": "Wandering Trainers",
       "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Adds ACE LEO, an optional battle trainer, to Viridian City.",
+      "version": "0.2.0",
+      "summary": "Eight optional battle trainers sprinkled across the towns, each asking YES/NO before a fight.",
       "categories": [
         "TRAINER"
       ],
@@ -80,6 +80,29 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/rocket_recruits.zip"
+    },
+    {
+      "id": "town_quests",
+      "title": "Town Quests",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "Four cross-town fetch quests: find a keepsake, a letter, a rare herb, or a luck charm for a reward.",
+      "categories": [
+        "QUEST"
+      ],
+      "tags": [
+        "quest",
+        "story",
+        "scripting"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/town_quests.zip"
     },
     {
       "id": "traveling_merchants",
