@@ -1,7 +1,7 @@
 {
   "id": "lottery",
   "name": "Town Lottery",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",

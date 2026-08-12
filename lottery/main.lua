@@ -41,12 +41,67 @@ local function winningFor(drawDay)
   for i = 1, #str do s = (s * 33 + str:byte(i)) % 2147483647 end
   return (s % 100) + 1
 end
+-- the most recent past draw: its day-number and which day it fell on
+local function lastDrawInfo()
+  local w = wday()
+  local aW, aS = (w - 4) % 7, (w - 7) % 7 -- days since last Wed / Sat
+  if aW <= aS then return nowDay() - aW, "WED" end
+  return nowDay() - aS, "SAT"
+end
 
 return function(mod)
   local Commands = require("src.script.Commands")
   local pending = 0 -- the number currently shown while buying / stored ticket
 
   mod.content.tokens:register("LOTTERY_NUM", function() return tostring(pending) end)
+
+  -- ---- on-load winning-number banner ------------------------------
+  -- Once per session, when the player first reaches free-roam, flash the most
+  -- recent draw's winning number across the top. Only for players who have
+  -- actually bought a ticket, so it advertises rather than nags.
+  local bannerT, bannerText, announced = 0, "", false
+
+  mod.hooks:wrap("core.update", function(next, game, dt)
+    local r = next(game, dt)
+    local top = game and game.stack and game.stack.top and game.stack:top()
+    local inOw = top and top.isOverworld
+    if not announced and inOw and mod.save:get("ever_played", false) then
+      announced = true
+      local day, name = lastDrawInfo()
+      local win = winningFor(day)
+      local hasTicket = mod.save:get("ticket_num", 0) > 0
+                        and mod.save:get("ticket_draw", -1) < nowDay()
+      bannerText = ("LOTTERY  %s DRAW: %d"):format(name, win)
+      if hasTicket then bannerText = bannerText .. "  CHECK YOUR TICKET!" end
+      bannerT = 360 -- ~6s at 60fps
+    end
+    if bannerT > 0 then bannerT = bannerT - 1 end
+    return r
+  end)
+
+  mod.hooks:wrap("render.hud", function(next, game, viewport)
+    local r = next(game, viewport)
+    if bannerT > 0 then
+      local vp = viewport or {}
+      local s = math.max(1, math.floor(vp.scale or 2))
+      local w = vp.width or 240
+      local y = (vp.gameY or 0) + 5 * s
+      local barH = 11 * s
+      local a = math.min(1, bannerT / 45) -- ease out over the last ~0.75s
+      love.graphics.push("all")
+      love.graphics.setColor(0, 0, 0, 0.72 * a)
+      love.graphics.rectangle("fill", 0, y, w, barH)
+      love.graphics.setColor(1, 0.82, 0.2, a)
+      love.graphics.rectangle("fill", 0, y, w, s)          -- accent line
+      local tx = math.floor((w - #bannerText * 6 * s) / 2)
+      love.graphics.setColor(0, 0, 0, a)
+      love.graphics.print(bannerText, tx + s, y + 3 * s + s, 0, s, s)
+      love.graphics.setColor(1, 0.95, 0.45, a)
+      love.graphics.print(bannerText, tx, y + 3 * s, 0, s, s)
+      love.graphics.pop()
+    end
+    return r
+  end)
 
   -- state checks (no yields)
   mod.content.commands:register("lottery:has_result", {
@@ -79,6 +134,7 @@ return function(mod)
       Commands.give_money(ctx, -PRICE)
       mod.save:set("ticket_num", pending)
       mod.save:set("ticket_draw", nextDrawDay())
+      mod.save:set("ever_played", true) -- so the on-load banner only shows to players
     end,
   })
   mod.content.commands:register("lottery:reveal", {
@@ -129,35 +185,41 @@ return function(mod)
     local row = ov.rows[y + 1]
     return row and row:sub(x + 1, x + 1) == "."
   end
-  -- A reachable tile BESIDE the mart entrance, not on the doormat. We take the
-  -- nearest reachable cell that is at least 2 tiles from the door and off the
-  -- door's own column, so the vendor flanks the entrance instead of blocking
-  -- it. Falls back to the plain nearest cell only if a map is too cramped to
-  -- offer one (so we never fail to spawn).
+  -- A reachable tile well to the SIDE of the mart entrance, so the vendor never
+  -- blocks the doorway or the lane a player walks up to reach it. Preference,
+  -- best first, with graceful fallback so we never fail to spawn:
+  --   1. >=3 tiles from the mart front AND >=2 columns off the door (clears the
+  --      approach lane); among these, closest and most level with the door so it
+  --      stands beside the entrance rather than far off.
+  --   2. >=2 tiles away and simply off the door's column.
+  --   3. the nearest reachable tile at all (cramped maps).
   local function pickNear(ov, ow, tx, ty)
     local px, py = ow.player and ow.player.cellX, ow.player and ow.player.cellY
     if not px then return nil end
     local W, seen, q, head = ov.width, {}, { { px, py } }, 1
     seen[py * W + px] = true
-    local best, bestScore, fallback, fallbackD
+    local best, bestScore     -- tier 1
+    local side, sideD         -- tier 2
+    local any, anyD           -- tier 3
     while head <= #q and head < 6000 do
       local c = q[head]; head = head + 1
-      local doorD = math.abs(c[1] - tx) + math.abs(c[2] - ty)
       if math.abs(c[1] - px) + math.abs(c[2] - py) >= 1 then
-        -- keep the doormat and the tile right in front of it clear
-        if doorD >= 2 then
-          -- prefer a tile off the door's column so it stands to one side
-          local score = doorD + (c[1] == tx and 4 or 0)
+        local dx, dy = math.abs(c[1] - tx), math.abs(c[2] - ty)
+        local doorD = dx + dy
+        if doorD >= 3 and dx >= 2 then
+          -- close to the mart, level with the door, off to one side
+          local score = dx + dy * 2
           if not best or score < bestScore then best, bestScore = c, score end
         end
-        if not fallback or doorD < fallbackD then fallback, fallbackD = c, doorD end
+        if doorD >= 2 and c[1] ~= tx and (not side or doorD < sideD) then side, sideD = c, doorD end
+        if not any or doorD < anyD then any, anyD = c, doorD end
       end
       for _, dd in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
         local nx, ny = c[1] + dd[1], c[2] + dd[2]
         if walkable(ov, nx, ny) and not seen[ny * W + nx] then seen[ny * W + nx] = true; q[#q + 1] = { nx, ny } end
       end
     end
-    return best or fallback
+    return best or side or any
   end
 
   local spawned = {}
