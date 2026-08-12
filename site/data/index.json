@@ -11,29 +11,9 @@
     "SOCIAL",
     "TIME",
     "TOOL",
-    "TRAINER",
-    "UI"
+    "TRAINER"
   ],
   "mods": [
-    {
-      "id": "ambient_motes",
-      "title": "Ambient Motes",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Soft glowing motes drift over the world for atmosphere. OPTIONS: OFF/FEW/SOME/MANY.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/ambient_motes.zip"
-    },
     {
       "id": "autosave",
       "title": "Autosave",
@@ -79,87 +59,6 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/berry_grove.zip"
-    },
-    {
-      "id": "branching_quests",
-      "title": "Branching Quests",
-      "author": "chrispanella",
-      "version": "0.3.0",
-      "summary": "Two questlines with real choices and multiple endings, where NPCs react to the side you pick.",
-      "categories": [
-        "QUEST"
-      ],
-      "tags": [
-        "quest",
-        "story",
-        "branching",
-        "scripting"
-      ],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/branching_quests.zip"
-    },
-    {
-      "id": "chromatic",
-      "title": "RGB Split",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Retro chromatic aberration (RGB channel split) for a CRT/analog feel. OPTIONS: OFF/SUBTLE/MEDIUM/STRONG.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/chromatic.zip"
-    },
-    {
-      "id": "color_grade",
-      "title": "Color Grade",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Richer color (saturation + contrast) via a small shader, with a safe pass-through fallback. OPTIONS: OFF/SOFT/RICH/MAX.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/color_grade.zip"
-    },
-    {
-      "id": "crt_filter",
-      "title": "CRT Lines",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "A scanline / CRT look over the whole frame, configurable in OPTIONS (OFF/SUBTLE/MEDIUM/HEAVY). Stacks with the other visual mods.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/crt_filter.zip"
     },
     {
       "id": "daily_coins",
@@ -223,44 +122,6 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/daily_lottery.zip"
-    },
-    {
-      "id": "duotone",
-      "title": "Duotone",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Retro two-tone looks (Game Boy green, sepia, noir) via a small shader with a safe fallback. OPTIONS in the display-mode row.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/duotone.zip"
-    },
-    {
-      "id": "film_grain",
-      "title": "Film Grain",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "A light animated grain over the frame for a filmic texture. OPTIONS: OFF/LIGHT/MEDIUM/HEAVY.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/film_grain.zip"
     },
     {
       "id": "friendships",
@@ -332,25 +193,6 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/legendary_shrine.zip"
     },
     {
-      "id": "letterbox",
-      "title": "Letterbox",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Cinematic black bars top and bottom. OPTIONS: OFF/THIN/WIDE/EPIC.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/letterbox.zip"
-    },
-    {
       "id": "new_area_clubhouse",
       "title": "New Area: Clubhouse",
       "author": "chrispanella",
@@ -374,13 +216,13 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/new_area_clubhouse.zip"
     },
     {
-      "id": "night_stars",
-      "title": "Night Stars",
+      "id": "quest_pack",
+      "title": "Quest Pack",
       "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Twinkling stars appear in the night sky (follows world_clock's in-game hour or your real local time). OPTIONS: OFF/DIM/BRIGHT.",
+      "version": "1.0.0",
+      "summary": "Every quest in one pack, plus a QUESTS entry in the START menu that tracks them. Includes the Glow Shard fetch quest, four Town Quests (keepsake, letter, rare herb, luck charm), and five Branching Quests with multiple endings (Secret Map, Amber Shard, Silph Whistleblower, Two Brothers, Rocker's Guitar). Flags and item ids are unchanged from the older separate mods, so saves carry over. No engine files edited, no maps changed.",
       "categories": [
-        "GRAPHICS"
+        "QUEST"
       ],
       "tags": [],
       "api": 2,
@@ -390,53 +232,7 @@
       "dependencies": [],
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/night_stars.zip"
-    },
-    {
-      "id": "quest_glow_shard",
-      "title": "The Glow Shard",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "A two-town fetch quest: bring a Cerulean collector the GLOW SHARD from Lavender Town for a RARE CANDY.",
-      "categories": [
-        "QUEST"
-      ],
-      "tags": [
-        "quest",
-        "story",
-        "scripting"
-      ],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/quest_glow_shard.zip"
-    },
-    {
-      "id": "quest_tracker",
-      "title": "Quest Tracker",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "A QUESTS entry in the START menu that tracks every quest in the pack and its status.",
-      "categories": [
-        "UI"
-      ],
-      "tags": [
-        "ui",
-        "quest",
-        "tool"
-      ],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/quest_tracker.zip"
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/quest_pack.zip"
     },
     {
       "id": "roaming_boss",
@@ -507,29 +303,6 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/starter_pack.zip"
     },
     {
-      "id": "town_quests",
-      "title": "Town Quests",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Four cross-town fetch quests: find a keepsake, a letter, a rare herb, or a luck charm for a reward.",
-      "categories": [
-        "QUEST"
-      ],
-      "tags": [
-        "quest",
-        "story",
-        "scripting"
-      ],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/town_quests.zip"
-    },
-    {
       "id": "traveling_merchants",
       "title": "Traveling Merchants",
       "author": "chrispanella",
@@ -596,11 +369,11 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/veteran.zip"
     },
     {
-      "id": "vignette",
-      "title": "Vignette",
+      "id": "visual_pack",
+      "title": "Visual Pack",
       "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Soft darkening toward the screen edges for a focused, cozy look. OPTIONS: OFF/SUBTLE/MEDIUM/STRONG.",
+      "version": "1.0.0",
+      "summary": "Every visual enhancement in one pack. Each effect is its own render pipeline with its own OPTIONS row and on/off ladder, and they stack: DAY/NIGHT lighting (time-aware), CRT lines, vignette, letterbox, weather (rain/snow/fog), ambient motes, RGB split, film grain, night stars, color grade, and duotone (GB green / sepia / noir). Safe overlay/color techniques with shader fallbacks; no engine files edited.",
       "categories": [
         "GRAPHICS"
       ],
@@ -612,50 +385,7 @@
       "dependencies": [],
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/vignette.zip"
-    },
-    {
-      "id": "visual_enhance",
-      "title": "Visual Enhance: Day/Night",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Dynamic day/night lighting: the overworld is tinted by time of day, following world_clock or your real clock.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [
-        "graphics",
-        "lighting",
-        "day-night",
-        "render-pipeline"
-      ],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/visual_enhance.zip"
-    },
-    {
-      "id": "weather_fx",
-      "title": "Weather FX",
-      "author": "chrispanella",
-      "version": "0.1.0",
-      "summary": "Animated weather over the world (menus stay clear): pick RAIN, SNOW, or FOG in OPTIONS.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/weather_fx.zip"
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/visual_pack.zip"
     },
     {
       "id": "wonder_trader",

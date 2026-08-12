@@ -1,0 +1,16 @@
+{
+  "id": "quest_pack",
+  "name": "Quest Pack",
+  "version": "1.0.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "QUEST",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Every quest in one pack, plus a QUESTS entry in the START menu that tracks them. Includes the Glow Shard fetch quest, four Town Quests (keepsake, letter, rare herb, luck charm), and five Branching Quests with multiple endings (Secret Map, Amber Shard, Silph Whistleblower, Two Brothers, Rocker's Guitar). Flags and item ids are unchanged from the older separate mods, so saves carry over. No engine files edited, no maps changed."
+}
