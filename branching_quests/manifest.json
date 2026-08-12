@@ -1,0 +1,16 @@
+{
+  "id": "branching_quests",
+  "name": "Branching Quests",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "QUEST",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Two questlines with real choices and multiple endings. THE SECRET MAP: a sailor gives you a map two people want - side with the Saffron scientist (rare TM) or the Fuchsia gambler (gold), and each ending locks out the other while both NPCs react to your choice. THE POACHER'S BARGAIN: a researcher sends you after a poacher - recover the amber shard for a reward, or take the poacher's bribe and let him go. Custom key items, MOD_ flags, and consequence dialogue. No engine files touched, no maps edited."
+}

@@ -1,0 +1,21 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "Two questlines with real choices and multiple endings, where NPCs react to the side you pick.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "quest", "story", "branching", "scripting" },
+  differences = {
+    added = {
+      "THE SECRET MAP: a Vermilion sailor, a Saffron scientist, and a Fuchsia gambler; give the map to one for a rare TM or gold, with two mutually exclusive endings",
+      "THE POACHER'S BARGAIN: a Cerulean researcher and a Fuchsia poacher; recover the amber shard or take a bribe, two endings",
+      "two custom key items (SECRET MAP, AMBER SHARD) and consequence dialogue that changes based on your choice",
+    },
+    changed = {
+      "five townspeople gain branching quest dialogue that reacts to your decisions",
+    },
+    known = {},
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}

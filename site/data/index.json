@@ -10,6 +10,30 @@
   ],
   "mods": [
     {
+      "id": "branching_quests",
+      "title": "Branching Quests",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "Two questlines with real choices and multiple endings, where NPCs react to the side you pick.",
+      "categories": [
+        "QUEST"
+      ],
+      "tags": [
+        "quest",
+        "story",
+        "branching",
+        "scripting"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/branching_quests.zip"
+    },
+    {
       "id": "fun_trainer_ace",
       "title": "Wandering Trainers",
       "author": "chrispanella",
