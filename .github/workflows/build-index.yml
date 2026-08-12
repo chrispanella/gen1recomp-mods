@@ -38,15 +38,10 @@ jobs:
         env:
           BUILD_STAMP: ${{ github.sha }}
         run: python tools/build_index.py
-      - name: Commit refreshed site/
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add site
-          if ! git diff --cached --quiet; then
-            git commit -m "Rebuild mod index [skip ci]"
-            git push
-          fi
+      # NOTE: we deliberately do NOT commit site/ back here. The committed
+      # site/ (which the raw-fallback feed reads) is rebuilt locally via
+      # tools/build_index.py alongside each mod change; letting CI also commit
+      # it just creates conflicting bot commits. CI only builds + deploys Pages.
       # Try to enable Pages automatically. If the token can't (org policy,
       # etc.), don't fail the run -- the index still works via the raw
       # fallback the engine uses, so Pages is pure polish.
