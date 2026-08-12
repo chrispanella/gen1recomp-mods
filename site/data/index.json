@@ -61,6 +61,27 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/berry_grove.zip"
     },
     {
+      "id": "crafting",
+      "title": "Crafting & Alchemy",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "Gather materials in the world, then craft at two benches: a BALL WORKSHOP in Cerulean turns apricorns into Poke/Great/Ultra Balls, and an ALCHEMY LAB in Celadon mixes herbs into Potions and status heals. Materials come from foraging spots on routes (refill weekly) and a chance drop after winning wild battles. The benches are interactive menu screens that show each recipe's cost and craft on select.",
+      "categories": [
+        "TOOL"
+      ],
+      "tags": [],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/crafting.zip"
+    },
+    {
       "id": "daily_coins",
       "title": "Daily Coins",
       "author": "chrispanella",
