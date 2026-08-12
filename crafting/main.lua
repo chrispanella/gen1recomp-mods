@@ -30,6 +30,7 @@ local MATS = {
   { id = "FRESH_BERRY",  name = "FRESH BERRY",  short = "BERRY" },
   { id = "SCRAP",        name = "SCRAP METAL",  short = "SCRAP" },
   { id = "SPRING",       name = "COIL SPRING",  short = "SPRING" },
+  { id = "TECH_SHARD",   name = "TECH SHARD",   short = "TECH" },
 }
 local SHORT = {}
 for _, m in ipairs(MATS) do SHORT[m.id] = m.short end
@@ -83,10 +84,31 @@ local ENGINEERING = {
   { out = "SUPER_ROD",  name = "SUPER ROD",  lvl = 4, xp = 24, mats = { { "SCRAP", 6 }, { "SPRING", 2 } } },
   { out = "BICYCLE",    name = "BICYCLE",    lvl = 5, xp = 40, mats = { { "SCRAP", 10 }, { "SPRING", 4 } } },
 }
+-- TM LAB: craft Technical Machines (and, at the top, a few HMs) from TECH SHARD.
+-- The move works natively once the TM is used; HMs still need the right badge to
+-- be used, so crafting one early is safe.
+local TM_LAB = {
+  { out = "TM_MEGA_PUNCH",  name = "TM MEGA PUNCH",  lvl = 1, xp = 10, mats = { { "TECH_SHARD", 2 } } },
+  { out = "TM_SWIFT",       name = "TM SWIFT",       lvl = 1, xp = 10, mats = { { "TECH_SHARD", 2 } } },
+  { out = "TM_BODY_SLAM",   name = "TM BODY SLAM",   lvl = 2, xp = 14, mats = { { "TECH_SHARD", 3 } } },
+  { out = "TM_BUBBLEBEAM",  name = "TM BUBBLEBEAM",  lvl = 2, xp = 14, mats = { { "TECH_SHARD", 3 } } },
+  { out = "TM_ROCK_SLIDE",  name = "TM ROCK SLIDE",  lvl = 2, xp = 14, mats = { { "TECH_SHARD", 3 }, { "SCRAP", 2 } } },
+  { out = "TM_THUNDERBOLT", name = "TM THUNDERBOLT", lvl = 3, xp = 20, mats = { { "TECH_SHARD", 4 }, { "SPRING", 1 } } },
+  { out = "TM_ICE_BEAM",    name = "TM ICE BEAM",    lvl = 3, xp = 20, mats = { { "TECH_SHARD", 4 } } },
+  { out = "TM_PSYCHIC_M",   name = "TM PSYCHIC",     lvl = 4, xp = 26, mats = { { "TECH_SHARD", 5 }, { "MYSTIC_HERB", 2 } } },
+  { out = "TM_EARTHQUAKE",  name = "TM EARTHQUAKE",  lvl = 4, xp = 26, mats = { { "TECH_SHARD", 5 }, { "SCRAP", 3 } } },
+  { out = "TM_FIRE_BLAST",  name = "TM FIRE BLAST",  lvl = 5, xp = 32, mats = { { "TECH_SHARD", 6 } } },
+  { out = "TM_BLIZZARD",    name = "TM BLIZZARD",    lvl = 5, xp = 32, mats = { { "TECH_SHARD", 6 } } },
+  { out = "TM_HYPER_BEAM",  name = "TM HYPER BEAM",  lvl = 6, xp = 45, mats = { { "TECH_SHARD", 8 }, { "SPRING", 2 } } },
+  { out = "HM_CUT",         name = "HM CUT",         lvl = 4, xp = 20, mats = { { "TECH_SHARD", 4 }, { "SCRAP", 2 } } },
+  { out = "HM_STRENGTH",    name = "HM STRENGTH",    lvl = 5, xp = 24, mats = { { "TECH_SHARD", 5 }, { "SCRAP", 4 } } },
+  { out = "HM_SURF",        name = "HM SURF",        lvl = 6, xp = 30, mats = { { "TECH_SHARD", 7 }, { "SPRING", 2 } } },
+}
 local DISCIPLINES = {
   { key = "alchemy",     label = "ALCHEMY",     recipes = ALCHEMY },
   { key = "cooking",     label = "COOKING",     recipes = COOKING },
   { key = "engineering", label = "ENGINEERING", recipes = ENGINEERING },
+  { key = "tinkering",   label = "TM LAB",      recipes = TM_LAB },
 }
 
 -- ---- foraging + wild drops --------------------------------------------------
@@ -99,12 +121,12 @@ local FORAGE = {
 local TIER_MATS = {
   [1] = { "RED_APRICORN", "ORAN_HERB", "PECHA_LEAF", "FRESH_BERRY" },
   [2] = { "BLU_APRICORN", "CHERI_LEAF", "RAWST_LEAF", "ORAN_HERB", "SCRAP", "FRESH_BERRY" },
-  [3] = { "YLW_APRICORN", "CHESTO_LEAF", "MYSTIC_HERB", "BLU_APRICORN", "SCRAP", "SPRING" },
+  [3] = { "YLW_APRICORN", "CHESTO_LEAF", "MYSTIC_HERB", "BLU_APRICORN", "SCRAP", "SPRING", "TECH_SHARD" },
 }
 local FORAGE_TEXT, FORAGE_SPRITE = "TEXT_FORAGE_SPOT", "SPRITE_BOULDER"
 local WILD_DROPS = {
   { "RED_APRICORN", 26 }, { "ORAN_HERB", 26 }, { "PECHA_LEAF", 12 }, { "FRESH_BERRY", 14 },
-  { "BLU_APRICORN", 10 }, { "SCRAP", 10 }, { "CHERI_LEAF", 7 }, { "MYSTIC_HERB", 5 },
+  { "BLU_APRICORN", 10 }, { "SCRAP", 10 }, { "CHERI_LEAF", 7 }, { "MYSTIC_HERB", 5 }, { "TECH_SHARD", 4 },
 }
 local DROP_CHANCE = 14
 
@@ -264,6 +286,7 @@ return function(mod)
           { label = "ALCHEMY",     right = "Lv " .. levelOf("alchemy"),     sub = "CRAFT_ALCHEMY" },
           { label = "COOKING",     right = "Lv " .. levelOf("cooking"),     sub = "CRAFT_COOKING" },
           { label = "ENGINEERING", right = "Lv " .. levelOf("engineering"), sub = "CRAFT_ENGINEERING" },
+          { label = "TM LAB",      right = "Lv " .. levelOf("tinkering"),   sub = "CRAFT_TINKERING" },
           { label = "GATHERING",   right = "Lv " .. levelOf("gathering"),   sub = "CRAFT_GATHER" },
           { label = "DONE" },
         }

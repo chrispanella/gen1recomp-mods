@@ -302,6 +302,47 @@ local function q5_thief() return {
   { "label", "idle" }, { "show_text", "Nothin' to see\nhere. Move along." },
 } end
 
+-- ================= MOVE TUTORS ==================================
+-- Spawned masters out on quiet routes. Beat their team once and they teach your
+-- trainer a signature move (a TM you cannot craft), then move on. Learned once.
+local TUTORS = {
+  { key = "goro", map = "ROUTE_22", sprite = "SPRITE_HIKER", text = "TEXT_MOVE_TUTOR_GORO",
+    trainer = "OPP_TUTOR_GORO", name = "MASTER GORO", tm = "TM_SUBMISSION",
+    party = { { level = 24, species = "PRIMEAPE" }, { level = 26, species = "MACHOKE" } },
+    intro = "I am MASTER GORO.\nBest my POKeMON and\vI will teach you\vthe art of SUBMISSION!",
+    teach = "Well fought! The\nway of SUBMISSION\vis yours now.",
+    after = "Keep body and\nspirit strong!" },
+  { key = "oracle", map = "ROUTE_13", sprite = "SPRITE_GAMBLER", text = "TEXT_MOVE_TUTOR_ORACLE",
+    trainer = "OPP_TUTOR_ORACLE", name = "SAGE ORACLE", tm = "TM_DREAM_EATER",
+    party = { { level = 30, species = "HYPNO" }, { level = 32, species = "ALAKAZAM" } },
+    intro = "I walk in dreams.\nDefeat me and I\vshall teach you\vDREAM EATER.",
+    teach = "Your mind is\nready. DREAM EATER\vis yours.",
+    after = "Sleep well,\ntraveler." },
+  { key = "sky", map = "ROUTE_15", sprite = "SPRITE_FISHING_GURU", text = "TEXT_MOVE_TUTOR_SKY",
+    trainer = "OPP_TUTOR_SKY", name = "TAMER SKY", tm = "TM_SKY_ATTACK",
+    party = { { level = 33, species = "FEAROW" }, { level = 35, species = "PIDGEOT" } },
+    intro = "My birds rule the\nsky! Beat them to\vlearn SKY ATTACK.",
+    teach = "Magnificent! SKY\nATTACK is yours to\vcommand.",
+    after = "Soar high, my\nfriend!" },
+}
+local function tutorFlag(t) return "MOD_TUTOR_" .. t.key .. "_LEARNED" end
+local function tutorTalk(t)
+  local LEARNED = tutorFlag(t)
+  return {
+    { "check_flag", LEARNED }, { "jump_if_true", "after" },
+    { "show_text", t.intro },
+    { "choice", { "BATTLE", "LATER" } }, { "jump_if_false", "later" },
+    { "start_battle", "trainer", t.trainer, 1 },
+    { "jump_if_false", "end" }, -- a loss blacks you out; bail quietly
+    { "give_item", t.tm, 1, true },
+    { "set_flag", LEARNED },
+    { "show_text", t.teach },
+    { "jump", "end" },
+    { "label", "later" }, { "show_text", "Come back when\nyou are ready." }, { "jump", "end" },
+    { "label", "after" }, { "show_text", t.after },
+  }
+end
+
 -- ================= TRACKER (QUESTS menu) =========================
 local LOG = {
   { name = "GLOW SHARD", started = GLOW_STARTED, done = GLOW_DONE },
@@ -314,6 +355,9 @@ local LOG = {
   { name = "WHISTLEBLOWER", started = Q3.STARTED, done = Q3.DONE, endings = { { Q3.HERO, "EXPOSED" }, { Q3.GREED, "COVERED" } } },
   { name = "TWO BROTHERS", started = Q4.STARTED, done = Q4.DONE, endings = { { Q4.SIDE3, "SIDED A" }, { Q4.SIDE2, "SIDED B" } } },
   { name = "ROCKER GUITAR", started = Q5.STARTED, done = Q5.DONE, endings = { { Q5.MUSIC, "RETURNED" }, { Q5.SELL, "SOLD" } } },
+  { name = "MASTER GORO", started = "MOD_TUTOR_goro_LEARNED", done = "MOD_TUTOR_goro_LEARNED" },
+  { name = "SAGE ORACLE", started = "MOD_TUTOR_oracle_LEARNED", done = "MOD_TUTOR_oracle_LEARNED" },
+  { name = "TAMER SKY", started = "MOD_TUTOR_sky_LEARNED", done = "MOD_TUTOR_sky_LEARNED" },
 }
 local SCREEN = "QuestLog"
 
@@ -358,6 +402,53 @@ return function(mod)
 
   for map, talk in pairs(byMap) do
     mod.content.map_scripts:register(map, { talk = talk })
+  end
+
+  -- ------- move tutors: spawn a master on a route until you learn from them ---
+  local function overview()
+    if not mod.world then return nil end
+    local ok, ov = pcall(function() return mod.world:mapOverview() end)
+    return ok and ov or nil
+  end
+  local function walkable(ov, x, y)
+    if not ov or x < 0 or y < 0 or x >= ov.width or y >= ov.height then return false end
+    local row = ov.rows[y + 1]
+    return row and row:sub(x + 1, x + 1) == "."
+  end
+  local function pickCell(ov, ow)
+    local px, py = ow.player and ow.player.cellX, ow.player and ow.player.cellY
+    if not px then return nil end
+    local W, seen, q, head = ov.width, {}, { { px, py } }, 1
+    seen[py * W + px] = true
+    local best
+    while head <= #q and head < 4000 do
+      local c = q[head]; head = head + 1
+      local d = math.abs(c[1] - px) + math.abs(c[2] - py)
+      if d >= 3 and d <= 9 and not best then best = c end
+      for _, dd in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
+        local nx, ny = c[1] + dd[1], c[2] + dd[2]
+        if walkable(ov, nx, ny) and not seen[ny * W + nx] then seen[ny * W + nx] = true; q[#q + 1] = { nx, ny } end
+      end
+    end
+    return best
+  end
+
+  local tutorSpawned = {}
+  for _, t in ipairs(TUTORS) do
+    mod.content.trainers:register(t.trainer, {
+      id = t.trainer, name = t.name, baseMoney = 50, parties = { t.party },
+    })
+    mod.content.map_scripts:register(t.map, {
+      talk = { [t.text] = tutorTalk(t) },
+      onEnter = function(game, ow)
+        if tutorSpawned[t.map] then return end
+        if game.save and game.save.flags and game.save.flags[tutorFlag(t)] then return end -- already learned
+        local ov = overview(); if not ov then return end
+        local cell = pickCell(ov, ow); if not cell then return end
+        local id = mod.world:spawnNpc(t.map, { sprite = t.sprite, text = t.text, movement = "STAY", range = "NONE", x = cell[1], y = cell[2] })
+        if id then tutorSpawned[t.map] = true end
+      end,
+    })
   end
 
   -- ------- the quest log ------------------------------------------
