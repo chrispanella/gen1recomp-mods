@@ -129,25 +129,35 @@ return function(mod)
     local row = ov.rows[y + 1]
     return row and row:sub(x + 1, x + 1) == "."
   end
-  -- the reachable tile nearest the mart front, so the vendor stands by it
+  -- A reachable tile BESIDE the mart entrance, not on the doormat. We take the
+  -- nearest reachable cell that is at least 2 tiles from the door and off the
+  -- door's own column, so the vendor flanks the entrance instead of blocking
+  -- it. Falls back to the plain nearest cell only if a map is too cramped to
+  -- offer one (so we never fail to spawn).
   local function pickNear(ov, ow, tx, ty)
     local px, py = ow.player and ow.player.cellX, ow.player and ow.player.cellY
     if not px then return nil end
     local W, seen, q, head = ov.width, {}, { { px, py } }, 1
     seen[py * W + px] = true
-    local best, bestd
+    local best, bestScore, fallback, fallbackD
     while head <= #q and head < 6000 do
       local c = q[head]; head = head + 1
+      local doorD = math.abs(c[1] - tx) + math.abs(c[2] - ty)
       if math.abs(c[1] - px) + math.abs(c[2] - py) >= 1 then
-        local d = math.abs(c[1] - tx) + math.abs(c[2] - ty)
-        if not best or d < bestd then best, bestd = c, d end
+        -- keep the doormat and the tile right in front of it clear
+        if doorD >= 2 then
+          -- prefer a tile off the door's column so it stands to one side
+          local score = doorD + (c[1] == tx and 4 or 0)
+          if not best or score < bestScore then best, bestScore = c, score end
+        end
+        if not fallback or doorD < fallbackD then fallback, fallbackD = c, doorD end
       end
       for _, dd in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
         local nx, ny = c[1] + dd[1], c[2] + dd[2]
         if walkable(ov, nx, ny) and not seen[ny * W + nx] then seen[ny * W + nx] = true; q[#q + 1] = { nx, ny } end
       end
     end
-    return best
+    return best or fallback
   end
 
   local spawned = {}
