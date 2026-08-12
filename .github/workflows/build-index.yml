@@ -47,6 +47,14 @@ jobs:
             git commit -m "Rebuild mod index [skip ci]"
             git push
           fi
+      # Try to enable Pages automatically. If the token can't (org policy,
+      # etc.), don't fail the run -- the index still works via the raw
+      # fallback the engine uses, so Pages is pure polish.
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        continue-on-error: true
+        with:
+          enablement: true
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -55,6 +63,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # Never red-X the whole workflow just because Pages isn't enabled yet;
+    # the raw-fallback feed keeps the index working regardless.
+    continue-on-error: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
