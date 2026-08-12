@@ -1,0 +1,17 @@
+{
+  "id": "autosave",
+  "name": "Autosave",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "TOOL",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "permissions": ["engine_internals"],
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Automatically saves your game on a schedule you pick in OPTIONS: ON EVENTS (after catching a Pokemon, a level up, an evolution, or a trainer/gym battle), EVERY 5 MIN (a timed autosave), or OFF. Saves are deferred to the moment you are back in free-roam overworld so one never lands mid-battle, and use the engine's own save routine. A brief AUTOSAVED indicator confirms each save. No engine files touched, no maps edited."
+}

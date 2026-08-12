@@ -8,10 +8,36 @@
     "QUEST",
     "SOCIAL",
     "TIME",
+    "TOOL",
     "TRAINER",
     "UI"
   ],
   "mods": [
+    {
+      "id": "autosave",
+      "title": "Autosave",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "Autosaves your game on events (catch, level up, evolve, trainer battle) or a timer - your choice in OPTIONS.",
+      "categories": [
+        "TOOL"
+      ],
+      "tags": [
+        "tool",
+        "quality-of-life",
+        "save"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/autosave.zip"
+    },
     {
       "id": "branching_quests",
       "title": "Branching Quests",

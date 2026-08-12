@@ -1,0 +1,23 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "Autosaves your game on events (catch, level up, evolve, trainer battle) or a timer - your choice in OPTIONS.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "tool", "quality-of-life", "save" },
+  differences = {
+    added = {
+      "an AUTOSAVE option (ON EVENTS / EVERY 5 MIN / OFF)",
+      "event autosaves after catching a Pokemon, a level up, an evolution, or a trainer/gym battle",
+      "a timed autosave mode, and a brief AUTOSAVED on-screen indicator",
+    },
+    changed = {
+      "the OPTIONS menu gains an AUTOSAVE row",
+    },
+    known = {
+      "saves are deferred to free-roam overworld, so an event autosave lands just after you leave the battle/menu, not during it",
+    },
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}
