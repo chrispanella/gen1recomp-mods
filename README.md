@@ -44,12 +44,16 @@ use **MODS -> Import mod .zip** in-game.
 | [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang: a daily challenge in a different city each real day, with a level-scaled, capped reward. |
 | [`roaming_boss`](roaming_boss/) | A tough Champion roams the cities every few days; beat their level-scaled team for a big prize. |
 | [`legendary_shrine`](legendary_shrine/) | A daily rotating legendary wild battle on Route 10. |
+| [`crafting`](crafting/) | Gather materials (apricorns, herbs) from foraging spots on routes and wild-battle drops, then craft at two benches: a BALL WORKSHOP (apricorns to Poke/Great/Ultra Balls) and an ALCHEMY LAB (herbs to Potions and status heals), each an interactive menu. |
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
+
+> **Battle difficulty:** the challenge mods above (`rocket_recruits`, `roaming_boss`, `legendary_shrine`) read the BATTLE DIFF setting from [`tweaks`](tweaks/) when it is installed, so NORMAL / HARD / BRUTAL makes their teams tougher across the board.
 
 **Weekly rewards and quality-of-life:**
 
 | Mod | What it adds |
 |---|---|
+| [`tweaks`](tweaks/) | A shared settings panel in OPTIONS: control the on-screen popups every mod uses (off / text-only / full bar, plus color, size, bold, duration, sound) and a BATTLE DIFF (Normal/Hard/Brutal) the challenge mods read. Other mods use it when present and fall back to their own defaults otherwise. |
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods. |
 | [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a timer (1-30 min, configurable) - your choice in OPTIONS. |
 | [`lottery`](lottery/) | A lottery vendor outside every town's mart. Buy a cheap ticket, lock in a number from 1 to 100; draws happen every WEDNESDAY and SATURDAY. Match the drawn number and collect the jackpot from any vendor. |

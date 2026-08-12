@@ -96,7 +96,10 @@ return function(mod)
         return
       end
       Commands.show_text(ctx, "So you found me.\nShow me your\vstrongest team!")
-      Commands.start_battle(ctx, "trainer", TRAINER, tierForAvg(avgLevel(ctx)))
+      -- tweaks BATTLE DIFF bumps the tier up (harder team) when installed
+      local tw = mod.find("tweaks")
+      local bump = (tw and tw.exports and tw.exports.difficulty and tw.exports.difficulty().tierBump) or 0
+      Commands.start_battle(ctx, "trainer", TRAINER, math.min(#TIERS, tierForAvg(avgLevel(ctx)) + bump))
       if ctx.lastCheck then
         mod.save:set("done", period())
         Commands.show_text(ctx, "Magnificent! Take\nthis, champion.")

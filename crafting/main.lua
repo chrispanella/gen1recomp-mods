@@ -270,7 +270,14 @@ return function(mod)
     if Bag.add(G.save, mat, 1, G.data) then
       local nm = "material"
       for _, m in ipairs(MATS) do if m.id == mat then nm = m.name end end
-      dropMsg, dropT = "Found a " .. nm .. "!", 240
+      local msg = "Found a " .. nm .. "!"
+      -- prefer the shared tweaks popup (styled + configurable); else fall back
+      local tw = mod.find("tweaks")
+      if tw and tw.exports and tw.exports.push then
+        tw.exports.push(msg)
+      else
+        dropMsg, dropT = msg, 240
+      end
     end
   end)
   mod.hooks:wrap("render.hud", function(next, game, viewport)

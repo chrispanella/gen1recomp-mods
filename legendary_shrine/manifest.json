@@ -1,7 +1,7 @@
 {
   "id": "legendary_shrine",
   "name": "Legendary Shrine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -13,7 +13,9 @@
     "engine_internals"
   ],
   "dependencies": [],
-  "optional_dependencies": [],
+  "optional_dependencies": [
+    "tweaks"
+  ],
   "conflicts": [],
   "description": "A shrine keeper appears on Route 10 each real day; speak to face a rotating legendary in a wild battle - once per day, so catch it or wait."
 }

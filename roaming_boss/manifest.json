@@ -1,7 +1,7 @@
 {
   "id": "roaming_boss",
   "name": "Roaming Boss",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -13,7 +13,9 @@
     "engine_internals"
   ],
   "dependencies": [],
-  "optional_dependencies": [],
+  "optional_dependencies": [
+    "tweaks"
+  ],
   "conflicts": [],
   "description": "A tough Champion-in-disguise appears in a different city every few real days; beat their level-scaled team for a big prize, once per appearance."
 }

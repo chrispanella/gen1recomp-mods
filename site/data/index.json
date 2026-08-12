@@ -64,7 +64,7 @@
       "id": "crafting",
       "title": "Crafting & Alchemy",
       "author": "chrispanella",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "summary": "Gather materials in the world, then craft at two benches: a BALL WORKSHOP in Cerulean turns apricorns into Poke/Great/Ultra Balls, and an ALCHEMY LAB in Celadon mixes herbs into Potions and status heals. Materials come from foraging spots on routes (refill weekly) and a chance drop after winning wild battles. The benches are interactive menu screens that show each recipe's cost and craft on select.",
       "categories": [
         "TOOL"
@@ -175,7 +175,7 @@
       "id": "legendary_shrine",
       "title": "Legendary Shrine",
       "author": "chrispanella",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "summary": "A shrine keeper appears on Route 10 each real day; speak to face a rotating legendary in a wild battle - once per day, so catch it or wait.",
       "categories": [
         "CHALLENGE"
@@ -196,7 +196,7 @@
       "id": "lottery",
       "title": "Town Lottery",
       "author": "chrispanella",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "summary": "A lottery vendor stands outside the mart in every town. Buy a cheap ticket (100) and lock in a number from 1 to 100. Draws happen every Wednesday and Saturday; match the drawn number to win a 50000 jackpot, collectable from any vendor after the draw. The winning number is fixed by the draw's date, so it is the same at every vendor. Spawned at runtime, no map edits.",
       "categories": [
         "CONTENT"
@@ -259,7 +259,7 @@
       "id": "roaming_boss",
       "title": "Roaming Boss",
       "author": "chrispanella",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "summary": "A tough Champion-in-disguise appears in a different city every few real days; beat their level-scaled team for a big prize, once per appearance.",
       "categories": [
         "CHALLENGE"
@@ -280,7 +280,7 @@
       "id": "rocket_recruits",
       "title": "Rocket Recruits",
       "author": "chrispanella",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "summary": "A roaming Team Rocket gang: a daily challenge in a different city each real-world day, with level-scaled, capped rewards.",
       "categories": [
         "CHALLENGE"
@@ -348,6 +348,27 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/traveling_merchants.zip"
+    },
+    {
+      "id": "tweaks",
+      "title": "Tweaks & Settings",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "A shared settings hub. Adds one OPTIONS panel that controls the on-screen popups every mod uses (off / text-only / full bar, plus color, size, bold, duration, and a sound toggle) and a BATTLE DIFF setting (Normal/Hard/Brutal) that the challenge mods read to make their teams tougher. Other mods use it when present and fall back to their own defaults when it is not.",
+      "categories": [
+        "TOOL"
+      ],
+      "tags": [],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/tweaks.zip"
     },
     {
       "id": "type_sage",

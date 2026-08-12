@@ -68,7 +68,10 @@ return function(mod)
       mod.save:set("last", today)
       local l = todaysLegend()
       Commands.show_text(ctx, "A great presence\nstirs at the shrine...")
-      Commands.start_battle(ctx, "wild", l[1], l[2])
+      -- tweaks BATTLE DIFF raises the legendary's level when installed
+      local tw = mod.find("tweaks")
+      local mult = (tw and tw.exports and tw.exports.difficulty and tw.exports.difficulty().levelMult) or 1
+      Commands.start_battle(ctx, "wild", l[1], math.min(100, math.floor(l[2] * mult)))
     end,
   })
 

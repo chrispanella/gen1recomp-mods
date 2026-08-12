@@ -73,7 +73,13 @@ return function(mod)
                         and mod.save:get("ticket_draw", -1) < nowDay()
       bannerText = ("LOTTERY  %s DRAW: %d"):format(name, win)
       if hasTicket then bannerText = bannerText .. "  CHECK YOUR TICKET!" end
-      bannerT = 360 -- ~6s at 60fps
+      -- prefer the shared tweaks popup (styled + configurable); else fall back
+      local tw = mod.find("tweaks")
+      if tw and tw.exports and tw.exports.push then
+        tw.exports.push(bannerText)
+      else
+        bannerT = 360 -- ~6s at 60fps
+      end
     end
     if bannerT > 0 then bannerT = bannerT - 1 end
     return r

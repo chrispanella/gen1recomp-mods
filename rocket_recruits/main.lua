@@ -127,7 +127,10 @@ return function(mod)
   mod.content.commands:register("rocket_recruits:battle", {
     foreground = true,
     fn = function(ctx)
-      Commands.start_battle(ctx, "trainer", TRAINER, tierForAvg(avgLevel(ctx)))
+      -- tweaks BATTLE DIFF bumps the tier up (harder team) when installed
+      local tw = mod.find("tweaks")
+      local bump = (tw and tw.exports and tw.exports.difficulty and tw.exports.difficulty().tierBump) or 0
+      Commands.start_battle(ctx, "trainer", TRAINER, math.min(#TIERS, tierForAvg(avgLevel(ctx)) + bump))
     end,
   })
 

@@ -1,7 +1,7 @@
 {
   "id": "crafting",
   "name": "Crafting & Alchemy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -13,7 +13,9 @@
     "engine_internals"
   ],
   "dependencies": [],
-  "optional_dependencies": [],
+  "optional_dependencies": [
+    "tweaks"
+  ],
   "conflicts": [],
   "description": "Gather materials in the world, then craft at two benches: a BALL WORKSHOP in Cerulean turns apricorns into Poke/Great/Ultra Balls, and an ALCHEMY LAB in Celadon mixes herbs into Potions and status heals. Materials come from foraging spots on routes (refill weekly) and a chance drop after winning wild battles. The benches are interactive menu screens that show each recipe's cost and craft on select."
 }
