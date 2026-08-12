@@ -1,0 +1,16 @@
+{
+  "id": "new_area_clubhouse",
+  "name": "New Area: Clubhouse",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "MAP",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "EXPERIMENTAL example of adding a brand-new map by mod: registers a new interior (the FUN CLUBHOUSE, cloned from a vanilla one-room house so it renders), adds a warp into it from Pallet Town, and populates it with a host NPC that gives a one-time gift. A worked template for new areas. The Pallet entrance tile is a best guess - verify it in game and refine the entrance in Tiled."
+}

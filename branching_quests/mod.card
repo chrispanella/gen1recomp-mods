@@ -11,10 +11,11 @@ return {
       "THE POACHER'S BARGAIN: recover an amber shard for a Cerulean researcher, or take a Fuchsia poacher's bribe; two endings",
       "THE SILPH WHISTLEBLOWER: a multi-step investigation (Saffron gentleman, Celadon retiree, Vermilion dock worker) that ends in expose-vs-cover-up",
       "TWO BROTHERS: settle a Celadon feud by siding with one gramps or the other",
-      "three custom key items (SECRET MAP, AMBER SHARD, NOTE) and consequence dialogue that changes with your choices",
+      "THE ROCKER'S GUITAR: return a Saffron rocker's stolen guitar, or help the Viridian thief sell it",
+      "four custom key items (SECRET MAP, AMBER SHARD, NOTE, GUITAR) and consequence dialogue that changes with your choices",
     },
     changed = {
-      "ten townspeople gain branching quest dialogue that reacts to your decisions",
+      "twelve townspeople gain branching quest dialogue that reacts to your decisions",
     },
     known = {},
   },

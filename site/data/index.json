@@ -3,6 +3,7 @@
   "generated_at": "static",
   "categories": [
     "CHALLENGE",
+    "MAP",
     "MERCHANT",
     "QUEST",
     "TIME",
@@ -13,7 +14,7 @@
       "id": "branching_quests",
       "title": "Branching Quests",
       "author": "chrispanella",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "summary": "Two questlines with real choices and multiple endings, where NPCs react to the side you pick.",
       "categories": [
         "QUEST"
@@ -55,6 +56,29 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/fun_trainer_ace.zip"
+    },
+    {
+      "id": "new_area_clubhouse",
+      "title": "New Area: Clubhouse",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "A worked example of adding a brand-new map: a Clubhouse room off Pallet Town with its own NPC.",
+      "categories": [
+        "MAP"
+      ],
+      "tags": [
+        "map",
+        "example",
+        "content"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/new_area_clubhouse.zip"
     },
     {
       "id": "quest_glow_shard",

@@ -258,10 +258,67 @@ local function q4_gramps3()
   }
 end
 
+-- ------- Quest 5: The Rocker's Guitar ------------------------------
+-- A Saffron rocker's guitar was stolen by a thief in Viridian. At the
+-- thief you choose to take it back (music ending) or help sell it (sellout).
+local GUITAR_ITEM = "BQ_GUITAR"
+local Q5 = { STARTED = "MOD_BQ5_STARTED", DONE = "MOD_BQ5_DONE",
+             MUSIC = "MOD_BQ5_END_MUSIC", SELL = "MOD_BQ5_END_SELL" }
+
+local function q5_rocker()
+  return {
+    { "check_flag", Q5.DONE }, { "jump_if_true", "after" },
+    { "check_flag", Q5.STARTED }, { "jump_if_true", "pending" },
+    { "show_text", "Some punk swiped\nmy GUITAR! It's in\vVIRIDIAN.\fGet it back and\nI'll make you a\vSTAR!" },
+    { "choice", { "ROCK ON", "NAH" } },
+    { "jump_if_false", "refuse" },
+    { "set_flag", Q5.STARTED },
+    { "show_text", "You rock! Find\nthat thief in\vVIRIDIAN CITY." },
+    { "jump", "end" },
+    { "label", "pending" },
+    { "check_item", GUITAR_ITEM }, { "jump_if_false", "remind" },
+    { "take_item", GUITAR_ITEM },
+    { "give_item", "TM_SWORDS_DANCE" },
+    { "set_flag", Q5.DONE }, { "set_flag", Q5.MUSIC },
+    { "emote", "player", "happy", 45 },
+    { "show_text", "My axe! Learn this\nmove, you earned\vit, STAR!" },
+    { "jump", "end" },
+    { "label", "remind" }, { "show_text", "That thief in\nVIRIDIAN still has\vmy GUITAR!" }, { "jump", "end" },
+    { "label", "refuse" }, { "show_text", "Aw, don't leave me\nhangin'..." }, { "jump", "end" },
+    { "label", "after" },
+    { "check_flag", Q5.MUSIC }, { "jump_if_true", "after_music" },
+    { "show_text", "You SOLD my GUITAR?\nThat's ice cold,\vman..." }, { "jump", "end" },
+    { "label", "after_music" },
+    { "show_text", "We gotta jam\nsometime, STAR!" },
+  }
+end
+
+local function q5_thief()
+  return {
+    { "check_flag", Q5.DONE }, { "jump_if_true", "idle" },
+    { "check_flag", Q5.STARTED }, { "jump_if_false", "idle" },
+    { "check_item", GUITAR_ITEM }, { "jump_if_true", "idle" },
+    { "show_text", "Heh, this GUITAR?\nThe ROCKER wants\vit back?\fTake it to him...\nOR help me sell it.\vBig cut for you." },
+    { "choice", { "TAKE GUITAR", "SELL IT" } },
+    { "jump_if_false", "sell" },
+    { "give_item", GUITAR_ITEM, 1, true },
+    { "show_text", "Tch. Fine. Run it\nback, hero." },
+    { "jump", "end" },
+    { "label", "sell" },
+    { "give_item", "NUGGET" },
+    { "give_money", 4000 },
+    { "set_flag", Q5.DONE }, { "set_flag", Q5.SELL },
+    { "show_text", "Smart. Easy money,\nno questions asked." },
+    { "jump", "end" },
+    { "label", "idle" }, { "show_text", "Nothin' to see\nhere. Move along." },
+  }
+end
+
 return function(mod)
   mod.content.items:register(MAP_ITEM, { id = MAP_ITEM, name = "SECRET MAP", price = 0, keyItem = true, tossable = false })
   mod.content.items:register(SHARD_ITEM, { id = SHARD_ITEM, name = "AMBER SHARD", price = 0, keyItem = true, tossable = false })
   mod.content.items:register(NOTE_ITEM, { id = NOTE_ITEM, name = "NOTE", price = 0, keyItem = true, tossable = false })
+  mod.content.items:register(GUITAR_ITEM, { id = GUITAR_ITEM, name = "GUITAR", price = 0, keyItem = true, tossable = false })
 
   -- collect talk per map so multiple quest NPCs on one town compose
   local byMap = {}
@@ -282,6 +339,9 @@ return function(mod)
 
   put("CELADON_CITY", "TEXT_CELADONCITY_GRAMPS2", q4_gramps2())
   put("CELADON_CITY", "TEXT_CELADONCITY_GRAMPS3", q4_gramps3())
+
+  put("SAFFRON_CITY", "TEXT_SAFFRONCITY_ROCKER", q5_rocker())
+  put("VIRIDIAN_CITY", "TEXT_VIRIDIANCITY_YOUNGSTER1", q5_thief())
 
   for map, talk in pairs(byMap) do
     mod.content.map_scripts:register(map, { talk = talk })

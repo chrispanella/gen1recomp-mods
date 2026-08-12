@@ -41,6 +41,15 @@ Two old men in **Celadon** are feuding over who caught the bigger Magikarp.
 Carry a NOTE between them and pick a side - whoever you back is delighted,
 the other sulks.
 
+## The Rocker's Guitar
+
+A **rocker** in Saffron had his guitar stolen by a thief in **Viridian**. At
+the thief you choose:
+
+- **Take the guitar** back for the rocker and a rare TM (music ending).
+- **Sell it** with the thief for a Nugget + cash (sellout ending). The rocker
+  is heartbroken.
+
 ## How it works
 
 Choices set `MOD_` flags, and every NPC branches on those flags for its

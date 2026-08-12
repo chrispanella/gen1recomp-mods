@@ -1,0 +1,22 @@
+-- Sharing metadata: read by tooling and the in-game manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "A worked example of adding a brand-new map: a Clubhouse room off Pallet Town with its own NPC.",
+  author = "chrispanella",
+  contact = "https://github.com/chrispanella/gen1recomp-mods",
+  tags = { "map", "example", "content" },
+  differences = {
+    added = {
+      "a new interior map, FUN_CLUBHOUSE (index 1000), with a layout cloned from a vanilla one-room house",
+      "a host NPC in the clubhouse that gives a one-time Rare Candy",
+    },
+    changed = {
+      "Pallet Town gains one warp (its entrance to the clubhouse)",
+    },
+    known = {
+      "the Pallet entrance tile is a best guess and may need moving in game; refine the entrance in Tiled for a real door",
+    },
+  },
+  credits = {},
+  compat = { engine = ">=0.0.0-0 <2.0.0", modApi = 2 },
+}
