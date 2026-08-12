@@ -33,7 +33,8 @@ also grab a single mod's `.zip` from [`site/mods/`](site/mods/) and use
 | [`new_area_clubhouse`](new_area_clubhouse/) | Experimental example of adding a brand-new map: a Clubhouse room off Pallet Town with its own NPC and gift. A template for new areas; see [docs/make-your-first-area.md](docs/make-your-first-area.md). |
 | [`quest_tracker`](quest_tracker/) | Adds a QUESTS entry to the START menu that tracks every quest in the pack (not started / active / done / which ending). |
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
-| [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a 5-minute timer - your choice in OPTIONS. Deferred to safe overworld moments. |
+| [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a timer (1-30 min, configurable) - your choice in OPTIONS. Deferred to safe overworld moments. |
+| [`visual_enhance`](visual_enhance/) | Dynamic day/night lighting: tints the overworld by time of day (from world_clock or your real clock) via a render pipeline. Hotkey 7. |
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods to build on. Foundation for time-based content. |
 | [`traveling_merchants`](traveling_merchants/) | Five distinct merchant NPCs out on the routes (Peddler, Digger, Herbalist, Techie, Tamer), each with its own sprite, specialty wares, route pair, and patrol style. Locations and stock rotate on real-world days. |
 | [`rocket_recruits`](rocket_recruits/) | A roaming Team Rocket gang that appears in a different city each real-world day as a daily challenge - one level-scaled battle for a capped cash reward + a rotating item. |

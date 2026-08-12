@@ -13,8 +13,8 @@
 -- menu calls), so an autosave is identical to a manual one.
 
 local MODES = { "EVENTS", "TIMED", "OFF" }
-local MODE_LABEL = { EVENTS = "ON EVENTS", TIMED = "EVERY 5 MIN", OFF = "OFF" }
-local INTERVAL_SECONDS = 300 -- timed mode: every 5 real minutes
+local MODE_LABEL = { EVENTS = "ON EVENTS", TIMED = "TIMED", OFF = "OFF" }
+local INTERVALS = { 1, 2, 3, 5, 10, 15, 20, 30 } -- timed-mode choices, minutes
 local FLASH_FRAMES = 100     -- how long "AUTOSAVED" stays on screen
 local SHOW_INDICATOR = true
 
@@ -28,6 +28,13 @@ return function(mod)
     local cur, idx = getMode(), 1
     for i, v in ipairs(MODES) do if v == cur then idx = i end end
     mod.save:set("autosave_mode", MODES[(idx % #MODES) + 1])
+  end
+
+  local function getInterval() return mod.save:get("autosave_interval", 5) end -- minutes
+  local function cycleInterval()
+    local cur, idx = getInterval(), 1
+    for i, v in ipairs(INTERVALS) do if v == cur then idx = i end end
+    mod.save:set("autosave_interval", INTERVALS[(idx % #INTERVALS) + 1])
   end
 
   -- ------- the progress moments (EVENTS mode) ----------------------
@@ -49,7 +56,7 @@ return function(mod)
     local mode = getMode()
     if mode == "TIMED" and type(dt) == "number" then
       timer = timer + dt
-      if timer >= INTERVAL_SECONDS then timer = 0; pending = true end
+      if timer >= getInterval() * 60 then timer = 0; pending = true end
     elseif mode == "OFF" then
       pending = false
     end
@@ -97,6 +104,16 @@ return function(mod)
       label = "AUTOSAVE",
       value = function() return MODE_LABEL[getMode()] or "?" end,
       activate = function() cycleMode() end,
+    }
+    -- interval selector; only meaningful in TIMED mode
+    out[#out + 1] = {
+      id = "autosave_interval",
+      label = "SAVE EVERY",
+      value = function()
+        if getMode() ~= "TIMED" then return "-" end
+        return getInterval() .. " MIN"
+      end,
+      activate = function() cycleInterval() end,
     }
     return out
   end)

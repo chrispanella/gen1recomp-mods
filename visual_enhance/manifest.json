@@ -1,0 +1,16 @@
+{
+  "id": "visual_enhance",
+  "name": "Visual Enhance: Day/Night",
+  "version": "0.1.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "GRAPHICS",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": ["world_clock"],
+  "conflicts": [],
+  "description": "A visual-enhancement display mode using the engine's render pipelines. Version 1 adds dynamic day/night lighting: the overworld is tinted by time of day (cool blue at night, warm at dawn and dusk, neutral at midday), following the in-game clock if world_clock is installed or your real local time otherwise. It colors only the world, leaving menus crisp. Toggle intensity with hotkey 7 (OFF / SUBTLE / MEDIUM / STRONG). No custom shader, no engine files touched, no maps edited."
+}

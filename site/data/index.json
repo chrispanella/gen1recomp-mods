@@ -3,6 +3,7 @@
   "generated_at": "static",
   "categories": [
     "CHALLENGE",
+    "GRAPHICS",
     "MAP",
     "MERCHANT",
     "QUEST",
@@ -17,7 +18,7 @@
       "id": "autosave",
       "title": "Autosave",
       "author": "chrispanella",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "summary": "Autosaves your game on events (catch, level up, evolve, trainer battle) or a timer - your choice in OPTIONS.",
       "categories": [
         "TOOL"
@@ -253,6 +254,30 @@
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/traveling_merchants.zip"
+    },
+    {
+      "id": "visual_enhance",
+      "title": "Visual Enhance: Day/Night",
+      "author": "chrispanella",
+      "version": "0.1.0",
+      "summary": "Dynamic day/night lighting: the overworld is tinted by time of day, following world_clock or your real clock.",
+      "categories": [
+        "GRAPHICS"
+      ],
+      "tags": [
+        "graphics",
+        "lighting",
+        "day-night",
+        "render-pipeline"
+      ],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/visual_enhance.zip"
     },
     {
       "id": "world_clock",

@@ -7,7 +7,7 @@ Automatically saves your game, on a schedule **you pick in OPTIONS**.
 | Mode | When it saves |
 |---|---|
 | `ON EVENTS` | after catching a Pokemon, a level up, an evolution, or a trainer/gym battle |
-| `EVERY 5 MIN` | a plain timed autosave |
+| `TIMED` | on a timer; a second row, **SAVE EVERY**, picks the interval: 1, 2, 3, 5, 10, 15, 20, or 30 minutes |
 | `OFF` | never (vanilla behavior) |
 
 ## How it works
