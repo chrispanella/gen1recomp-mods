@@ -2,13 +2,18 @@
 -- battle a fixed team, earn modest prize money. No one-time flag - come back
 -- as often as you like.
 return function(mod)
+  -- optional tweaks BATTLE DIFF scales the team's levels (read once at load;
+  -- changing the setting takes effect after a reload)
+  local tw = mod.find("tweaks")
+  local mult = (tw and tw.exports and tw.exports.difficulty and tw.exports.difficulty().levelMult) or 1
+  local function lv(l) return math.min(100, math.floor(l * mult)) end
   mod.content.trainers:register("OPP_FUN_VETERAN", {
     id = "OPP_FUN_VETERAN", name = "VETERAN JODY", baseMoney = 55,
     parties = { {
-      { level = 30, species = "PIDGEOTTO" },
-      { level = 31, species = "RATICATE" },
-      { level = 32, species = "KADABRA" },
-      { level = 33, species = "MACHOKE" },
+      { level = lv(30), species = "PIDGEOTTO" },
+      { level = lv(31), species = "RATICATE" },
+      { level = lv(32), species = "KADABRA" },
+      { level = lv(33), species = "MACHOKE" },
     } },
   })
   mod.content.map_scripts:register("VIRIDIAN_CITY", {

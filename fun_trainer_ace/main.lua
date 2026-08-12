@@ -98,12 +98,24 @@ local function trainerTalk(t)
 end
 
 return function(mod)
+  -- optional tweaks BATTLE DIFF scales every team's levels. Parties are static
+  -- (registered here at load), so this is read once; changing the setting takes
+  -- effect after a reload.
+  local tw = mod.find("tweaks")
+  local mult = (tw and tw.exports and tw.exports.difficulty and tw.exports.difficulty().levelMult) or 1
+  local function scaleParty(p)
+    local out = {}
+    for i, mon in ipairs(p) do
+      out[i] = { level = math.min(100, math.floor(mon.level * mult)), species = mon.species }
+    end
+    return out
+  end
   -- register every trainer, and collect talk entries per map so several
   -- trainers on one map compose instead of overwriting
   local byMap = {}
   for _, t in ipairs(TRAINERS) do
     mod.content.trainers:register(t.id, {
-      id = t.id, name = t.name, baseMoney = t.money, parties = { t.party },
+      id = t.id, name = t.name, baseMoney = t.money, parties = { scaleParty(t.party) },
     })
     byMap[t.town] = byMap[t.town] or {}
     byMap[t.town][t.npc] = trainerTalk(t)

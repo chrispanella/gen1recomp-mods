@@ -47,7 +47,7 @@ use **MODS -> Import mod .zip** in-game.
 | [`crafting`](crafting/) | Gather materials (apricorns, herbs) from foraging spots on routes and wild-battle drops, then craft at two benches: a BALL WORKSHOP (apricorns to Poke/Great/Ultra Balls) and an ALCHEMY LAB (herbs to Potions and status heals), each an interactive menu. |
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
 
-> **Battle difficulty:** the challenge mods above (`rocket_recruits`, `roaming_boss`, `legendary_shrine`) read the BATTLE DIFF setting from [`tweaks`](tweaks/) when it is installed, so NORMAL / HARD / BRUTAL makes their teams tougher across the board.
+> **Battle difficulty:** every battle mod (`rocket_recruits`, `roaming_boss`, `legendary_shrine`, `fun_trainer_ace`, `veteran`) reads the BATTLE DIFF setting from [`tweaks`](tweaks/) when it is installed, so NORMAL / HARD / BRUTAL makes their teams tougher across the board. The roaming/rocket/legendary mods apply it live at each encounter; the fixed-team trainers (`fun_trainer_ace`, `veteran`) apply it at load, so changing the setting for those takes effect after a reload.
 
 **Weekly rewards and quality-of-life:**
 

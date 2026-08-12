@@ -66,7 +66,15 @@ return function(mod)
       if top and top.isOverworld then -- free roam, nothing on top
         pending = false
         local ok = pcall(function() return game:writeSave() end)
-        if ok then flash = FLASH_FRAMES end
+        if ok then
+          -- prefer the shared tweaks popup (styled + configurable); else flash
+          local tw = mod.find("tweaks")
+          if tw and tw.exports and tw.exports.push then
+            tw.exports.push("AUTOSAVED")
+          else
+            flash = FLASH_FRAMES
+          end
+        end
       end
     end
 
