@@ -140,6 +140,32 @@ return function(mod)
     add("tw_diff", "BATTLE DIFF",
         function() return (DIFFS[get("difficulty_idx", 1)] or DIFFS[1]).name end,
         function() set("difficulty_idx", (get("difficulty_idx", 1) % #DIFFS) + 1) end)
+
+    -- one-tap: turn every render-pipeline graphics effect (any mod) back to OFF.
+    -- Only shown when some pipeline exists to reset.
+    local nPipes = 0
+    pcall(function() nPipes = #require("src.render.Pipelines").list() end)
+    if nPipes > 0 then
+      add("tw_gfxreset", "RESET GRAPHICS",
+          function()
+            local on = 0
+            pcall(function()
+              local P = require("src.render.Pipelines")
+              for _, e in ipairs(P.list()) do if P.level(e.id) > 0 then on = on + 1 end end
+            end)
+            return on > 0 and (on .. " ON") or "ALL OFF"
+          end,
+          function()
+            pcall(function()
+              local P = require("src.render.Pipelines")
+              for _, e in ipairs(P.list()) do P.setLevel(e.id, 0) end
+              pcall(function() require("src.render.Tilt").setLevel(0) end)
+              local opts = game.save and game.save.options
+              if opts then P.syncOptions(opts); opts.tilt = 0 end
+            end)
+            if mod.exports and mod.exports.push then mod.exports.push("Graphics reset to OFF.") end
+          end)
+    end
     return out
   end)
 end

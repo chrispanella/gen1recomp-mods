@@ -1,7 +1,7 @@
 {
   "id": "tweaks",
   "name": "Tweaks & Settings",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -15,5 +15,5 @@
   "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],
-  "description": "A shared settings hub. Adds one OPTIONS panel that controls the on-screen popups every mod uses (off / text-only / full bar, plus color, size, bold, duration, and a sound toggle) and a BATTLE DIFF setting (Normal/Hard/Brutal) that the challenge mods read to make their teams tougher. Other mods use it when present and fall back to their own defaults when it is not."
+  "description": "A shared settings hub. Adds one OPTIONS panel that controls the on-screen popups every mod uses (off / text-only / full bar, plus color, size, bold, duration, and a sound toggle) a one-tap RESET GRAPHICS that turns every visual effect off, and a BATTLE DIFF setting (Normal/Hard/Brutal) that the challenge mods read to make their teams tougher. Other mods use it when present and fall back to their own defaults when it is not."
 }
