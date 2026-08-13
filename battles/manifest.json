@@ -14,7 +14,7 @@
   ],
   "dependencies": [],
   "optional_dependencies": [
-    "tweaks"
+    "visual_pack"
   ],
   "conflicts": [],
   "description": "Every optional battle challenge in one mod (formerly rocket_recruits, roaming_boss, legendary_shrine, fun_trainer_ace, veteran): eight wandering trainers who ask before a fight, a re-battleable veteran in Viridian, a daily roaming Team Rocket gang that moves as a formation, a roaming Champion that changes cities every few days, and a daily rotating legendary on Route 10. All read the tweaks BATTLE DIFF setting to scale their teams."

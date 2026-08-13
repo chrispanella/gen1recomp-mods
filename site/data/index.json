@@ -217,13 +217,13 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/traveling_merchants.zip"
     },
     {
-      "id": "tweaks",
-      "title": "Tweaks & Settings",
+      "id": "visual_pack",
+      "title": "Visual Pack",
       "author": "chrispanella",
-      "version": "0.2.0",
-      "summary": "A shared settings hub. Adds one OPTIONS panel that controls the on-screen popups every mod uses (off / text-only / full bar, plus color, size, bold, duration, and a sound toggle) a one-tap RESET GRAPHICS that turns every visual effect off, and a BATTLE DIFF setting (Normal/Hard/Brutal) that the challenge mods read to make their teams tougher. Other mods use it when present and fall back to their own defaults when it is not.",
+      "version": "1.1.0",
+      "summary": "Every visual enhancement in one pack, each its own OPTIONS row and on/off ladder (all default OFF): a unified SKY & WEATHER system (time-of-day lighting, night stars, and weather that varies by map and real day), plus CRT lines, vignette, letterbox, ambient motes, RGB split, film grain, color grade, and duotone. Also the shared settings hub (formerly the tweaks mod): the popup style every mod uses, a BATTLE DIFF setting the challenge mods read, and a one-tap RESET GRAPHICS. Safe overlay/shader techniques with fallbacks; no engine files edited.",
       "categories": [
-        "TOOL"
+        "GRAPHICS"
       ],
       "tags": [],
       "api": 2,
@@ -232,25 +232,6 @@
       "permissions": [
         "engine_internals"
       ],
-      "dependencies": [],
-      "github": "chrispanella/gen1recomp-mods",
-      "repo": "https://github.com/chrispanella/gen1recomp-mods",
-      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/tweaks.zip"
-    },
-    {
-      "id": "visual_pack",
-      "title": "Visual Pack",
-      "author": "chrispanella",
-      "version": "1.0.1",
-      "summary": "Every visual enhancement in one pack. Each effect is its own render pipeline with its own OPTIONS row and on/off ladder, and they stack: DAY/NIGHT lighting (time-aware), CRT lines, vignette, letterbox, weather (rain/snow/fog), ambient motes, RGB split, film grain, night stars, color grade, and duotone (GB green / sepia / noir). Safe overlay/color techniques with shader fallbacks; no engine files edited.",
-      "categories": [
-        "GRAPHICS"
-      ],
-      "tags": [],
-      "api": 2,
-      "game_version": ">=0.0.0-0 <2.0.0",
-      "profile": "content",
-      "permissions": [],
       "dependencies": [],
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",
