@@ -179,31 +179,53 @@ return function(mod)
     mod.content.items:register(m.id, { id = m.id, name = m.name, price = 100, keyItem = false, tossable = true })
   end
 
-  -- buff-food items + their in-battle stat-boost effects (eaten during a fight,
-  -- they raise the active Pokemon's stat stages for the rest of that battle)
+  -- buff-food items. Eaten IN battle, they boost the active Pokemon's stat
+  -- stages for the rest of the fight. Eaten in the FIELD, they prepare a meal
+  -- that buffs your lead at the START of your next battle (persists in the save
+  -- until that battle happens).
+  local function applyBuff(b, buff)
+    local raised = {}
+    for _, s in ipairs(buff) do
+      local cur = b.stages[s[1]] or 0
+      if cur < 6 then
+        b.stages[s[1]] = math.min(6, cur + s[2])
+        raised[#raised + 1] = STAT_LABEL[s[1]]
+      end
+    end
+    return raised
+  end
   local function foodEffect(food)
     return function(ctx)
-      if not (ctx.battle and ctx.battle.player) then
-        return "failed", { "It is not the time\nto eat that." }
+      if ctx.battle and ctx.battle.player then
+        local b = ctx.battle.player
+        local raised = applyBuff(b, food.buff)
+        local who = b.name or "POKeMON"
+        if #raised == 0 then return "consumed", { who .. " is already\npumped up!" } end
+        return "consumed", { who .. " ate the\n" .. food.name .. "!", table.concat(raised, " ") .. " rose!" }
       end
-      local b = ctx.battle.player
-      local raised = {}
-      for _, s in ipairs(food.buff) do
-        local cur = b.stages[s[1]] or 0
-        if cur < 6 then
-          b.stages[s[1]] = math.min(6, cur + s[2])
-          raised[#raised + 1] = STAT_LABEL[s[1]]
-        end
-      end
-      local who = b.name or "POKeMON"
-      if #raised == 0 then return "consumed", { who .. " is already\npumped up!" } end
-      return "consumed", { who .. " ate the\n" .. food.name .. "!", table.concat(raised, " ") .. " rose!" }
+      -- field use: store the prepared meal for the next battle (one battle)
+      mod.save:set("pending_food", food.id)
+      return "consumed", { "Your team enjoyed\nthe " .. food.name .. "!", "They are pumped for\nthe next battle!" }
     end
   end
   for _, food in ipairs(FOODS) do
     mod.content.items:register(food.id, { id = food.id, name = food.name, price = 200, keyItem = false, tossable = true, effect = food.id })
-    mod.content.item_effects:register(food.id, { use = foodEffect(food), battle = true, field = false })
+    mod.content.item_effects:register(food.id, { use = foodEffect(food), battle = true, field = true })
   end
+
+  -- apply a prepared meal to the lead at the start of the next battle
+  mod.events:on("battle.started", function(ev)
+    local fid = mod.save:get("pending_food", nil)
+    if not fid then return end
+    mod.save:set("pending_food", nil) -- consumed by this battle
+    local food
+    for _, f in ipairs(FOODS) do if f.id == fid then food = f end end
+    local b = ev and ev.battle and ev.battle.player
+    if not (food and b and b.stages) then return end
+    applyBuff(b, food.buff)
+    local tw = mod.find("tweaks")
+    if tw and tw.exports and tw.exports.push then tw.exports.push("Your meal kicked in!") end
+  end)
 
   -- ---- levels ----
   local function xpOf(disc) return mod.save:get("xp_" .. disc, 0) end
