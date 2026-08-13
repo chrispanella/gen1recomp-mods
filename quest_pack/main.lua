@@ -361,6 +361,83 @@ local LOG = {
 }
 local SCREEN = "QuestLog"
 
+-- ---- current-step hints (shown when a quest is selected in the log) ----------
+local function isSetM(game, flag)
+  return flag and game and game.save and game.save.flags and game.save.flags[flag] and true or false
+end
+local function pretty(mapId)
+  return (tostring(mapId or ""):gsub("_CITY", ""):gsub("_TOWN", ""):gsub("_ISLAND", ""):gsub("_", " "))
+end
+local TQ_INFO = {
+  ["KEEPSAKE"]    = { id = "keepsake", item = "KEEPSAKE",   giver = "PALLET_TOWN",   holder = "VIRIDIAN_CITY" },
+  ["LOST LETTER"] = { id = "letter",   item = "LETTER",     giver = "CERULEAN_CITY", holder = "VERMILION_CITY" },
+  ["RARE HERB"]   = { id = "herb",     item = "RARE HERB",  giver = "CELADON_CITY",  holder = "FUCHSIA_CITY" },
+  ["LUCK CHARM"]  = { id = "charm",    item = "LUCK CHARM", giver = "LAVENDER_TOWN", holder = "PEWTER_CITY" },
+}
+-- The player's current objective for a quest, from which flags are set - so the
+-- log shows where you are (who to see next / what to fetch).
+local function hintFor(game, q)
+  local n = q.name
+  local tq = TQ_INFO[n]
+  if tq then
+    local S = "MOD_TQ_" .. tq.id .. "_"
+    if isSetM(game, S .. "DONE") then return "Done. Thanks for helping!" end
+    if isSetM(game, S .. "STARTED") then
+      if isSetM(game, S .. "TAKEN") then return "Bring the " .. tq.item .. " back to " .. pretty(tq.giver) .. "." end
+      return "Find the " .. tq.item .. " in " .. pretty(tq.holder) .. "."
+    end
+    return "Someone in " .. pretty(tq.giver) .. " could use a hand."
+  end
+  if n == "GLOW SHARD" then
+    if isSetM(game, GLOW_DONE) then return "Done!" end
+    if isSetM(game, GLOW_STARTED) then
+      if isSetM(game, GLOW_TAKEN) then return "Return the GLOW SHARD to the man in CERULEAN." end
+      return "Find the GLOW SHARD in LAVENDER TOWN."
+    end
+    return "A man in CERULEAN is searching for something."
+  end
+  if n == "SECRET MAP" then
+    if isSetM(game, Q1.DONE) then return "Resolved." end
+    if isSetM(game, Q1.STARTED) then return "Take the SECRET MAP to the scientist in SAFFRON, or the gambler in FUCHSIA." end
+    return "A sailor at the VERMILION docks has a SECRET MAP."
+  end
+  if n == "AMBER SHARD" then
+    if isSetM(game, Q2.DONE) then return "Resolved." end
+    if isSetM(game, Q2.STARTED) then return "See the poacher ERIK in FUCHSIA, then report back to the researcher in CERULEAN." end
+    return "A researcher in CERULEAN is studying fossils."
+  end
+  if n == "WHISTLEBLOWER" then
+    if isSetM(game, Q3.DONE) then return "Resolved." end
+    if isSetM(game, Q3.STARTED) then
+      if isSetM(game, Q3.C1) and isSetM(game, Q3.C2) then return "Confront the executive in SAFFRON with your proof." end
+      return "Gather proof: talk to a retiree in CELADON and a dockworker in VERMILION."
+    end
+    return "A worker in SAFFRON wants to expose SILPH."
+  end
+  if n == "TWO BROTHERS" then
+    if isSetM(game, Q4.DONE) then return "Resolved." end
+    if isSetM(game, Q4.STARTED) then return "Take the NOTE to the other brother in CELADON." end
+    return "An old man in CELADON wrote a NOTE."
+  end
+  if n == "ROCKER GUITAR" then
+    if isSetM(game, Q5.DONE) then return "Resolved." end
+    if isSetM(game, Q5.STARTED) then return "Track down the thief in VIRIDIAN." end
+    return "A ROCKER in SAFFRON lost his GUITAR."
+  end
+  if n == "MASTER GORO" then
+    return isSetM(game, "MOD_TUTOR_goro_LEARNED") and "Learned SUBMISSION!" or "Beat MASTER GORO on ROUTE 22 to learn SUBMISSION."
+  end
+  if n == "SAGE ORACLE" then
+    return isSetM(game, "MOD_TUTOR_oracle_LEARNED") and "Learned DREAM EATER!" or "Beat SAGE ORACLE on ROUTE 13 to learn DREAM EATER."
+  end
+  if n == "TAMER SKY" then
+    return isSetM(game, "MOD_TUTOR_sky_LEARNED") and "Learned SKY ATTACK!" or "Beat TAMER SKY on ROUTE 15 to learn SKY ATTACK."
+  end
+  if isSetM(game, q.done) then return "Complete." end
+  if isSetM(game, q.started) then return "In progress." end
+  return "Not started yet."
+end
+
 return function(mod)
   -- all quest items
   mod.content.items:register(GLOW_SHARD, { id = GLOW_SHARD, name = "GLOW SHARD", price = 0, keyItem = true, tossable = false })
@@ -470,9 +547,18 @@ return function(mod)
     new = function(game)
       local items = {}
       for _, q in ipairs(LOG) do
-        items[#items + 1] = { label = q.name, right = status(game, q), value = q.name }
+        items[#items + 1] = { label = q.name, right = status(game, q), value = q.name, quest = q }
       end
-      return mod.ui.ListMenu.new(game, "QUESTS", items, { onChoose = function(_, menu) menu:close() end })
+      local menu
+      menu = mod.ui.ListMenu.new(game, "QUESTS", items, {
+        messageBox = true, -- render the footer text box
+        footer = "Pick a quest to see your next step.",
+        onChoose = function(item, m)
+          if item.quest then m.footer = hintFor(game, item.quest) end
+        end,
+        onCancel = function(m) m:close() end,
+      })
+      return menu
     end,
   })
   mod.hooks:wrap("ui.start_menu.items", function(next, game, items)

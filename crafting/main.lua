@@ -282,6 +282,7 @@ return function(mod)
       new = function(game)
         local menu
         menu = mod.ui.ListMenu.new(game, label .. " Lv " .. levelOf(disc), rows(game), {
+          messageBox = true,
           footer = "Pick something to make.",
           onChoose = function(item, m)
             if not item.recipe then m:close(); return end
@@ -323,6 +324,7 @@ return function(mod)
       if #rows == 0 then rows[#rows + 1] = { label = "(nothing gathered yet)" } end
       rows[#rows + 1] = { label = "BACK" }
       return mod.ui.ListMenu.new(game, "GATHERING Lv " .. levelOf("gathering"), rows, {
+        messageBox = true,
         footer = "Higher level yields more per forage.",
         onChoose = function(_, m) m:close() end,
       })
@@ -344,6 +346,7 @@ return function(mod)
       end
       local menu
       menu = mod.ui.ListMenu.new(game, "CRAFTING", rows(), {
+        messageBox = true,
         footer = "What will you make?",
         onChoose = function(item, m)
           if not item.sub then m:close(); return end

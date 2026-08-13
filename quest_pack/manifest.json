@@ -1,7 +1,7 @@
 {
   "id": "quest_pack",
   "name": "Quest Pack",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
