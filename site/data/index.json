@@ -62,7 +62,7 @@
       "id": "crafting",
       "title": "Crafting & Alchemy",
       "author": "chrispanella",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "summary": "A crafting hub you open at a bench (Cerulean or Celadon). The main menu branches into ALCHEMY (potions and status heals), COOKING (badge-gated buff food that raises a Pokemon's stats when eaten in battle, or prepares a meal in the field that buffs your lead at the start of your next battle - each region unlocks a better dish), ENGINEERING (Poke/Great/Ultra Balls, fishing rods, a bicycle), a TM LAB (craft TMs and a few HMs from Tech Shards), and GATHERING (a view of your materials). Each discipline has its own level that rises as you craft and unlocks better recipes. Materials come from foraging spots on routes (refill weekly, placed off the main path) and a chance drop after winning wild battles (water-type foes drop water materials like Kelp and Pearls; other areas drop region-appropriate materials); both also raise your Gathering level.",
       "categories": [
         "TOOL"
@@ -241,7 +241,7 @@
       "id": "visual_pack",
       "title": "Visual Pack",
       "author": "chrispanella",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "summary": "Every visual enhancement in one pack. Each effect is its own render pipeline with its own OPTIONS row and on/off ladder, and they stack: DAY/NIGHT lighting (time-aware), CRT lines, vignette, letterbox, weather (rain/snow/fog), ambient motes, RGB split, film grain, night stars, color grade, and duotone (GB green / sepia / noir). Safe overlay/color techniques with shader fallbacks; no engine files edited.",
       "categories": [
         "GRAPHICS"

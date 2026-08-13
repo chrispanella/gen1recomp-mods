@@ -1,7 +1,7 @@
 {
   "id": "visual_pack",
   "name": "Visual Pack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -10,7 +10,9 @@
   "game_version": ">=0.0.0-0 <2.0.0",
   "priority": 100,
   "dependencies": [],
-  "optional_dependencies": ["world_clock"],
+  "optional_dependencies": [
+    "world_clock"
+  ],
   "conflicts": [],
   "description": "Every visual enhancement in one pack. Each effect is its own render pipeline with its own OPTIONS row and on/off ladder, and they stack: DAY/NIGHT lighting (time-aware), CRT lines, vignette, letterbox, weather (rain/snow/fog), ambient motes, RGB split, film grain, night stars, color grade, and duotone (GB green / sepia / noir). Safe overlay/color techniques with shader fallbacks; no engine files edited."
 }

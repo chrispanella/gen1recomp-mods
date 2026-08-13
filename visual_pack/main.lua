@@ -89,7 +89,7 @@ return function(mod)
       else return 1.0, 0.80, 0.62 end
     end
     P:register("vp_daynight", {
-      label = "DAY/NIGHT", levels = { "OFF", "SUBTLE", "MEDIUM", "STRONG" }, hotkey = "7", priority = 10,
+      label = "DAY/NIGHT", levels = { "OFF", "SUBTLE", "MEDIUM", "STRONG" }, priority = 10,
       available = haveCanvas,
       update = function(dt, level)
         intensity = STR[level] or 0
@@ -248,7 +248,7 @@ return function(mod)
     local intensity = 0
     local STR = { 0.15, 0.28, 0.45 }
     P:register("vp_crt", {
-      label = "CRT LINES", levels = { "OFF", "SUBTLE", "MEDIUM", "HEAVY" }, hotkey = "8", priority = 5,
+      label = "CRT LINES", levels = { "OFF", "SUBTLE", "MEDIUM", "HEAVY" }, priority = 5,
       available = haveCanvas,
       update = function(dt, level) intensity = STR[level] or 0 end,
       present = function(canvas, ctx)
@@ -284,7 +284,7 @@ return function(mod)
       return vig
     end
     P:register("vp_vignette", {
-      label = "VIGNETTE", levels = { "OFF", "SUBTLE", "MEDIUM", "STRONG" }, hotkey = "9", priority = 4,
+      label = "VIGNETTE", levels = { "OFF", "SUBTLE", "MEDIUM", "STRONG" }, priority = 4,
       available = function() return haveCanvas() and love.image ~= nil end,
       update = function(dt, level) intensity = STR[level] or 0 end,
       present = function(canvas, ctx)

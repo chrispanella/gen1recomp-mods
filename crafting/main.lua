@@ -359,6 +359,17 @@ return function(mod)
     foreground = true, fn = function(ctx) Commands.push_screen(ctx, "CRAFT_HUB") end,
   })
 
+  -- a CRAFT entry in the START menu (next to QUESTS), so the hub is always
+  -- reachable without finding a bench
+  mod.hooks:wrap("ui.start_menu.items", function(next, game, items)
+    local out = next(game, items)
+    if type(out) ~= "table" then return out end
+    return mod.ui.insertBefore(out, "SAVE", {
+      label = "CRAFT",
+      onSelect = function() mod.ui.push(game, "CRAFT_HUB") end,
+    })
+  end)
+
   -- ===== reachable placement (benches + forage nodes) ========================
   local function overview()
     if not mod.world then return nil end
