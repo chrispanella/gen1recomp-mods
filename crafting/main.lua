@@ -31,6 +31,8 @@ local MATS = {
   { id = "SCRAP",        name = "SCRAP METAL",  short = "SCRAP" },
   { id = "SPRING",       name = "COIL SPRING",  short = "SPRING" },
   { id = "TECH_SHARD",   name = "TECH SHARD",   short = "TECH" },
+  { id = "PEARL",        name = "PEARL",        short = "PEARL" },
+  { id = "KELP",         name = "KELP",         short = "KELP" },
 }
 local SHORT = {}
 for _, m in ipairs(MATS) do SHORT[m.id] = m.short end
@@ -66,6 +68,7 @@ local FOODS = {
   { id = "RICE_BALL",   name = "RICE BALL",   badges = 1, xp = 8,  mats = { { "FRESH_BERRY", 3 } },                        buff = { { "attack", 1 } } },
   { id = "VEGGIE_WRAP", name = "VEGGIE WRAP", badges = 2, xp = 9,  mats = { { "FRESH_BERRY", 3 }, { "ORAN_HERB", 1 } },    buff = { { "defense", 1 } } },
   { id = "SPICY_CURRY", name = "SPICY CURRY", badges = 3, xp = 12, mats = { { "FRESH_BERRY", 4 }, { "ORAN_HERB", 1 } },    buff = { { "attack", 1 }, { "speed", 1 } } },
+  { id = "SUSHI_ROLL",  name = "SUSHI ROLL",  badges = 3, xp = 13, mats = { { "KELP", 2 }, { "FRESH_BERRY", 2 } },        buff = { { "speed", 1 }, { "special", 1 } } },
   { id = "HEARTY_STEW", name = "HEARTY STEW", badges = 4, xp = 14, mats = { { "FRESH_BERRY", 4 }, { "MYSTIC_HERB", 1 } },  buff = { { "defense", 1 }, { "special", 1 } } },
   { id = "GLORY_BOWL",  name = "GLORY BOWL",  badges = 5, xp = 18, mats = { { "FRESH_BERRY", 5 }, { "MYSTIC_HERB", 1 } },  buff = { { "attack", 1 }, { "defense", 1 }, { "speed", 1 } } },
   { id = "SAGE_FEAST",  name = "SAGE FEAST",  badges = 6, xp = 22, mats = { { "FRESH_BERRY", 5 }, { "MYSTIC_HERB", 2 } },  buff = { { "special", 2 } } },
@@ -102,7 +105,7 @@ local TM_LAB = {
   { out = "TM_HYPER_BEAM",  name = "TM HYPER BEAM",  lvl = 6, xp = 45, mats = { { "TECH_SHARD", 8 }, { "SPRING", 2 } } },
   { out = "HM_CUT",         name = "HM CUT",         lvl = 4, xp = 20, mats = { { "TECH_SHARD", 4 }, { "SCRAP", 2 } } },
   { out = "HM_STRENGTH",    name = "HM STRENGTH",    lvl = 5, xp = 24, mats = { { "TECH_SHARD", 5 }, { "SCRAP", 4 } } },
-  { out = "HM_SURF",        name = "HM SURF",        lvl = 6, xp = 30, mats = { { "TECH_SHARD", 7 }, { "SPRING", 2 } } },
+  { out = "HM_SURF",        name = "HM SURF",        lvl = 6, xp = 30, mats = { { "TECH_SHARD", 7 }, { "SPRING", 2 }, { "PEARL", 1 } } },
 }
 local DISCIPLINES = {
   { key = "alchemy",     label = "ALCHEMY",     recipes = ALCHEMY },
@@ -124,11 +127,37 @@ local TIER_MATS = {
   [3] = { "YLW_APRICORN", "CHESTO_LEAF", "MYSTIC_HERB", "BLU_APRICORN", "SCRAP", "SPRING", "TECH_SHARD" },
 }
 local FORAGE_TEXT, FORAGE_SPRITE = "TEXT_FORAGE_SPOT", "SPRITE_BOULDER"
-local WILD_DROPS = {
+-- Wild-battle drops depend on WHERE you are and WHAT you beat. A defeated
+-- Water-type rolls the water table; otherwise the current map's region decides.
+local DEFAULT_DROPS = {
   { "RED_APRICORN", 26 }, { "ORAN_HERB", 26 }, { "PECHA_LEAF", 12 }, { "FRESH_BERRY", 14 },
   { "BLU_APRICORN", 10 }, { "SCRAP", 10 }, { "CHERI_LEAF", 7 }, { "MYSTIC_HERB", 5 }, { "TECH_SHARD", 4 },
 }
-local DROP_CHANCE = 14
+local REGION_DROPS = {
+  forest  = { { "ORAN_HERB", 26 }, { "FRESH_BERRY", 24 }, { "PECHA_LEAF", 16 }, { "RED_APRICORN", 18 }, { "CHESTO_LEAF", 8 } },
+  cave    = { { "SCRAP", 30 }, { "TECH_SHARD", 20 }, { "SPRING", 16 }, { "MYSTIC_HERB", 8 }, { "YLW_APRICORN", 8 } },
+  default = DEFAULT_DROPS,
+}
+local WATER_DROPS = {
+  { "KELP", 30 }, { "PEARL", 24 }, { "BLU_APRICORN", 16 }, { "FRESH_BERRY", 16 }, { "MYSTIC_HERB", 8 },
+}
+local DROP_CHANCE, WATER_CHANCE = 14, 22 -- percent; water foes drop a bit more often
+local function regionFor(mapId)
+  mapId = mapId or ""
+  if mapId:find("FOREST") then return "forest" end
+  if mapId:find("MT_") or mapId:find("ROCK_TUNNEL") or mapId:find("CAVE")
+     or mapId:find("MANSION") or mapId:find("VICTORY_ROAD") or mapId:find("SEAFOAM")
+     or mapId:find("POWER_PLANT") then return "cave" end
+  return "default"
+end
+local function enemyIsWater(ev, data)
+  local enemy = ev.battle and ev.battle.enemy
+  local species = enemy and enemy.mon and enemy.mon.species
+  local def = species and data and data.pokemon and data.pokemon[species]
+  if not def then return false end
+  for _, t in ipairs(def.types or {}) do if t == "WATER" then return true end end
+  return false
+end
 
 -- ---- benches (both open the full hub) ---------------------------------------
 local BENCHES = {
@@ -417,9 +446,12 @@ return function(mod)
   end)
   mod.events:on("battle.ended", function(ev)
     if not (ev and ev.result == "win" and ev.battle and ev.battle.kind == "wild") then return end
-    if math.random(100) > DROP_CHANCE then return end
     if not (G and G.save) then return end
-    local mat = weightedPick(WILD_DROPS)
+    local water = enemyIsWater(ev, G.data)
+    if math.random(100) > (water and WATER_CHANCE or DROP_CHANCE) then return end
+    local tbl = water and WATER_DROPS
+                or (REGION_DROPS[regionFor(G.save.player and G.save.player.map)] or DEFAULT_DROPS)
+    local mat = weightedPick(tbl)
     if Bag.add(G.save, mat, 1, G.data) then
       addXP("gathering", 2)
       local nm = "material"
