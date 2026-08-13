@@ -177,11 +177,11 @@ return function(mod)
     return n > 0 and math.floor(s / n) or dflt
   end
   local function tierBump()
-    local tw = mod.find("visual_pack")
+    local tw = mod.find("settings")
     return (tw and tw.exports and tw.exports.difficulty and tw.exports.difficulty().tierBump) or 0
   end
   local function levelMult()
-    local tw = mod.find("visual_pack")
+    local tw = mod.find("settings")
     return (tw and tw.exports and tw.exports.difficulty and tw.exports.difficulty().levelMult) or 1
   end
 

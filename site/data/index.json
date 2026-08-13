@@ -16,7 +16,7 @@
       "id": "autosave",
       "title": "Autosave",
       "author": "chrispanella",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "summary": "Autosaves your game on events (catch, level up, evolve, trainer battle) or a timer - your choice in OPTIONS.",
       "categories": [
         "TOOL"
@@ -41,7 +41,7 @@
       "id": "battles",
       "title": "Battle Challenges",
       "author": "chrispanella",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "summary": "Every optional battle challenge in one mod (formerly rocket_recruits, roaming_boss, legendary_shrine, fun_trainer_ace, veteran): eight wandering trainers who ask before a fight, a re-battleable veteran in Viridian, a daily roaming Team Rocket gang that moves as a formation, a roaming Champion that changes cities every few days, and a daily rotating legendary on Route 10. All read the tweaks BATTLE DIFF setting to scale their teams.",
       "categories": [
         "CONTENT"
@@ -62,7 +62,7 @@
       "id": "crafting",
       "title": "Crafting & Alchemy",
       "author": "chrispanella",
-      "version": "0.9.0",
+      "version": "0.9.1",
       "summary": "A crafting hub you open at a bench (Cerulean or Celadon). The main menu branches into ALCHEMY (potions and status heals), COOKING (badge-gated buff food that raises a Pokemon's stats when eaten in battle, or prepares a meal in the field that buffs your lead at the start of your next battle - each region unlocks a better dish), ENGINEERING (Poke/Great/Ultra Balls, fishing rods, a bicycle), a TM LAB (craft TMs and a few HMs from Tech Shards), and GATHERING (a view of your materials). Each discipline has its own level that rises as you craft and unlocks better recipes. Materials come from foraging spots on routes (refill weekly, placed off the main path) and a chance drop after winning wild battles (water-type foes drop water materials like Kelp and Pearls; other areas drop region-appropriate materials); both also raise your Gathering level.",
       "categories": [
         "TOOL"
@@ -108,7 +108,7 @@
       "id": "lottery",
       "title": "Town Lottery",
       "author": "chrispanella",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "summary": "A lottery vendor stands outside the mart in every town. Buy a cheap ticket (100) and lock in a number from 1 to 100. Draws happen every Wednesday and Saturday; match the drawn number to win a 50000 jackpot, collectable from any vendor after the draw. The winning number is fixed by the draw's date, so it is the same at every vendor. Spawned at runtime, no map edits.",
       "categories": [
         "CONTENT"
@@ -170,6 +170,27 @@
       "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/quest_pack.zip"
     },
     {
+      "id": "settings",
+      "title": "Settings",
+      "author": "chrispanella",
+      "version": "1.0.0",
+      "summary": "A shared settings hub. Adds one OPTIONS panel that controls the on-screen popups every mod uses (off / text-only / full bar, plus color, size, bold, duration, and a sound toggle), a BATTLE DIFF setting (Normal/Hard/Brutal) the challenge mods read, and a one-tap RESET GRAPHICS that turns every visual effect off. Other mods use it when present and fall back to their own defaults when it is not. Independent of the graphics pack, so you can keep this and archive the graphics.",
+      "categories": [
+        "TOOL"
+      ],
+      "tags": [],
+      "api": 2,
+      "game_version": ">=0.0.0-0 <2.0.0",
+      "profile": "content",
+      "permissions": [
+        "engine_internals"
+      ],
+      "dependencies": [],
+      "github": "chrispanella/gen1recomp-mods",
+      "repo": "https://github.com/chrispanella/gen1recomp-mods",
+      "downloadURL": "https://raw.githubusercontent.com/chrispanella/gen1recomp-mods/main/site/mods/settings.zip"
+    },
+    {
       "id": "town_gifts",
       "title": "Town Gifts",
       "author": "chrispanella",
@@ -220,8 +241,8 @@
       "id": "visual_pack",
       "title": "Visual Pack",
       "author": "chrispanella",
-      "version": "1.1.0",
-      "summary": "Every visual enhancement in one pack, each its own OPTIONS row and on/off ladder (all default OFF): a unified SKY & WEATHER system (time-of-day lighting, night stars, and weather that varies by map and real day), plus CRT lines, vignette, letterbox, ambient motes, RGB split, film grain, color grade, and duotone. Also the shared settings hub (formerly the tweaks mod): the popup style every mod uses, a BATTLE DIFF setting the challenge mods read, and a one-tap RESET GRAPHICS. Safe overlay/shader techniques with fallbacks; no engine files edited.",
+      "version": "1.2.0",
+      "summary": "Every visual enhancement in one pack, each its own OPTIONS row and on/off ladder (all default OFF): a unified SKY & WEATHER system (time-of-day lighting, night stars, and weather that varies by map and real day), plus CRT lines, vignette, letterbox, ambient motes, RGB split, film grain, color grade, and duotone. Pure graphics - the settings hub lives in the separate 'settings' mod now, so you can archive this pack freely. Safe overlay/shader techniques with fallbacks; no engine files edited.",
       "categories": [
         "GRAPHICS"
       ],
@@ -229,9 +250,7 @@
       "api": 2,
       "game_version": ">=0.0.0-0 <2.0.0",
       "profile": "content",
-      "permissions": [
-        "engine_internals"
-      ],
+      "permissions": [],
       "dependencies": [],
       "github": "chrispanella/gen1recomp-mods",
       "repo": "https://github.com/chrispanella/gen1recomp-mods",

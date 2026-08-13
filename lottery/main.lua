@@ -74,7 +74,7 @@ return function(mod)
       bannerText = ("LOTTERY  %s DRAW: %d"):format(name, win)
       if hasTicket then bannerText = bannerText .. "  CHECK YOUR TICKET!" end
       -- prefer the shared tweaks popup (styled + configurable); else fall back
-      local tw = mod.find("visual_pack")
+      local tw = mod.find("settings")
       if tw and tw.exports and tw.exports.push then
         tw.exports.push(bannerText)
       else

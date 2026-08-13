@@ -32,7 +32,7 @@ use **MODS -> Import mod .zip** in-game.
 | Mod | What it adds |
 |---|---|
 | [`quest_pack`](quest_pack/) | Every quest in one mod: the Glow Shard, four Town Quests, and five Branching Quests with multiple endings, plus a QUESTS entry in the START menu that tracks them all. |
-| [`visual_pack`](visual_pack/) | Every visual enhancement in one mod (all default OFF): a unified **SKY & WEATHER** system (time-of-day lighting, night stars, and weather that varies by city/route and by day), plus CRT lines, vignette, letterbox, motes, RGB split, film grain, color grade, duotone. **Also the shared settings hub** (formerly `tweaks`): the popup style every mod uses, a BATTLE DIFF setting, and a one-tap RESET GRAPHICS. |
+| [`visual_pack`](visual_pack/) | Every visual enhancement in one mod (all default OFF): a unified **SKY & WEATHER** system (time-of-day lighting, night stars, and weather that varies by city/route and by day), plus CRT lines, vignette, letterbox, motes, RGB split, film grain, color grade, duotone. Pure graphics - archive it freely; the settings live in [`settings`](settings/). |
 
 **Content, world, and challenges:**
 
@@ -44,12 +44,13 @@ use **MODS -> Import mod .zip** in-game.
 | [`crafting`](crafting/) | **A full crafting system:** a bench opens a hub with ALCHEMY, COOKING, ENGINEERING, a TM LAB, and GATHERING, each with its own level that unlocks better recipes. Gather materials from off-path foraging spots and area/water-specific wild-battle drops. See [Crafting in depth](#crafting-in-depth) below. |
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
 
-> **Battle difficulty:** [`battles`](battles/) reads the BATTLE DIFF setting from [`visual_pack`](visual_pack/) when it is installed, so NORMAL / HARD / BRUTAL makes every challenge's team tougher. The roaming/rocket/legendary battles apply it live at each encounter; the fixed-team trainers (wanderers, veteran) apply it at load, so changing the setting for those takes effect after a reload.
+> **Battle difficulty:** [`battles`](battles/) reads the BATTLE DIFF setting from [`settings`](settings/) when it is installed, so NORMAL / HARD / BRUTAL makes every challenge's team tougher. The roaming/rocket/legendary battles apply it live at each encounter; the fixed-team trainers (wanderers, veteran) apply it at load, so changing the setting for those takes effect after a reload.
 
 **Weekly rewards and quality-of-life:**
 
 | Mod | What it adds |
 |---|---|
+| [`settings`](settings/) | A shared settings panel in OPTIONS: the on-screen popup style every mod uses (off / text-only / full bar, plus color, size, bold, duration, sound), a BATTLE DIFF (Normal/Hard/Brutal) the challenge mods read, and a one-tap RESET GRAPHICS. Independent of the graphics pack. |
 | [`world_clock`](world_clock/) | An in-game playtime clock that persists with the save and publishes time + day/hour events for other mods. |
 | [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a timer (1-30 min, configurable) - your choice in OPTIONS. |
 | [`lottery`](lottery/) | A lottery vendor outside every town's mart. Buy a cheap ticket, lock in a number from 1 to 100; draws happen every WEDNESDAY and SATURDAY. Match the drawn number and collect the jackpot from any vendor. |
@@ -99,8 +100,8 @@ Materials come from two places, and both raise your Gathering level:
 Some moves aren't craftable at all: three **Move Tutors** in [`quest_pack`](quest_pack/)
 teach signature TMs (Submission, Dream Eater, Sky Attack) when you beat them.
 
-If [`visual_pack`](visual_pack/) is installed, the "found a material" popup
-follows your popup style settings there.
+If [`settings`](settings/) is installed, the "found a material" popup follows
+your popup style settings there.
 
 ## Installing / testing a mod
 

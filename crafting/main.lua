@@ -223,7 +223,7 @@ return function(mod)
     local b = ev and ev.battle and ev.battle.player
     if not (food and b and b.stages) then return end
     applyBuff(b, food.buff)
-    local tw = mod.find("visual_pack")
+    local tw = mod.find("settings")
     if tw and tw.exports and tw.exports.push then tw.exports.push("Your meal kicked in!") end
   end)
 
@@ -493,7 +493,7 @@ return function(mod)
       local nm = "material"
       for _, m in ipairs(MATS) do if m.id == mat then nm = m.name end end
       local msg = "Found a " .. nm .. "!"
-      local tw = mod.find("visual_pack")
+      local tw = mod.find("settings")
       if tw and tw.exports and tw.exports.push then tw.exports.push(msg)
       else dropMsg, dropT = msg, 240 end
     end

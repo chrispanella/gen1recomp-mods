@@ -1,0 +1,19 @@
+{
+  "id": "settings",
+  "name": "Settings",
+  "version": "1.0.0",
+  "github": "chrispanella/gen1recomp-mods",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "TOOL",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 200,
+  "permissions": [
+    "engine_internals"
+  ],
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "A shared settings hub. Adds one OPTIONS panel that controls the on-screen popups every mod uses (off / text-only / full bar, plus color, size, bold, duration, and a sound toggle), a BATTLE DIFF setting (Normal/Hard/Brutal) the challenge mods read, and a one-tap RESET GRAPHICS that turns every visual effect off. Other mods use it when present and fall back to their own defaults when it is not. Independent of the graphics pack, so you can keep this and archive the graphics."
+}

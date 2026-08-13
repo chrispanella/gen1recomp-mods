@@ -1,7 +1,7 @@
 {
   "id": "lottery",
   "name": "Town Lottery",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -12,7 +12,7 @@
   ],
   "dependencies": [],
   "optional_dependencies": [
-    "visual_pack"
+    "settings"
   ],
   "conflicts": [],
   "description": "A lottery vendor stands outside the mart in every town. Buy a cheap ticket (100) and lock in a number from 1 to 100. Draws happen every Wednesday and Saturday; match the drawn number to win a 50000 jackpot, collectable from any vendor after the draw. The winning number is fixed by the draw's date, so it is the same at every vendor. Spawned at runtime, no map edits."

@@ -1,7 +1,7 @@
 {
   "id": "visual_pack",
   "name": "Visual Pack",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "github": "chrispanella/gen1recomp-mods",
   "api": 2,
   "entry": "main.lua",
@@ -9,13 +9,10 @@
   "category": "GRAPHICS",
   "game_version": ">=0.0.0-0 <2.0.0",
   "priority": 100,
-  "permissions": [
-    "engine_internals"
-  ],
   "dependencies": [],
   "optional_dependencies": [
     "world_clock"
   ],
   "conflicts": [],
-  "description": "Every visual enhancement in one pack, each its own OPTIONS row and on/off ladder (all default OFF): a unified SKY & WEATHER system (time-of-day lighting, night stars, and weather that varies by map and real day), plus CRT lines, vignette, letterbox, ambient motes, RGB split, film grain, color grade, and duotone. Also the shared settings hub (formerly the tweaks mod): the popup style every mod uses, a BATTLE DIFF setting the challenge mods read, and a one-tap RESET GRAPHICS. Safe overlay/shader techniques with fallbacks; no engine files edited."
+  "description": "Every visual enhancement in one pack, each its own OPTIONS row and on/off ladder (all default OFF): a unified SKY & WEATHER system (time-of-day lighting, night stars, and weather that varies by map and real day), plus CRT lines, vignette, letterbox, ambient motes, RGB split, film grain, color grade, and duotone. Pure graphics - the settings hub lives in the separate 'settings' mod now, so you can archive this pack freely. Safe overlay/shader techniques with fallbacks; no engine files edited."
 }

@@ -68,7 +68,7 @@ return function(mod)
         local ok = pcall(function() return game:writeSave() end)
         if ok then
           -- prefer the shared tweaks popup (styled + configurable); else flash
-          local tw = mod.find("visual_pack")
+          local tw = mod.find("settings")
           if tw and tw.exports and tw.exports.push then
             tw.exports.push("AUTOSAVED")
           else
