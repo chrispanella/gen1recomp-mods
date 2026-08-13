@@ -41,7 +41,7 @@ use **MODS -> Import mod .zip** in-game.
 | [`battles`](battles/) | **Every battle challenge in one mod:** eight wandering trainers who ask before a fight, a re-battleable veteran in Viridian, a daily roaming Team Rocket gang that moves as a formation, a Champion that roams the cities every few days, and a daily rotating legendary on Route 10. |
 | [`new_area_clubhouse`](new_area_clubhouse/) | Example of adding a brand-new map: a Clubhouse off Pallet Town with its own NPC. A template for new areas; see [docs/make-your-first-area.md](docs/make-your-first-area.md). |
 | [`traveling_merchants`](traveling_merchants/) | Five distinct merchant NPCs out on the routes, each with its own sprite, specialty wares, route pair, and patrol style. Locations and stock rotate on real-world days. |
-| [`crafting`](crafting/) | Gather materials (apricorns, herbs) from foraging spots on routes and wild-battle drops, then craft at two benches: a BALL WORKSHOP (apricorns to Poke/Great/Ultra Balls) and an ALCHEMY LAB (herbs to Potions and status heals), each an interactive menu. |
+| [`crafting`](crafting/) | **A full crafting system:** a bench opens a hub with ALCHEMY, COOKING, ENGINEERING, a TM LAB, and GATHERING, each with its own level that unlocks better recipes. Gather materials from off-path foraging spots and area/water-specific wild-battle drops. See [Crafting in depth](#crafting-in-depth) below. |
 | [`friendships`](friendships/) | Build relationships with six townsfolk over real-world days - warmer greetings and gifts as bonds grow, with a FRIENDS menu tracker. |
 
 > **Battle difficulty:** [`battles`](battles/) reads the BATTLE DIFF setting from [`tweaks`](tweaks/) when it is installed, so NORMAL / HARD / BRUTAL makes every challenge's team tougher. The roaming/rocket/legendary battles apply it live at each encounter; the fixed-team trainers (wanderers, veteran) apply it at load, so changing the setting for those takes effect after a reload.
@@ -55,6 +55,53 @@ use **MODS -> Import mod .zip** in-game.
 | [`autosave`](autosave/) | Autosaves on events (catch, level up, evolve, trainer/gym battle) or a timer (1-30 min, configurable) - your choice in OPTIONS. |
 | [`lottery`](lottery/) | A lottery vendor outside every town's mart. Buy a cheap ticket, lock in a number from 1 to 100; draws happen every WEDNESDAY and SATURDAY. Match the drawn number and collect the jackpot from any vendor. |
 | [`town_gifts`](town_gifts/) | **Friendly townsfolk in one mod:** weekly gifts (a free item in Pewter, a rare Pokemon in Celadon, a healing item and Game Corner coins in Cerulean), a rotating weekly type tip, and a one-time welcome kit from a spawned Pewter NPC that leaves for good once claimed. |
+
+## Crafting in depth
+
+The [`crafting`](crafting/) mod is a full crafting system. Talk to a crafting
+bench (a craftsman spawns in **Cerulean**, an alchemist in **Celadon**) to open
+the **CRAFTING** hub, which branches into five disciplines. Each discipline has
+its own **level** that rises as you craft and unlocks better recipes; a locked
+recipe shows its requirement (`Lv N`, or `Bg N` badges for cooking) instead of
+its cost.
+
+| Discipline | What you make | Gated by |
+|---|---|---|
+| **ALCHEMY** | Potions and status heals - Potion up through Full Restore, plus Antidote / Parlyz Heal / Burn Heal / Awakening | discipline level (1-5) |
+| **COOKING** | **Buff food** - dishes that raise a Pokemon's stats (see below). Better dishes each region | **badge count** (0-7) |
+| **ENGINEERING** | Poke / Great / Ultra Balls, then Old / Good / Super Rod and a Bicycle - all real, working items (a better rod really does catch better fish) | discipline level (1-5) |
+| **TM LAB** | Twelve TMs (Body Slam, Thunderbolt, Ice Beam, Earthquake, Fire Blast, Hyper Beam, ...) and three HMs, built from **Tech Shards** | discipline level (1-6) |
+| **GATHERING** | A read-only look at your materials; its level raises how much each foraging spot yields | rises as you forage |
+
+### Buff food (Cooking)
+
+Which dishes you can cook is gated by **badge count** - each region unlocks a
+better meal, the same way your Pokemon obey you further as you earn badges
+(Berry Juice at 0 badges up to a Grand Feast at 7 that raises all four stats).
+A dish can be used two ways:
+
+- **In battle** - eaten during a fight, it boosts the active Pokemon's stat
+  stages for the rest of that battle (like a multi-stat X-item).
+- **In the field** - eaten from the bag, it prepares a meal that buffs your
+  **lead at the start of your next battle**, persisting in the save until then.
+
+### Materials and gathering
+
+Materials come from two places, and both raise your Gathering level:
+
+- **Foraging spots** - a searchable node (a rock/brush clump) appears on
+  several routes, biased to off-path edge tiles so it never blocks the way.
+  Searching yields area-appropriate materials and refills once per real week.
+- **Wild-battle drops** - a chance to find a material after winning a wild
+  battle. **Water-type foes** drop water materials (Kelp, Pearls); otherwise
+  the **region** decides - forests favor herbs and berries, caves and mountains
+  favor scrap, springs, and Tech Shards.
+
+Some moves aren't craftable at all: three **Move Tutors** in [`quest_pack`](quest_pack/)
+teach signature TMs (Submission, Dream Eater, Sky Attack) when you beat them.
+
+If [`tweaks`](tweaks/) is installed, the "found a material" popup follows your
+popup style settings there.
 
 ## Installing / testing a mod
 
